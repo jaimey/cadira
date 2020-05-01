@@ -126,6 +126,6 @@ jQuery(document).ready(function () {
 	var moduleName = app.getModuleName();
 	if (moduleName == 'Home') {
 		var instance = new ExtensionStore_ExtensionStore_Js();
-		instance.registerEvents();
+		//instance.registerEvents();
 	}
 });
