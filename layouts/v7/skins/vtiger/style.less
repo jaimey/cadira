@@ -60,31 +60,30 @@ a:focus,a:active{
 /************ Layout **************/
 /**********************************/
 html{
-    height: 100%;
-    overflow-y: auto;
-}
-body{
-    width: 100%;
     margin: 0;
     padding: 0;
-    height: 100%;
+    overflow-y: auto;
+    min-height: 100%;
+}
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'OpenSans-Regular', sans-serif;
+    font-size : 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-kerning: normal;
+    height: inherit;
 }
 body > .mCSB_inside > .mCSB_container{
     margin-right: 15px;
 }
 #page{
-    min-height:100%;
     padding-top: 84px;
+    height: inherit;
 }
 .select2-container .select2-choice{
   font-family: 'OpenSans-Regular', sans-serif;
-}
-body{
-    font-family: 'OpenSans-Regular', sans-serif; 
-    font-size : 12px;
-    font-weight: normal;
-    font-style: normal;
-    font-kerning: normal;
 }
 .app-fixed-navbar{
     background: #fff;
@@ -107,11 +106,12 @@ body{
     background: @blockBackground;
     margin-bottom: 0;
     padding: 4px 0;
-    border-top: 1px solid @lightColorBorder;
+    border-top: 1px solid #ccc;
+    border-width: thin;
 }
 .main-container{
     position: relative;
-    min-height: 100%;
+    min-height: calc(100vh - 108px);
 }
 .main-container:before,
 .main-container:after{
@@ -119,7 +119,9 @@ body{
     display: block;
     clear:both;
 }
-
+.main-container .row {
+    min-height: inherit;
+}
 @media (min-width: 992px) {
     .global-nav .logo-container{
         display: inline-block;
@@ -135,8 +137,6 @@ body{
         position: absolute;
         width: 100%;
         height: 43px;
-/*        border-top:1px solid #ddd;*/
-        border-bottom:1px solid #eee
     }
     .app-nav .module-action-bar .module-action-content{
         background: @blockBackground;
@@ -157,7 +157,6 @@ body{
         min-height: 100%;
         background-color: @moduleNav;
         background: @moduleNav;
-
     }
     .main-container .sidebar-essentials {
         display: inline-block;
@@ -170,14 +169,14 @@ body{
         min-height: 100%;
         background: @white;
         border-right: 1px solid @lightColorBorder;
+        overflow: auto;
+        border-width: thin;
     }
     .main-container .content-area{
         width: 100%;
         padding-left:283px;
-        min-height: 768px;
     }
     .main-container .settingsPageDiv{
-        min-height: 768px;
         padding-left: 230px;
     }
     .main-container .settingsNav {
@@ -289,6 +288,7 @@ body{
     text-decoration: none;
     vertical-align: top;
     border: 1px solid @lightColorBorder;
+    border-width: thin;
     .adv-search {
         margin-top:9px;
     }
@@ -421,12 +421,10 @@ body{
 
 .app-nav .app-indicator-icon-container {
     top: 0px;
-    height: 43px;
+    height: 42px;
     text-align: center;
-    line-height: 43px;
-/*    background-color: #2c3b49;*/
+    line-height: 42px;
     color: #ffffff;
-    /*border-bottom: 1px solid #272B46;*/
     .app-indicator-icon {
         font-size: 24px;
         line-height: 40px;
@@ -858,10 +856,12 @@ a.menu-item:hover{
 /*************************************************/
 /******** View styles (List/Edit/Detail..) *******/
 /*************************************************/
+.viewContent {
+    height: inherit;
+}
 .viewContent .content-area{
     padding-left : 3%;
 }
-
 .viewContent .content-area.full-width{
     padding-left : 15px;
 }
@@ -936,6 +936,7 @@ a{
     border-radius: 1px;
     box-shadow: none;
     border:1px solid #cccccc;
+    border-width: thin;
 }
 input[type="text"].inputElement,
 input[type="password"].inputElement{
@@ -944,10 +945,10 @@ input[type="password"].inputElement{
 .select2-container-multi .select2-choices {
     min-height: 28px;
     border-radius: 1px;
-    border-color: #aaa;
+    border-color: #ccc;
     position:initial;
     z-index : 3;
-    
+    border-width: thin;
 }
 .select2-container-multi .select2-choices .select2-search-field input{
     height: 29px;
@@ -966,6 +967,7 @@ input[type="password"].inputElement{
 .inputElement.select2-container .select2-choice{
     border-radius: 0 2px 2px 0;
     height : 28px;
+    border-width: thin;
 }
 
 .inputElement.select2-container {
@@ -1484,6 +1486,7 @@ ul.unstyled{
     border-radius: 0px;
     font-weight: 100;
     cursor:pointer;
+    border-width: thin;
 }
 
 .module-buttons#ClearDemoData{
@@ -1498,6 +1501,7 @@ ul.unstyled{
     border: 1px solid #ddd;
     color: #666;
     background: #fff;
+    border-width: thin;
 }
 .module-buttons:hover, 
 .module-buttons:focus, 
@@ -1602,6 +1606,7 @@ ul.unstyled{
     border: 1px solid #ddd;
     margin-top: 10px;
     overflow: scroll;
+    border-width: thin;
 }
 
 .listview-table{
@@ -1626,7 +1631,7 @@ ul.unstyled{
 .listview-table > tbody > tr > td,
 .listview-table > tfoot > tr > td{
     vertical-align: middle;
-    padding: 3px;
+    padding: 8px 3px;
     .value{
         padding: 0 5px;
     }
@@ -1993,7 +1998,7 @@ strong, b, th{
 }
 
 #detailView td.fieldValue .edit{
-    width:90%;
+    width:100%;
 }
 
 //detail view header edit
@@ -2044,17 +2049,6 @@ strong, b, th{
 //detail view header edit end
 
 //detailview reference style removed
-
-.referencefield-wrapper .createReferenceRecord{
-    float: left;
-    margin-left: 5px;
-    margin-top: 3px;
-    border: 1px solid @lightColorBorder;
-    padding: 3px 7px;
-    text-align: center;
-    color: #666;
-    background: @referencefieldBackground;
-}
 .input-save-wrap{ 
     float:left;
     display: table-cell;
@@ -2073,6 +2067,8 @@ strong, b, th{
 
 .referencefield-wrapper{
     display: table-cell;
+    width: 80%;
+    max-width: 325px;
 }
 //removed styles for reference field 
 
@@ -2193,6 +2189,10 @@ strong, b, th{
     font-size: 35px;
 }
 //ends
+.detailViewContainer {
+    background:@detailViewbackground;
+    min-height: inherit;
+}
 .detailViewContainer .block{
     background:@white;
     border:1px solid @detailViewContainerBorderColor;
@@ -2201,6 +2201,7 @@ strong, b, th{
     hr{
         margin: 10px 0;
     }
+    border-width: thin;
 }
 
 .editViewContainer .block{
@@ -2233,7 +2234,7 @@ strong, b, th{
     border: 0 !important;
 }
 #overlayPage {
-    top:43px;
+    top:86px;
     position:fixed;
     width:100%;
     z-index: 1030;
@@ -2421,6 +2422,7 @@ strong, b, th{
     padding : 15px;
     margin-bottom : 10px;
     background: @white;
+    border-width: thin;
 }
 
 .summaryView .fieldLabel{
@@ -2460,6 +2462,7 @@ strong, b, th{
     padding : 15px;
     margin-bottom : 10px;
     background: @white;
+    border-width: thin;
 }
 
 .summaryWidgetContainer .widget_header{
@@ -2471,8 +2474,7 @@ strong, b, th{
 }
 
 .summaryWidgetContainer .commentTitle{
-    padding-left: 15px;
-    padding-right: 15px;
+    margin-bottom: 25px;
 }
 
 .summaryWidgetContainer .creatorName{
@@ -2495,7 +2497,8 @@ strong, b, th{
 
 .noCommentsMsgContainer,
 .quick-preview-modal .noContent{
-    border : 1px solid #CCC;
+    border : 1px solid #eee;
+    border-width: thin;
 }
 .summaryWidgetContainer .recordImage .name{
     display: table-cell;
@@ -2633,7 +2636,8 @@ strong, b, th{
 
 .fieldBlockContainer .inputElement{
     height : 30px;
-    width : 200px; 
+    width: 100%;
+    max-width: 325px;
 }
 //editview input-group styles
 .editViewContents {
@@ -2647,7 +2651,6 @@ strong, b, th{
         width:100%;
     }
     .input-group{
-        width:208px;
         float:left;
     }
 	.fieldLabel {
@@ -5723,6 +5726,7 @@ hr{
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     -o-box-sizing:border-box;
+    margin-bottom: 1px;
 }
 .row .nav>li>a:hover{
     border-bottom-color:@relatedtabsborderbottomcolor;
@@ -6772,6 +6776,8 @@ div.tooltip-inner{
     background: white; 
     padding: 15px;
     padding-top: 25px;
+    border:1px solid @detailViewContainerBorderColor;
+    border-width: thin;
 } 
 
 .detailViewContainer .content-area,
@@ -6789,12 +6795,14 @@ div.tooltip-inner{
 }
 .detailview-content .details.row .relatedHeader{
     border:1px solid @detailViewContainerBorderColor;
+    border-width: thin;
 }
 .detailview-content .details.row .relatedContents{
     background: white;
     padding: 0;
     margin-top: 0;
     border:1px solid @detailViewContainerBorderColor;
+    border-width: thin;
 }
 .related-tabs.row{
     background: @white;
@@ -6874,11 +6882,12 @@ div.tooltip-inner{
     border-left:0;
 }
 .editViewContents .fieldValue .referencefield-wrapper {
-    width: 300px;
+    width: 100%;
     display: inline-block;
 }
 .input-group-addon{
-    line-height: 1.4;
+    line-height: 1.5;
+    border-width: thin;
 }
 .input-group{
     float:left;
@@ -6890,11 +6899,13 @@ div.tooltip-inner{
 }
 .listViewEntries .input-group,
 .referencefield-wrapper .input-group{
-    min-width: 120px;
+    width: 100%;
+    max-width: 325px;
     }
 .summaryViewEntries .inputElement.form-control,
 .detailview-table .inputElement.form-control{
-    width:70%;
+    width:80%;
+    max-width: 300px;
 }
 .detailview-table input[type="checkbox"]{ //TN-#34172
     width:13px !important;
@@ -6902,7 +6913,8 @@ div.tooltip-inner{
 }
 .detailview-table .input-group-addon+.inputElement.form-control,
 .detailview-table .inputElement.form-control.input-medium{
-    width:100%;
+    min-width: 80%;
+    max-width: 300px;
 }
 
 .summaryViewEntries .referencefield-wrapper .inputElement,
@@ -7115,7 +7127,6 @@ margin-right: 5px;
     min-height:100%;
     .dashBoardTabContents ul{
         position:relative;
-        height: 960px;
         width: 1260px;
     }
 }
@@ -7528,7 +7539,7 @@ li.select2-search-choice div{
 }
 
 .floatThead-table {
-    border-left: 1px solid @lightColorBorder;
+    background: #fbfbfb;
 }
 .main-container-Documents .module-nav,
 .main-container-Reports .module-nav {
@@ -8496,7 +8507,33 @@ body .fc {
 .nav-tabs {
     border-bottom: 0;
 }
-@media all and (min-width:0px) and (max-width: 600px) {
+.commentcontent {
+    border: 1px solid #ddd;
+    border-width: thin;
+    background: #fcfcfc;
+}
+.editViewHeader {
+    padding-top: 20px;
+}
+.listview-table > thead > tr > th {
+    border-bottom: 0;
+    font-size: 13px;
+}
+.floatThead-floatContainer {
+    margin-left: 1px;
+}
+.navbar {
+    border: 1px solid @detailViewContainerBorderColor;
+    border-width: thin;
+}
+#appnav .navbar {
+    border: 0;
+    background: none;
+}
+.dashBoardContainer, .loginPageContainer {
+    min-height: calc(100vh - 110px);
+}
+@media all and (min-width:0px) and (max-width: 830px) {
     //Responsive Table
     table.summary-table>tbody>tr>td,
     table.summary-table>tbody>tr>th,
@@ -8576,7 +8613,7 @@ body .fc {
         font-size: 13px;
     }
     .overlay-container-60{
-        margin-left:0px ;
+        margin-left:0 ;
     }
     .overlayPageContent {
         padding-bottom: 0;
@@ -8598,6 +8635,25 @@ body .fc {
     }
     #comment1 {
         border-left-color: #ccc;
+    }
+    .editViewContents .fieldLabel {
+        padding-top: 20px;
+    }
+    .quickCreateContent .fieldLabel {
+        padding-top: 20px;
+    }
+    .floatThead-floatContainer {
+        margin-left: 1px;
+        padding-top: 1px;
+    }
+    .listViewPageDiv #table-content {
+        overflow: scroll !important;
+    }
+    #appnavcontent {
+        border: 1px solid #ccc;
+        background: #f0f0f0;
+        border-width: thin;
+        padding: 30px;
     }
 }
 

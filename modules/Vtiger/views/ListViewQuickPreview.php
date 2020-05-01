@@ -15,13 +15,13 @@ class Vtiger_ListViewQuickPreview_View extends Vtiger_Index_View {
 	function __construct() {
 		parent::__construct();
 	}
-
+	
 	public function requiresPermission(\Vtiger_Request $request) {
 		$permissions = parent::requiresPermission($request);
 		$permissions[] = array('module_parameter' => 'module', 'action' => 'DetailView', 'record_parameter' => 'record');
 		return $permissions;
 	}
-
+	
 	function checkPermission(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
@@ -63,8 +63,8 @@ class Vtiger_ListViewQuickPreview_View extends Vtiger_Index_View {
 		$viewer->assign('SUMMARY_RECORD_STRUCTURE', $recordStrucure->getStructure());
 		$viewer->assign('$SOCIAL_ENABLED', false);
 		$appName = $request->get('app');
-		if (!empty($appName)) {
-			$viewer->assign('SELECTED_MENU_CATEGORY', $appName);
+		if(!empty($appName)){
+			$viewer->assign('SELECTED_MENU_CATEGORY',$appName);
 		}
 		$viewer->assign('LIST_PREVIEW', true);
 
@@ -98,7 +98,7 @@ class Vtiger_ListViewQuickPreview_View extends Vtiger_Index_View {
 		$viewer->view('ListViewQuickPreview.tpl', $moduleName);
 	}
 
-	public function assignNavigationRecordIds($viewer, $recordId) {
+	public function assignNavigationRecordIds($viewer, $recordId){
 		//Navigation to next and previous records.
 		$navigationInfo = ListViewSession::getListViewNavigation($recordId);
 		//Intially make the prev and next records as null

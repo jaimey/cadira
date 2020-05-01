@@ -22,7 +22,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		parent::__construct();
 	}
 
-	function preProcess(Vtiger_Request $request, $display = true) {
+	function preProcess (Vtiger_Request $request, $display=true) {
 		parent::preProcess($request, false);
 
 		$viewer = $this->getViewer($request);
@@ -33,7 +33,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 
 		$companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
 		$companyLogo = $companyDetails->getLogo();
-		$currentDate = Vtiger_Date_UIType::getDisplayDateValue(date('Y-n-j'));
+		$currentDate  = Vtiger_Date_UIType::getDisplayDateValue(date('Y-n-j'));
 		$viewer->assign('CURRENTDATE', $currentDate);
 		$viewer->assign('MODULE', $selectedModule);
 		$viewer->assign('MODULE_NAME', $selectedModule);
@@ -53,51 +53,44 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		$menuGroupedByParent['SUPPORT'] = $supportGroup;
 
 		foreach ($menuGroupedByParent as $parentCategory => $menuList) {
-			if ($parentCategory == 'ANALYTICS' || $parentCategory == 'SETTINGS') {
-				continue;
-			}
-			if (count($menuList) > 0) {
-				if (array_key_exists($selectedModule, $menuList) && $parentCategory) {
+			if($parentCategory == 'ANALYTICS' || $parentCategory == 'SETTINGS') continue;
+			if(count($menuList) > 0) {
+				if(array_key_exists($selectedModule, $menuList) && $parentCategory) {
 					$moduleFound = true;
 					$selectedModuleMenuCategory = $parentCategory;
 				}
 			}
 		}
 
-		$requestAppName = $request->get('app');
-		if (!empty($requestAppName)) {
-			$selectedModuleMenuCategory = $requestAppName;
-		}
-
-		//If module is not found in any category we need to show the module itself
-		//Eg : Home->DashBoard view we ned to show Home
-		if ($moduleFound) {
-			$selectedMenuCategoryLabel = vtranslate('LBL_' . $selectedModuleMenuCategory, $selectedModule);
-		} else {
+		//If module is not found in any category we need to show the module itself 
+		//Eg : Home->DashBoard view we ned to show Home 
+		if($moduleFound) {
+			$selectedMenuCategoryLabel = vtranslate('LBL_'.$selectedModuleMenuCategory, $selectedModule);
+		}else{
 			$selectedMenuCategoryLabel = vtranslate($selectedModule, $selectedModule);
 		}
 
-		$viewer->assign('SELECTED_MENU_CATEGORY', $selectedModuleMenuCategory);
+		$viewer->assign('SELECTED_MENU_CATEGORY',$selectedModuleMenuCategory);
 		$viewer->assign('SELECTED_MENU_CATEGORY_LABEL', $selectedMenuCategoryLabel);
-		$viewer->assign('SELECTED_CATEGORY_MENU_LIST', $menuGroupedByParent[$selectedModuleMenuCategory]);
+		$viewer->assign('SELECTED_CATEGORY_MENU_LIST',$menuGroupedByParent[$selectedModuleMenuCategory]);
 		$viewer->assign('MENUS', $menuModelsList);
 		$viewer->assign('QUICK_CREATE_MODULES', Vtiger_Menu_Model::getAllForQuickCreate());
 		$viewer->assign('MENU_STRUCTURE', $menuStructure);
 		$viewer->assign('MENU_SELECTED_MODULENAME', $selectedModule);
 		$viewer->assign('MENU_TOPITEMS_LIMIT', $menuStructure->getLimit());
-		$viewer->assign('COMPANY_LOGO', $companyLogo);
-		$viewer->assign('COMPANY_DETAILS_SETTINGS', new Settings_Vtiger_CompanyDetails_Model());
+		$viewer->assign('COMPANY_LOGO',$companyLogo);
+		$viewer->assign('COMPANY_DETAILS_SETTINGS',new Settings_Vtiger_CompanyDetails_Model());
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 
 		$homeModuleModel = Vtiger_Module_Model::getInstance('Home');
 		$viewer->assign('HOME_MODULE_MODEL', $homeModuleModel);
-		$viewer->assign('HEADER_LINKS', $this->getHeaderLinks());
+		$viewer->assign('HEADER_LINKS',$this->getHeaderLinks());
 		$viewer->assign('ANNOUNCEMENT', $this->getAnnouncement());
 		$viewer->assign('SEARCHABLE_MODULES', Vtiger_Module_Model::getSearchableModules());
 
 		$inventoryModules = getInventoryModules();
-		$viewer->assign('INVENTORY_MODULES', $inventoryModules);
-		if ($display) {
+		$viewer->assign('INVENTORY_MODULES',  $inventoryModules);
+		if($display) {
 			$this->preProcessDisplay($request);
 		}
 	}
@@ -112,7 +105,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		return parent::preProcessTplName($request);
 	}*/
 
-	function postProcess(Vtiger_Request $request) {
+	function postProcess(Vtiger_Request $request){
 		$viewer = $this->getViewer($request);
 		//$viewer->assign('GUIDERSJSON', Vtiger_Guider_Model::toJsonList($this->getGuiderModels($request)));
 		parent::postProcess($request);
@@ -129,8 +122,8 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 
 		$jsFileNames = array(
 			'libraries.bootstrap.js.eternicode-bootstrap-datepicker.js.bootstrap-datepicker',
-			'~libraries/bootstrap/js/eternicode-bootstrap-datepicker/js/locales/bootstrap-datepicker.' . Vtiger_Language_Handler::getShortLanguageName() . '.js',
-			'~layouts/' . Vtiger_Viewer::getDefaultLayoutName() . '/lib/jquery/timepicker/jquery.timepicker.min.js',
+			'~libraries/bootstrap/js/eternicode-bootstrap-datepicker/js/locales/bootstrap-datepicker.'.Vtiger_Language_Handler::getShortLanguageName().'.js',
+			'~layouts/'.Vtiger_Viewer::getDefaultLayoutName().'/lib/jquery/timepicker/jquery.timepicker.min.js',
 			"~libraries/jquery/lazyYT/lazyYT.min.js",
 			'modules.Vtiger.resources.Header',
 			'modules.Vtiger.resources.Edit',
@@ -165,7 +158,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($jsScriptInstances, $headerScriptInstances);
+		$headerScriptInstances = array_merge($jsScriptInstances,$headerScriptInstances);
 		return $headerScriptInstances;
 	}
 
@@ -176,7 +169,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 	public function validateRequest(Vtiger_Request $request) {
 		//Removed validation check for specific views
 		$allowedViews = array("List", "Index", "Detail", "PreferenceDetail", "ExtensionStore", "CompanyDetails", "TaxIndex", "OutgoingServerDetail",
-			"TermsAndConditionsEdit", "AnnouncementEdit", "CustomRecordNumbering", "ConfigEditorDetail", "ChartDetail");
+								"TermsAndConditionsEdit", "AnnouncementEdit", "CustomRecordNumbering", "ConfigEditorDetail", "ChartDetail");
 		$view = $request->get("view");
 		$mode = $request->get("mode");
 		if (!(in_array($view, $allowedViews) || ($view == "Import" && !$mode) || ($view == "Edit" && $request->get("module") == "Workflows" && !$mode))) {
