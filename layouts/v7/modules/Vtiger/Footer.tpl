@@ -7,6 +7,7 @@
 * All Rights Reserved.
 ************************************************************************************}
 
+</div>
 <footer class="app-footer">
 	<p>
 		Powered by vtiger CRM - {$VTIGER_VERSION}&nbsp;&nbsp;© 2004 - {date('Y')}&nbsp;&nbsp;
@@ -14,7 +15,6 @@
 		<a href="https://www.vtiger.com/privacy-policy" target="_blank">Privacy Policy</a>
 	</p>
 </footer>
-</div>
 <div id='overlayPage'>
 	<!-- arrow is added to point arrow to the clicked element (Ex:- TaskManagement), 
 	any one can use this by adding "show" class to it -->
