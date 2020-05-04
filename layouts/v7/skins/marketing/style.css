@@ -144,8 +144,8 @@ body > .mCSB_inside > .mCSB_container {
     top: 0;
     left: 0;
     min-height: 100%;
-    background-color: #2C3B49;
-    background: #2C3B49;
+    background-color: #3278b5;
+    background: #3278b5;
   }
   .main-container .sidebar-essentials {
     display: inline-block;
@@ -164,6 +164,8 @@ body > .mCSB_inside > .mCSB_container {
   .main-container .content-area {
     width: 100%;
     padding-left: 283px;
+    padding-top: 15px;
+    min-height: 768px;
   }
   .main-container .settingsPageDiv {
     padding-left: 230px;
@@ -179,8 +181,8 @@ body > .mCSB_inside > .mCSB_container {
   margin-left: 5px;
 }
 .vt-notification {
-  background-color: #2C3B49;
-  border-color: #2C3B49;
+  background-color: #3278b5;
+  border-color: #3278b5;
   padding: 10px 15px;
   font-size: 15px;
   position: fixed !important;
@@ -445,14 +447,14 @@ body > .mCSB_inside > .mCSB_container {
   background-color: #010101 !important;
 }
 .app-switcher-container .app-navigator {
-  background-color: #2C3B49;
+  background-color: #3278b5;
 }
 .app-switcher-container .app-navigator .app-icon {
   color: white;
   opacity: 0.8;
 }
 .global-nav .app-switcher-container .app-navigator:hover {
-  background: #596875;
+  background: #185488;
   opacity: 1;
 }
 .global-nav .app-switcher-container .app-navigator:hover .app-icon {
@@ -479,7 +481,7 @@ body > .mCSB_inside > .mCSB_container {
   border: 0;
   top: 0px !important;
   box-shadow: 0px 5px 14px #555;
-  background: #2C3B49;
+  background: #3278b5;
   z-index: 1102;
   display: none;
 }
@@ -532,7 +534,7 @@ a.menu-item:hover {
   color: #fff;
   cursor: pointer;
   display: block;
-  background-color: #2c3b49;
+  background-color: #3278b5;
   padding: 2.5% 2% !important;
   margin-left: 2px;
   opacity: 0.8;
@@ -547,7 +549,7 @@ a.menu-item:hover {
 .active-app-item,
 .app-item:hover {
   opacity: 1;
-  background: #596875;
+  background: #185488;
   color: #f2f1f1;
 }
 .app-item-color-MARKETING {
@@ -588,7 +590,7 @@ a.menu-item:hover {
   height: 100vh;
   font-size: 1.2em;
   overflow-x: hidden;
-  background-color: #2C3B49;
+  background-color: #3278b5;
   box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -615,7 +617,7 @@ a.menu-item:hover {
 }
 .app-menu .app-modules-dropdown li:hover {
   opacity: 1;
-  background: #596875;
+  background: #185488;
   color: #f2f1f1;
 }
 .app-menu .app-modules-dropdown li:hover .module-icon {
@@ -709,7 +711,7 @@ a.menu-item:hover {
   -moz-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;
   transition: all 0.2s ease;
-  background: #2c3b49;
+  background: #3278b5;
   padding: 6px;
   border-radius: 20px;
   margin-top: -2px;
@@ -930,7 +932,7 @@ input[type="password"].inputElement {
   width: 100%;
   height: 100%;
   float: left;
-  background: #2C3B49;
+  background: #3278b5;
   position: absolute;
   z-index: 10;
   left: 0;
@@ -987,14 +989,14 @@ input[type="password"].inputElement {
   white-space: nowrap;
 }
 .modules-menu ul li:hover {
-  background: #596875;
+  background: #185488;
   opacity: 1;
 }
 .modules-menu ul li:hover a {
   opacity: 1;
 }
 .modules-menu ul li.active {
-  background: #010101;
+  background: #185488;
 }
 .modules-menu ul li.active a {
   opacity: 1;
@@ -1161,7 +1163,7 @@ input[type="password"].inputElement {
 }
 .integrations-container > div:hover,
 .common-links-container > div:hover {
-  background: #2c3b49;
+  background: #3278b5;
 }
 .integrations-container > div a,
 .common-links-container > div a {
@@ -1299,7 +1301,7 @@ ul.unstyled {
   border-bottom: 1px solid #EF5E29;
 }
 .coloredBorderTop {
-  border-top: 1px solid #EF5E29;
+  border-top: 1px solid #185488;
 }
 .redColor {
   color: red;
@@ -1367,7 +1369,7 @@ ul.unstyled {
   margin: 4px 2px;
   border-radius: 2px;
   border: 1px solid #ddd;
-  color: #666;
+  color: #3278b5;
   background: #fff;
   border-width: thin;
 }
@@ -2365,7 +2367,7 @@ th {
   color: #3498DB;
 }
 .fieldLabel {
-  color: #2c3b49;
+  color: #3278b5;
   opacity: 0.8;
 }
 .fieldLabel label {
@@ -2771,7 +2773,7 @@ th {
   display: inline-block;
   width: 100%;
   float: left;
-  background: #2c3b49;
+  background: #3278b5;
   height: 100%;
 }
 .settings-flip {
@@ -3073,7 +3075,7 @@ th {
   width: 100px;
 }
 .updates_timeline #more_button .update_icon .moreRecentUpdates {
-  background: #2c3b49;
+  background: #3278b5;
   border-radius: 15%;
 }
 .updates_timeline .update_icon img {
@@ -3272,7 +3274,7 @@ th {
   color: #FFFFFF;
 }
 .settingsgroup div.panel-collapse {
-  background-color: #2C3B49;
+  background-color: #3278b5;
 }
 .settingsgroup-accordion {
   color: #FFFFFF;
@@ -3290,11 +3292,11 @@ th {
   text-transform: uppercase;
 }
 .settingsgroup {
-  background: #2C3B49;
+  background: #3278b5;
   height: 100%;
 }
 .settingsgroup .panel-group .panel {
-  background-color: #2C3B49;
+  background-color: #3278b5;
 }
 .userDefaultIcon {
   font-size: 30px;
@@ -4985,7 +4987,7 @@ hr {
   bottom: 0;
   background: #EFEFEF;
   /*width:100%;*/
-  border-left: 42px solid #2c3b49;
+  border-left: 42px solid #3278b5;
   height: 60px;
   left: 0;
   right: 0;
@@ -5002,7 +5004,7 @@ hr {
   z-index: 0;
 }
 .settingsPageDiv .modal-overlay-footer {
-  border-left: 230px solid #2c3b49;
+  border-left: 230px solid #3278b5;
 }
 .settingsOverlayContainer .modal-overlay-footer {
   margin: 0;
@@ -5061,14 +5063,14 @@ hr {
   padding: 4px 6px;
 }
 .panel-collapse ul li a:hover {
-  background: #596875;
+  background: #185488;
   opacity: 1;
 }
 .panel-collapse ul li a:hover a {
   opacity: 1;
 }
 .panel-collapse ul li a.settingsgroup-menu-color {
-  background-color: #010101;
+  background-color: #185488;
 }
 .calendar-sidebar-tab {
   padding: 10px;
@@ -5773,7 +5775,7 @@ TN-34230 .row .nav > li > a:hover {
   margin: 20px 0px 20px 0px;
 }
 .highLightMail {
-  background-color: #2C3B49;
+  background-color: #3278b5;
 }
 .whiteFont {
   color: #FFFFFF;
@@ -6002,7 +6004,7 @@ div.tooltip-inner {
   font-size: 2em;
 }
 .menuEditorModuleItem {
-  background: #2C3B49;
+  background: #3278b5;
   border-bottom: 1px solid #DDDDDD;
   cursor: move;
 }
@@ -6372,7 +6374,7 @@ div.tooltip-inner {
   background-color: white;
 }
 .help_header {
-  background-color: #2c3b49;
+  background-color: #3278b5;
   cursor: move;
   box-shadow: 0 0px 5px 0 #ccc;
   padding: 5px 10px;
@@ -6389,7 +6391,7 @@ div.tooltip-inner {
   position: relative;
   top: 10px;
   border: 0px;
-  background-color: #2c3b49;
+  background-color: #3278b5;
 }
 .help_close_area {
   margin: 5px 15px;
@@ -7193,7 +7195,7 @@ input:focus:-ms-input-placeholder {
 }
 #OnBoardLayout #OnBoardPageContainer .step-tracker {
   padding: 1%;
-  background: #2C3B49;
+  background: #3278b5;
   min-height: 100px;
   width: 100%;
   z-index: 1;
@@ -7284,7 +7286,7 @@ input:focus:-ms-input-placeholder {
   padding: 1%;
 }
 #OnBoardLayout #OnBoardPageContainer .crmGoals .item:hover {
-  border-color: #2C3B49;
+  border-color: #3278b5;
 }
 #OnBoardLayout #OnBoardPageContainer .crmGoals .item:hover p {
   opacity: 1;
@@ -7320,7 +7322,7 @@ input:focus:-ms-input-placeholder {
   margin-top: 10px;
 }
 #OnBoardLayout #OnBoardPageContainer .PickRoles .item {
-  border: 1px solid #2C3B49;
+  border: 1px solid #3278b5;
   height: 100px;
   cursor: pointer;
   text-align: center;
@@ -7592,7 +7594,6 @@ body .fc {
   margin-left: 1px;
 }
 .navbar {
-  border: 1px solid #eee;
   border-width: thin;
 }
 #appnav .navbar {

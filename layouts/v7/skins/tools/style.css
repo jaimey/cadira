@@ -164,6 +164,8 @@ body > .mCSB_inside > .mCSB_container {
   .main-container .content-area {
     width: 100%;
     padding-left: 283px;
+    padding-top: 15px;
+    min-height: 768px;
   }
   .main-container .settingsPageDiv {
     padding-left: 230px;
@@ -7592,7 +7594,6 @@ body .fc {
   margin-left: 1px;
 }
 .navbar {
-  border: 1px solid #eee;
   border-width: thin;
 }
 #appnav .navbar {
