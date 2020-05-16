@@ -62,4 +62,4 @@
                 {include file="modules/Settings/Vtiger/Sidebar.tpl"}
             </div>
         </div>
-        <div class="settingsPageDiv content-area clearfix">
+        <div class="settingsPageDiv clearfix">
