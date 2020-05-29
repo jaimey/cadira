@@ -632,6 +632,7 @@ a.menu-item:hover {
 }
 .app-menu .app-list-divider {
   border-top: 1px solid;
+  color: #2a6192;
 }
 .app-menu .menu-items-wrapper {
   padding-left: 8px;

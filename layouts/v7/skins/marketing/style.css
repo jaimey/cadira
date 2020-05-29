@@ -632,6 +632,7 @@ a.menu-item:hover {
 }
 .app-menu .app-list-divider {
   border-top: 1px solid;
+  color: #2a6192;
 }
 .app-menu .menu-items-wrapper {
   padding-left: 8px;
@@ -5123,7 +5124,7 @@ TN-34230 .row .nav > li > a:hover {
 .dashBoardContainer .nav-tabs > li.active:focus,
 .contents.tabbable .nav-tabs > li.active:focus {
   border: none;
-  border-bottom: 3px solid #555;
+  border-bottom: 3px solid #185388;
   margin-bottom: 0;
 }
 .nav-tabs > li.active > a,
