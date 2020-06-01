@@ -1571,10 +1571,12 @@ class Vtiger_Functions {
             $query = "SELECT attachmentsid FROM vtiger_seattachmentsrel WHERE crmid = ?";
             $result = $adb->pquery($query, array($crmid));
             $noofrows = $adb->num_rows($result);
-            if ($noofrows) {
+            if ($adb->num_rows($result) > 1) {
                 for ($i = 0; $i < $noofrows; $i++) {
                     $attachmentIds[] = vtws_getId($WsEntityId,$adb->query_result($result, $i, 'attachmentsid'));
                 }
+            } else if($adb->num_rows($result) > 0 && $adb->num_rows($result) == 1){
+                $attachmentIds[] = vtws_getId($WsEntityId, $adb->query_result($result, 0, 'attachmentsid'));
             }
         }
         return $attachmentIds;
