@@ -1774,9 +1774,18 @@ th {
 }
 .detailview-table .fieldLabel {
   width: 20%;
+  background-color: #f7f7f7;
+  border-top: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
 }
 .detailview-table .fieldValue {
   width: 30%;
+  border-top: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;  
 }
 #detailView td.fieldValue .action {
   display: none;
@@ -2406,9 +2415,18 @@ th {
   min-width: 100px;
   width: 20%;
   word-break: break-all;
+  background-color: #f7f7f7;
+  border-top: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
 }
 .editViewContents .fieldValue {
   width: 30%;
+  border-top: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
 }
 .editViewContents td.fieldValue[colspan="3"] {
   width: 80%;

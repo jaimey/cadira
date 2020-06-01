@@ -18,7 +18,6 @@
 	text-transform: none;
 	line-height: 1;
 	font-size:23px;
-	color: #3278b5;
 
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
@@ -31,550 +30,413 @@
 }
 
 .vicon-accounts:before {
-	color: white;
 	content: "\e600";
 }
 .vicon-add:before {
-	color: white;
 	content: "\e601";
 }
 .vicon-alert:before {
-	color: white;
 	content: "\e602";
 }
 .vicon-assets:before {
-	color: white;
 	content: "\e603";
 }
 .vicon-attachment:before {
-	color: white;
 	content: "\e604";
 }
 .vicon-autoresponder:before {
-	color: white;
 	content: "\e605";
 }
 .vicon-bell:before {
-	color: white;
 	content: "\e606";
 }
 .vicon-bulb:before {
-	color: white;
 	content: "\e607";
 }
 .vicon-calendar:before {
-	color: white;
 	content: "\e608";
 }
 .vicon-calendaragenda:before {
-	color: white;
 	content: "\e609";
 }
 .vicon-calendarlist:before {
-	color: white;
 	content: "\e60a";
 }
 .vicon-call:before {
-	color: white;
 	content: "\e60b";
 }
 .vicon-camera:before {
-	color: white;
 	content: "\e60c";
 }
 .vicon-campaigns:before {
-	color: white;
 	content: "\e60d";
 }
 .vicon-cases:before {
-	color: white;
 	content: "\e60e";
 }
 .vicon-chat:before {
-	color: white;
 	content: "\e60f";
 }
 .vicon-close:before {
-	color: white;
 	content: "\e610";
 }
 .vicon-code:before {
-	color: white;
 	content: "\e611";
 }
 .vicon-codebraces:before {
-	color: white;
 	content: "\e612";
 }
 .vicon-cog:before {
-	color: white;
 	content: "\e613";
 }
 .vicon-columns:before {
-	color: white;
 	content: "\e614";
 }
 .vicon-compose:before {
-	color: white;
 	content: "\e615";
 }
 .vicon-contacts:before {
-	color: white;
 	content: "\e616";
 }
 .vicon-customerportal:before {
-	color: white;
 	content: "\e617";
 }
 .vicon-default:before {
-	color: white;
 	content: "\e618";
 }
 .vicon-detailreport:before {
-	color: white;
 	content: "\e619";
 }
 .vicon-documents:before {
-	color: white;
 	content: "\e61a";
 }
 .vicon-duplicaterecords:before {
-	color: white;
 	content: "\e61b";
 }
 .vicon-edit:before {
-	color: white;
 	content: "\e61c";
 }
 .vicon-emailcampaigns:before {
-	color: white;
 	content: "\e61d";
 }
 .vicon-emails:before {
-	color: white;
 	content: "\e61e";
 }
 .vicon-emailtemplates:before {
-	color: white;
 	content: "\e61f";
 }
 .vicon-engagementhistory:before {
-	color: white;
 	content: "\e620";
 }
 .vicon-equalizer:before {
-	color: white;
 	content: "\e621";
 }
 .vicon-esign:before {
-	color: white;
 	content: "\e622";
 }
 .vicon-exit:before {
-	color: white;
 	content: "\e623";
 }
 .vicon-export:before {
-	color: white;
 	content: "\e624";
 }
 .vicon-eyeclose:before {
-	color: white;
 	content: "\e625";
 }
 .vicon-eyeopen:before {
-	color: white;
 	content: "\e626";
 }
 .vicon-faq:before {
-	color: white;
 	content: "\e627";
 }
 .vicon-fb:before {
-	color: white;
 	content: "\e628";
 }
 .vicon-folderclose:before {
-	color: white;
 	content: "\e629";
 }
 .vicon-foldermove:before {
-	color: white;
 	content: "\e62a";
 }
 .vicon-folderopen:before {
-	color: white;
 	content: "\e62b";
 }
 .vicon-forecast:before {
-	color: white;
 	content: "\e62c";
 }
 .vicon-forward:before {
-	color: white;
 	content: "\e62d";
 }
 .vicon-googleplus:before {
-	color: white;
 	content: "\e62e";
 }
 .vicon-graphview:before {
-	color: white;
 	content: "\e62f";
 }
 .vicon-grid:before {
-	color: white;
 	content: "\e630";
 }
 .vicon-help:before {
-	color: white;
 	content: "\e631";
 }
 .vicon-helpdesk:before {
-	color: white;
 	content: "\e632";
 }
 .vicon-home:before {
-	color: white;
 	content: "\e633";
 }
 .vicon-image:before {
-	color: white;
 	content: "\e634";
 }
 .vicon-import:before {
-	color: white;
 	content: "\e635";
 }
 .vicon-insights:before {
-	color: white;
 	content: "\e636";
 }
 .vicon-inventory:before {
-	color: white;
 	content: "\e637";
 }
 .vicon-inventory2:before {
-	color: white;
 	content: "\e638";
 }
 .vicon-inventory3:before {
-	color: white;
 	content: "\e639";
 }
 .vicon-invoice:before {
-	color: white;
 	content: "\e63a";
 }
 .vicon-invoicerecurring:before {
-	color: white;
 	content: "\e63b";
 }
 .vicon-leads:before {
-	color: white;
 	content: "\e63c";
 }
 .vicon-link:before {
-	color: white;
 	content: "\e63d";
 }
 .vicon-linkopen:before {
-	color: white;
 	content: "\e63e";
 }
 .vicon-list:before {
-	color: white;
 	content: "\e63f";
 }
 .vicon-lock:before {
-	color: white;
 	content: "\e640";
 }
 .vicon-lockopen:before {
-	color: white;
 	content: "\e641";
 }
 .vicon-logout:before {
-	color: white;
 	content: "\e642";
 }
 .vicon-mailmanager:before {
-	color: white;
 	content: "\e643";
 }
 .vicon-mandatory:before {
-	color: white;
 	content: "\e644";
 }
 .vicon-marketinglist:before {
-	color: white;
 	content: "\e645";
 }
 .vicon-massedit:before {
-	color: white;
 	content: "\e646";
 }
 .vicon-meeting:before {
-	color: white;
 	content: "\e647";
 }
 .vicon-move:before {
-	color: white;
 	content: "\e648";
 }
 .vicon-mycalendar:before {
-	color: white;
 	content: "\e649";
 }
 .vicon-olark:before {
-	color: white;
 	content: "\e64a";
 }
 .vicon-olark2:before {
-	color: white;
 	content: "\e64b";
 }
 .vicon-oursites:before {
-	color: white;
 	content: "\e64c";
 }
 .vicon-pagecount:before {
-	color: white;
 	content: "\e64d";
 }
 .vicon-payments:before {
-	color: white;
 	content: "\e64e";
 }
 .vicon-pbxmanager:before {
-	color: white;
 	content: "\e64f";
 }
 .vicon-phonecalls:before {
-	color: white;
 	content: "\e650";
 }
 .vicon-pin:before {
-	color: white;
 	content: "\e651";
 }
 .vicon-pivots:before {
-	color: white;
 	content: "\e652";
 }
 .vicon-play:before {
-	color: white;
 	content: "\e653";
 }
 .vicon-potentials:before {
-	color: white;
 	content: "\e654";
 }
 .vicon-pricebooks:before {
-	color: white;
 	content: "\e655";
 }
 .vicon-printtemplates:before {
-	color: white;
 	content: "\e656";
 }
 .vicon-products:before {
-	color: white;
 	content: "\e657";
 }
 .vicon-project:before {
-	color: white;
 	content: "\e658";
 }
 .vicon-projectmilestone:before {
-	color: white;
 	content: "\e659";
 }
 .vicon-projecttask:before {
-	color: white;
 	content: "\e65a";
 }
 .vicon-purchaseorder:before {
-	color: white;
 	content: "\e65b";
 }
 .vicon-puzzle:before {
-	color: white;
 	content: "\e65c";
 }
 .vicon-quickbooks:before {
-	color: white;
 	content: "\e65d";
 }
 .vicon-quotes:before {
-	color: white;
 	content: "\e65e";
 }
 .vicon-recyclebin:before {
-	color: white;
 	content: "\e65f";
 }
 .vicon-refresh:before {
-	color: white;
 	content: "\e660";
 }
 .vicon-replytoall:before {
-	color: white;
 	content: "\e661";
 }
 .vicon-reports:before {
-	color: white;
 	content: "\e662";
 }
 .vicon-restorerecyclebin:before {
-	color: white;
 	content: "\e663";
 }
 .vicon-retweet:before {
-	color: white;
 	content: "\e664";
 }
 .vicon-road:before {
-	color: white;
 	content: "\e665";
 }
 .vicon-rss:before {
-	color: white;
 	content: "\e666";
 }
 .vicon-salesorder:before {
-	color: white;
 	content: "\e667";
 }
 .vicon-search:before {
-	color: white;
 	content: "\e668";
 }
 .vicon-selectcolumn:before {
-	color: white;
 	content: "\e669";
 }
 .vicon-servicecontracts:before {
-	color: white;
 	content: "\e66a";
 }
 .vicon-services:before {
-	color: white;
 	content: "\e66b";
 }
 .vicon-share:before {
-	color: white;
 	content: "\e66c";
 }
 .vicon-sharedcalendar:before {
-	color: white;
 	content: "\e66d";
 }
 .vicon-shoppingcart:before {
-	color: white;
 	content: "\e66e";
 }
 .vicon-smiley1:before {
-	color: white;
 	content: "\e66f";
 }
 .vicon-smiley2:before {
-	color: white;
 	content: "\e670";
 }
 .vicon-smiley3:before {
-	color: white;
 	content: "\e671";
 }
 .vicon-smsnotifier:before {
-	color: white;
 	content: "\e672";
 }
 .vicon-social:before {
-	color: white;
 	content: "\e673";
 }
 .vicon-starempty:before {
-	color: white;
 	content: "\e674";
 }
 .vicon-starfull:before {
-	color: white;
 	content: "\e675";
 }
 .vicon-starhalf:before {
-	color: white;
 	content: "\e676";
 }
 .vicon-subscription:before {
-	color: white;
 	content: "\e677";
 }
 .vicon-tag:before {
-	color: white;
 	content: "\e678";
 }
 .vicon-task:before {
-	color: white;
 	content: "\e679";
 }
 .vicon-taxes:before {
-	color: white;
 	content: "\e67a";
 }
 .vicon-timeline:before {
-	color: white;
 	content: "\e67b";
 }
 .vicon-toggle:before {
-	color: white;
 	content: "\e67c";
 }
 .vicon-transactions:before {
-	color: white;
 	content: "\e67d";
 }
 .vicon-twitter:before {
-	color: white;
 	content: "\e67e";
 }
 .vicon-twitterreply:before {
-	color: white;
 	content: "\e67f";
 }
 .vicon-unpin:before {
-	color: white;
 	content: "\e680";
 }
 .vicon-unplug:before {
-	color: white;
 	content: "\e681";
 }
 .vicon-vendors:before {
-	color: white;
 	content: "\e682";
 }
 .vicon-vendors3:before {
-	color: white;
 	content: "\e683";
 }
 .vicon-video:before {
-	color: white;
 	content: "\e684";
 }
 .vicon-volumeoff:before {
-	color: white;
 	content: "\e685";
 }
 .vicon-volumeon:before {
-	color: white;
 	content: "\e686";
 }
 .vicon-vtigeruser:before {
-	color: white;
 	content: "\e687";
 }
 .vicon-vtigeruser2:before {
-	color: white;
 	content: "\e688";
 }
