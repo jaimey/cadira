@@ -151,83 +151,63 @@ if (defined('VTIGER_UPGRADE')) {
     if ($db->num_rows($result)) {
         $templateId = $db->query_result($result, 0, 'templateid');
     }
-    if(!empty($templateId)){
-        $portalLoginTemplateRecord = EmailTemplates_Record_Model::getInstanceById($templateId);
-        $portalLoginTemplateContent = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-        <html>
-        <head>
-          <title></title>
-        </head>
-        <body class="scayt-enabled">
-          <!-- <center> -->
-            <table border="0" cellpadding="0" cellspacing="0" class="borderGrey" width="600px" style="margin-left:0px;">
-              <tbody>
-                <tr>
-                  <td colspan="6"><!-- Begin Pre header --><!-- // End Pre header \ --></td>
-                </tr>
-                <tr style="height:50px;">
-                  <td colspan="6" style="
-                  font-family: Helvetica,Verdana,sans-serif">
-                  <div style="margin-bottom:10px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);"><br />
-                    Dear $contacts-firstname$ $contacts-lastname$,</div>
+    $portalLoginTemplateRecord = EmailTemplates_Record_Model::getInstanceById($templateId);
+    $portalLoginTemplateContent = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+    <html>
+    <head>
+      <title></title>
+    </head>
+    <body class="scayt-enabled">
+      <!-- <center> -->
+        <table border="0" cellpadding="0" cellspacing="0" class="borderGrey" width="600px" style="margin-left:0px;">
+          <tbody>
+            <tr>
+              <td colspan="6"><!-- Begin Pre header --><!-- // End Pre header \ --></td>
+            </tr>
+            <tr style="height:50px;">
+              <td colspan="6" style="
+              font-family: Helvetica,Verdana,sans-serif">
+              <div style="margin-bottom:10px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);"><br />
+                Dear $contacts-firstname$ $contacts-lastname$,</div>
 
-                    <div style="margin-top:20px;margin-bottom:20px; color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">As our customer, you can be assured of getting excellent support from our team. I would like to take this opportunity to introduce the portal we have setup for valuable customers like you. You can submit questions/issues via the portal, see past issues and responses. In addition, Portal provides you access to our knowledge base and documents we shared with you in the past.
-                    </div>
+                <div style="margin-top:20px;margin-bottom:20px; color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">As our customer, you can be assured of getting excellent support from our team. I would like to take this opportunity to introduce the portal we have setup for valuable customers like you. You can submit questions/issues via the portal, see past issues and responses. In addition, Portal provides you access to our knowledge base and documents we shared with you in the past.
+                </div>
 
-                    <div style="margin-top:10px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">$URL$ to login to the portal, with the credentials below.</div>
+                <div style="margin-top:10px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">$URL$ to login to the portal, with the credentials below.</div>
 
-                    <div style="margin-top:20px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">Your Username: $login_name$</div>
+                <div style="margin-top:20px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">Your Username: $login_name$</div>
 
-                    <div style="margin-bottom:20px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">Your Password: $password$</div>
-                    <div class="gmail_extra" style="margin-top:10px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">Thank you,<br />
-                      $contacts-smownerid$</div>
+                <div style="margin-bottom:20px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">Your Password: $password$</div>
+                <div class="gmail_extra" style="margin-top:10px;color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; background-color: rgb(255, 255, 255);">Thank you,<br />
+                  $contacts-smownerid$</div>
 
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="6" style="font-family: Helvetica,Verdana,sans-serif;font-size: 11px;color: #666666;">
-                      <table border="0" cellpadding="4" cellspacing="0" width="100%">
-                        <tbody>
-                          <!--copy right data-->
-                          <tr>
-                            <td valign="top" style="
-                            padding-left: 0px;
-                            padding-right: 0px;
-                            width:350px">
-                                <div style="margin-top:20px;"><em>Powered By <a href="www.vtiger.com">Vtiger</a><div>
-                            </td>
-                          </tr>
-                          <!--subscribers links-->
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            <!-- </center> -->
-          </body>
-          </html>';
-        $portalLoginTemplateRecord->set('body', $portalLoginTemplateContent);
-        $portalLoginTemplateRecord->save();
-        $portalLoginTemplateId = $portalLoginTemplateRecord->getId();
-        echo "Customer portal login template created.<br>";
-        
-        //#1278 - registered new webservice api
-		$operationName = 'files_retrieve';
-		$handler_path = 'include/Webservices/FileRetrieve.php';
-		$handler_method = 'vtws_file_retrieve';
-		$operation_type = 'GET';
-
-		$result = $db->pquery("SELECT 1 FROM vtiger_ws_operation WHERE name = ?", array($operationName));
-		if(!$db->num_rows($result)) {
-		    $operationId = vtws_addWebserviceOperation($operationName, $handler_path, $handler_method, $operation_type);
-		    vtws_addWebserviceOperationParam($operationId, 'id', 'string', 1);
-		}
-		//4537596 - END
-    }
-    
-    //image uitype added for webservice fieldtype
-    $sql = 'INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES (?,?)';
-    $params = array('69', 'image');
-    $db->pquery($sql, $params);
+                </td>
+              </tr>
+              <tr>
+                <td colspan="6" style="font-family: Helvetica,Verdana,sans-serif;font-size: 11px;color: #666666;">
+                  <table border="0" cellpadding="4" cellspacing="0" width="100%">
+                    <tbody>
+                      <!--copy right data-->
+                      <tr>
+                        <td valign="top" style="
+                        padding-left: 0px;
+                        padding-right: 0px;
+                        width:350px">
+                            <div style="margin-top:20px;"><em>Powered By <a href="www.vtiger.com">Vtiger</a><div>
+                        </td>
+                      </tr>
+                      <!--subscribers links-->
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        <!-- </center> -->
+      </body>
+      </html>';
+    $portalLoginTemplateRecord->set('body', $portalLoginTemplateContent);
+    $portalLoginTemplateRecord->save();
+    $portalLoginTemplateId = $portalLoginTemplateRecord->getId();
+    echo "Customer portal login template created.<br>";
 }
