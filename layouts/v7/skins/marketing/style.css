@@ -169,6 +169,7 @@ body > .mCSB_inside > .mCSB_container {
   }
   .main-container .settingsPageDiv {
     padding-left: 230px;
+    padding-top: 5px;
   }
   .main-container .settingsNav {
     height: 100%;

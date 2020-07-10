@@ -166,7 +166,7 @@
 			outline: 0;
 		}
 		.buttonBlue {
-			background-image: linear-gradient(to bottom, #0bb3f1 0px, #0bb3f1 100%)
+			background: #175388;
 		}
 		.ripples {
 			position: absolute;
