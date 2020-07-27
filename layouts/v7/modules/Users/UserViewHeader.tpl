@@ -16,21 +16,13 @@
             <div class = "row">
                 <div class="col-md-5">
                     <div class="col-md-5 recordImage" style="height: 50px;width: 50px;">
-                        {assign var=NOIMAGE value=0}
                         {foreach key=ITER item=IMAGE_INFO from=$RECORD->getImageDetails()}
                             {if !empty($IMAGE_INFO.url)}
-                                <img height="100%" width="100%" src="{$IMAGE_INFO.url}" alt="{$IMAGE_INFO.orgname}" title="{$IMAGE_INFO.orgname}" data-image-id="{$IMAGE_INFO.id}">
+                                <img height="100%" width="100%" src="{$IMAGE_INFO.url}" alt="User" title="User" data-image-id="{$IMAGE_INFO.id}">
                             {else}
-                                {assign var=NOIMAGE value=1}
+                                <img height="100%" width="100%" src="layouts/v7/skins/images/user.png" alt="User" title="User">
                             {/if}
                         {/foreach}
-                        {if $NOIMAGE eq 1}
-                            <div class="name">
-                                <span style="font-size:24px;">
-                                    <strong> {$RECORD->getName()|substr:0:2} </strong>
-                                </span>
-                            </div>
-                        {/if}
                     </div>
                     <span class="font-x-x-large" style="margin:5px;font-size:24px">
                         {$RECORD->getName()}
