@@ -1,0 +1,10 @@
+{"changesets": [
+    {
+        "id": "1",
+        "Author" : "DogiCRM",
+        "Description": "New module Register Time",
+        "File" : "ModuleTimeRegister.php",
+        "Update" : 0
+    }
+]
+}
