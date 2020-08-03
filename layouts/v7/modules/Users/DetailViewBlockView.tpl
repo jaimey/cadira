@@ -21,7 +21,7 @@
 				</div>
 				<hr>
 				<div class="blockData">
-					<table class="table detailview-table no-border">
+					<table class="table detailview-table">
 						<tbody>
 							{assign var=COUNTER value=0}
 							<tr>
