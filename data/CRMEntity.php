@@ -28,195 +28,184 @@ require_once('include/utils/UserInfoUtil.php');
 require_once("include/Zend/Json.php");
 require_once 'include/RelatedListView.php';
 
-class CRMEntity
-{
-    public $ownedby;
-    public $recordSource = 'CRM';
+class CRMEntity {
 
-    /**
-     * Detect if we are in bulk save mode, where some features can be turned-off
-     * to improve performance.
-     */
-    public static function isBulkSaveMode()
-    {
-        global $VTIGER_BULK_SAVE_MODE;
-        if (isset($VTIGER_BULK_SAVE_MODE) && $VTIGER_BULK_SAVE_MODE) {
-            return true;
-        }
-        return false;
-    }
+	var $ownedby;
+	var $recordSource = 'CRM';
 
-    public static function getInstance($module)
-    {
-        $modName = $module;
-        if ($module == 'Calendar' || $module == 'Events') {
-            $module = 'Calendar';
-            $modName = 'Activity';
-        }
-        // File access security check
-        if (!class_exists($modName)) {
-            checkFileAccessForInclusion("modules/$module/$modName.php");
-            require_once("modules/$module/$modName.php");
-        }
-        $focus = new $modName();
-        $focus->moduleName = $module;
-        $focus->column_fields = new TrackableObject();
-        $focus->column_fields = getColumnFields($module);
-        if (method_exists($focus, 'initialize')) {
-            $focus->initialize();
-        }
-        return $focus;
-    }
+	/**
+	 * Detect if we are in bulk save mode, where some features can be turned-off
+	 * to improve performance.
+	 */
+	static function isBulkSaveMode() {
+		global $VTIGER_BULK_SAVE_MODE;
+		if (isset($VTIGER_BULK_SAVE_MODE) && $VTIGER_BULK_SAVE_MODE) {
+			return true;
+		}
+		return false;
+	}
 
-    /**
-     * Function which indicates whether to chagne the modified time or not while saving
-     */
-    public static function isTimeStampNoChangeMode()
-    {
-        global $VTIGER_TIMESTAMP_NO_CHANGE_MODE;
-        if (isset($VTIGER_TIMESTAMP_NO_CHANGE_MODE) && $VTIGER_TIMESTAMP_NO_CHANGE_MODE) {
-            return true;
-        }
-        return false;
-    }
+	static function getInstance($module) {
+		$modName = $module;
+		if ($module == 'Calendar' || $module == 'Events') {
+			$module = 'Calendar';
+			$modName = 'Activity';
+		}
+		// File access security check
+		if (!class_exists($modName)) {
+			checkFileAccessForInclusion("modules/$module/$modName.php");
+			require_once("modules/$module/$modName.php");
+		}
+		$focus = new $modName();
+		$focus->moduleName = $module;
+		$focus->column_fields = new TrackableObject();
+		$focus->column_fields = getColumnFields($module);
+		if (method_exists($focus, 'initialize')) $focus->initialize();
+		return $focus;
+	}
 
-    /**
-     * Function which will used to initialize object properties
-     */
-    public function initialize()
-    {
-        $moduleName = $this->moduleName;
-        $moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-        if ($moduleModel && !$moduleModel->isEntityModule()) {
-            return;
-        }
+	/**
+	 * Function which indicates whether to chagne the modified time or not while saving
+	 */
+	static function isTimeStampNoChangeMode(){
+		global $VTIGER_TIMESTAMP_NO_CHANGE_MODE;
+		if (isset($VTIGER_TIMESTAMP_NO_CHANGE_MODE) && $VTIGER_TIMESTAMP_NO_CHANGE_MODE) {
+			return true;
+		}
+		return false;
+	}
 
-        $userSpecificTableIgnoredModules = array('SMSNotifier', 'PBXManager', 'ModComments');
-        if (in_array($moduleName, $userSpecificTableIgnoredModules)) {
-            return;
-        }
+	/**
+	 * Function which will used to initialize object properties 
+	 */
+	function initialize() {
+		$moduleName = $this->moduleName;
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+		if($moduleModel && !$moduleModel->isEntityModule()) {
+			return;
+		}
 
-        $userSpecificTable = Vtiger_Functions::getUserSpecificTableName($moduleName);
-        if (!in_array($userSpecificTable, $this->tab_name)) {
-            $this->tab_name[] = $userSpecificTable;
-            $this->tab_name_index [$userSpecificTable] = 'recordid';
-        }
-    }
+		$userSpecificTableIgnoredModules = array('SMSNotifier', 'PBXManager', 'ModComments');
+		if(in_array($moduleName, $userSpecificTableIgnoredModules)) return;
 
-    public function saveentity($module, $fileid = '')
-    {
-        global $current_user, $adb; //$adb added by raju for mass mailing
-        $insertion_mode = $this->mode;
+		$userSpecificTable = Vtiger_Functions::getUserSpecificTableName($moduleName);
+		if(!in_array($userSpecificTable, $this->tab_name)) {
+			$this->tab_name[] = $userSpecificTable;
+			$this->tab_name_index [$userSpecificTable] = 'recordid';
+		}
+	}
 
-        $columnFields = $this->column_fields;
-        $anyValue = false;
-        foreach ($columnFields as $value) {
-            if (!empty($value)) {
-                $anyValue = true;
-                break;
-            }
-        }
-        if (!$anyValue) {
-            die("<center>" .getTranslatedString('LBL_MANDATORY_FIELD_MISSING')."</center>");
-        }
+	function saveentity($module, $fileid = '') {
+		global $current_user, $adb; //$adb added by raju for mass mailing
+		$insertion_mode = $this->mode;
 
-        // added to support files transformation for file upload fields like uitype 69,
-        if (count($_FILES)) {
-            $_FILES = Vtiger_Util_Helper::transformUploadedFiles($_FILES, true);
-        }
+		$columnFields = $this->column_fields;
+		$anyValue = false;
+		foreach ($columnFields as $value) {
+			if(!empty($value)) {
+				$anyValue = true;
+				break;
+			}
+		}
+		if(!$anyValue) {
+			die("<center>" .getTranslatedString('LBL_MANDATORY_FIELD_MISSING')."</center>");
+		}
 
-        $this->db->startTransaction();
-        foreach ($this->tab_name as $table_name) {
-            if ($table_name == "vtiger_crmentity") {
-                $this->insertIntoCrmEntity($module, $fileid);
-            } else {
-                $this->insertIntoEntityTable($table_name, $module, $fileid);
-            }
-        }
-        $columnFields->restartTracking();
-        //Calling the Module specific save code
-        $this->save_module($module);
+		// added to support files transformation for file upload fields like uitype 69, 
+		if(!empty($_FILES) && count($_FILES)) {
+			$_FILES = Vtiger_Util_Helper::transformUploadedFiles($_FILES, true);
+		}
 
-        $this->db->completeTransaction();
+		$this->db->startTransaction();
+		foreach ($this->tab_name as $table_name) {
+			if ($table_name == "vtiger_crmentity") {
+				$this->insertIntoCrmEntity($module, $fileid);
+			} else {
+				$this->insertIntoEntityTable($table_name, $module, $fileid);
+			}
+		}
+		$columnFields->restartTracking();
+		//Calling the Module specific save code
+		$this->save_module($module);
 
-        // vtlib customization: Hook provide to enable generic module relation.
-        if ($_REQUEST['createmode'] == 'link' && !$_REQUEST['__linkcreated']) {
-            $_REQUEST['__linkcreated'] = true;
-            $for_module = vtlib_purify($_REQUEST['return_module']);
-            $for_crmid = vtlib_purify($_REQUEST['return_id']);
-            $with_module = $module;
-            $with_crmid = $this->id;
+		$this->db->completeTransaction();
 
-            $on_focus = CRMEntity::getInstance($for_module);
+		// vtlib customization: Hook provide to enable generic module relation.
+		if ($_REQUEST['createmode'] == 'link' && !$_REQUEST['__linkcreated']) {
+			$_REQUEST['__linkcreated'] = true;
+			$for_module = vtlib_purify($_REQUEST['return_module']);
+			$for_crmid = vtlib_purify($_REQUEST['return_id']);
+			$with_module = $module;
+			$with_crmid = $this->id;
 
-            if ($for_module && $for_crmid && $with_module && $with_crmid) {
-                relateEntities($on_focus, $for_module, $for_crmid, $with_module, $with_crmid);
-            }
-        }
-        // END
-    }
+			$on_focus = CRMEntity::getInstance($for_module);
 
-    /**
-     * This function is used to upload the attachment in the server and save that attachment information in db.
-     * @param int $id  - entity id to which the file to be uploaded
-     * @param string $module  - the current module name
-     * @param array $file_details  - array which contains the file information(name, type, size, tmp_name and error)
-     * return void
-     */
-    public function uploadAndSaveFile($id, $module, $file_details, $attachmentType='Attachment')
-    {
-        global $log;
-        $log->debug("Entering into uploadAndSaveFile($id,$module,$file_details) method.");
+			if ($for_module && $for_crmid && $with_module && $with_crmid) {
+				relateEntities($on_focus, $for_module, $for_crmid, $with_module, $with_crmid);
+			}
+		}
+		// END
+	}
 
-        global $adb, $current_user;
-        global $upload_badext;
+	/**
+	 * This function is used to upload the attachment in the server and save that attachment information in db.
+	 * @param int $id  - entity id to which the file to be uploaded
+	 * @param string $module  - the current module name
+	 * @param array $file_details  - array which contains the file information(name, type, size, tmp_name and error)
+	 * return void
+	 */
+	function uploadAndSaveFile($id, $module, $file_details, $attachmentType='Attachment') {
+		global $log;
+		$log->debug("Entering into uploadAndSaveFile($id,$module,$file_details) method.");
 
-        $date_var = date("Y-m-d H:i:s");
+		global $adb, $current_user;
+		global $upload_badext;
 
-        //to get the owner id
-        $ownerid = $this->column_fields['assigned_user_id'];
-        if (!isset($ownerid) || $ownerid == '') {
-            $ownerid = $current_user->id;
-        }
+		$date_var = date("Y-m-d H:i:s");
 
-        if (isset($file_details['original_name']) && $file_details['original_name'] != null) {
-            $file_name = $file_details['original_name'];
-        } else {
-            $file_name = $file_details['name'];
-        }
+		//to get the owner id
+		$ownerid = $this->column_fields['assigned_user_id'];
+		if (!isset($ownerid) || $ownerid == '')
+			$ownerid = $current_user->id;
 
-        // Check 1
-        $save_file = 'true';
-        //only images are allowed for Image Attachmenttype
-        $mimeType = vtlib_mime_content_type($file_details['tmp_name']);
-        $mimeTypeContents = explode('/', $mimeType);
-        // For contacts and products we are sending attachmentType as value
-        if ($attachmentType == 'Image' || ($file_details['size'] && $mimeTypeContents[0] == 'image')) {
-            $save_file = validateImageFile($file_details);
-        }
-        if ($save_file == 'false') {
-            return false;
-        }
+		if (isset($file_details['original_name']) && $file_details['original_name'] != null) {
+			$file_name = $file_details['original_name'];
+		} else {
+			$file_name = $file_details['name'];
+		}
 
-        // Check 2
-        $save_file = 'true';
-        //only images are allowed for these modules
-        if ($module == 'Contacts' || $module == 'Products') {
-            $save_file = validateImageFile($file_details);
-        }
+		// Check 1
+		$save_file = 'true';
+		//only images are allowed for Image Attachmenttype
+		$mimeType = vtlib_mime_content_type($file_details['tmp_name']);
+		$mimeTypeContents = explode('/', $mimeType);
+		// For contacts and products we are sending attachmentType as value
+		if ($attachmentType == 'Image' || ($file_details['size'] && $mimeTypeContents[0] == 'image')) {
+			$save_file = validateImageFile($file_details);
+		}
+		if ($save_file == 'false') {
+			return false;
+		}
 
-        $binFile = sanitizeUploadFileName($file_name, $upload_badext);
+		// Check 2
+		$save_file = 'true';
+		//only images are allowed for these modules
+		if ($module == 'Contacts' || $module == 'Products') {
+			$save_file = validateImageFile($file_details);
+		}
 
-        $current_id = $adb->getUniqueID("vtiger_crmentity");
+		$binFile = sanitizeUploadFileName($file_name, $upload_badext);
 
-        $filename = ltrim(basename(" " . $binFile)); //allowed filename like UTF-8 characters
-        $filetype = $file_details['type'];
-        $filetmp_name = $file_details['tmp_name'];
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
 
-        //get the file path inwhich folder we want to upload the file
-        $upload_file_path = decideFilePath();
+		$filename = ltrim(basename(" " . $binFile)); //allowed filename like UTF-8 characters
+		$filetype = $file_details['type'];
+		$filetmp_name = $file_details['tmp_name'];
 
-        // upload the file in server
+		//get the file path inwhich folder we want to upload the file
+		$upload_file_path = decideFilePath();
+
+		// upload the file in server
         $encryptFileName = Vtiger_Util_Helper::getEncryptedFileName($binFile);
         $upload_status = copy($filetmp_name, $upload_file_path . $current_id . "_" . $encryptFileName);
         // temporary file will be deleted at the end of request
