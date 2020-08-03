@@ -450,7 +450,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model
 	 */
 	public function getImageDetails()
 	{
-		global $site_URL, $log;
+		global $site_URL;
 		$db = PearDatabase::getInstance();
 		$imageDetails = [];
 		$recordId = $this->getId();
@@ -461,8 +461,6 @@ class Vtiger_Record_Model extends Vtiger_Base_Model
 						INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_attachments.attachmentsid
 						WHERE vtiger_crmentity.setype = ? and vtiger_seattachmentsrel.crmid = ?';
 
-			$log->fatal([$this->getModuleName().' Image', $recordId]);
-
 			$result = $db->pquery($sql, [$this->getModuleName().' Image', $recordId]);
 
 			$imageId = $db->query_result($result, 0, 'attachmentsid');
@@ -471,17 +469,18 @@ class Vtiger_Record_Model extends Vtiger_Base_Model
 			$url = \Vtiger_Functions::getFilePublicURL($imageId, $imageName);
 			//decode_html - added to handle UTF-8 characters in file names
 			$imageOriginalName = urlencode(decode_html($imageName));
-            if($url) {
-                $url = $site_URL.$url;
-            }
-            
-			if(!empty($imageName)){
-				$imageDetails[] = array(
-						'id' => $imageId,
-						'orgname' => $imageOriginalName,
-						'path' => $imagePath.$imageId,
-						'name' => $imageName,
-                                                'url'  => $url
+			if ($url) {
+				$url = $site_URL.'/'.$url;
+			}
+
+			if (! empty($imageName)) {
+				$imageDetails[] = [
+					'id'      => $imageId,
+					'orgname' => $imageOriginalName,
+					'path'    => $imagePath.$imageId,
+					'name'    => $imageName,
+					'url'     => $url
+				];
 			}
 		}
 
