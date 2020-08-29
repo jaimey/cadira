@@ -92,9 +92,6 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action
 	 */
 	public function getRecordModelFromRequest(Vtiger_Request $request)
 	{
-		global $log;
-		$log->fatal('getRecordModelFromRequest');
-
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
