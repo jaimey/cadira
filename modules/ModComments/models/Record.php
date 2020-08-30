@@ -118,8 +118,8 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 		return $fileName;
 	}
 
-
-	public function getImagePath() {
+	public function getImagePath()
+	{
 		$commentor = $this->getCommentedByModel();
 		$isMailConverterType = $this->get('from_mailconverter');
 		if ($commentor) {
@@ -159,7 +159,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 					INNER JOIN vtiger_crmentity ON vtiger_modcomments.modcommentsid = vtiger_crmentity.crmid
 					WHERE modcommentsid = ? AND deleted = 0', [$record]);
 		if ($db->num_rows($result)) {
-			$row = $db->query_result_rowdata($result, $i);
+			$row = $db->query_result_rowdata($result, 0);
 			$self = new self();
 			$self->setData($row);
 
