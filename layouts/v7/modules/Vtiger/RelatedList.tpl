@@ -116,7 +116,7 @@
 									{/if}
 
 									{if $IS_DELETABLE}
-										<a class="relationDelete"><i title="{vtranslate('LBL_UNLINK', $MODULE)}" class="vicon-linkopen"></i></a>
+										<a class="relationDelete"><i title="{vtranslate('LBL_UNLINK', $MODULE)}" class="fa fa-chain-broken"></i></a>
 									{/if}
 								</span>
 

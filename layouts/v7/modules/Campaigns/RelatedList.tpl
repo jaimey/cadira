@@ -163,7 +163,7 @@
 									<span class="actionImages">
 										<a name="relationEdit" data-url="{$RELATED_RECORD->getEditViewUrl()}" href="javascript:void(0)"><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="fa fa-pencil"></i></a> &nbsp;&nbsp;
 										{if $IS_DELETABLE}
-											<a class="relationDelete"><i title="{vtranslate('LBL_UNLINK', $MODULE)}" class="vicon-linkopen"></i></a>
+											<a class="relationDelete"><i title="{vtranslate('LBL_UNLINK', $MODULE)}" class="fa fa-chain-broken"></i></a>
 										{/if}
 									</span>
 								</td>

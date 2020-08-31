@@ -6656,7 +6656,6 @@ li.select2-search-choice div {
 }
 .related-list-actions {
   width: 100px;
-  padding-left: 15px ! important;
 }
 .fa-star.active {
   color: #FFC600;
@@ -7752,5 +7751,9 @@ body .fc {
 .modules-menu ul li.active a {
   border-left: 3px solid #EF5E29;
   opacity: 1;
+}
+.actionImages {
+  color: #175388;
+  font-size: 20px;
 }
 /*# sourceMappingURL=style.css.map */
