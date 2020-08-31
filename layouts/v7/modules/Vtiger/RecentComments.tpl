@@ -12,6 +12,7 @@
 {assign var="PRIVATE_COMMENT_MODULES" value=Vtiger_Functions::getPrivateCommentModules()}
 {assign var=IS_CREATABLE value=$COMMENTS_MODULE_MODEL->isPermitted('CreateView')}
 {assign var=IS_EDITABLE value=$COMMENTS_MODULE_MODEL->isPermitted('EditView')}
+{assign var=IS_DELETABLE value=$COMMENTS_MODULE_MODEL->isPermitted('Delete')}
 
 <div class="commentContainer recentComments">
 	<div class="commentTitle">
@@ -159,6 +160,12 @@
 															{if $IS_CREATABLE}&nbsp;&nbsp;&nbsp;{/if}
 															<a href="javascript:void(0);" class="cursorPointer editComment feedback" style="color: blue;">
 																{vtranslate('LBL_EDIT',$MODULE_NAME)}
+															</a>
+														{/if}
+														{if $IS_DELETABLE}
+															{if $IS_CREATABLE}&nbsp;&nbsp;&nbsp;{/if}
+															<a href="javascript:void(0);" class="cursorPointer deleteCommentSummary feedback" style="color: blue;">
+																{vtranslate('LBL_DELETE',$MODULE_NAME)}
 															</a>
 														{/if}
 													</span>
