@@ -96,7 +96,7 @@
 			<div id="workSpace" style="padding:0px; overflow-y:auto; overflow-x:hidden;border:1px solid #e5e5e5;position:relative;margin:0 5px"></div>
 			<div id="gantEditorTemplates" style="display:none;">
 				<div class="__template__" type="TASKSEDITHEAD"><!--
-				<table class="gdfTable" cellspacing="0" cellpadding="0">
+				<table class="gdfTable" cellspacing="0" cellpadding="0" style="width: 1000px; top: 0px;">
 				 <thead>
 				 <tr style='height:50px'>
 					<th class="gdfColHeader" style="width:35px;"></th>
