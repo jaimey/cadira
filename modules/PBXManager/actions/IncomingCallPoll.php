@@ -66,10 +66,27 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
             foreach ($recordModels as $recordModel){
                 // To check whether the user has permission to see contact name in popup
                 $recordModel->set('callername', null);
+                
+                //SalesPlatform.ru begin incoming call for calling user
+                if($user->id != $recordModel->get('user')) {
+                    continue;
+                }
+                //SalesPlatform.ru end
 
                 $callerid = $recordModel->get('customer');
-                if($callerid){
+                //SalesPlatform.ru begin
+                if($callerid && isRecordExists($callerid)){
+                //if($callerid){
+                //SalesPlatform.ru end
                     $moduleName = $recordModel->get('customertype');
+
+                    // SalesPlatform.ru begin
+                    $callerRecordModel = Vtiger_Record_Model::getInstanceById($callerid, $moduleName);
+                    $ownerId = $callerRecordModel->get('assigned_user_id');
+                    $ownername = (getUserFullName($ownerId) != "") ? getUserFullName($ownerId) : getGroupFullName($ownerId);
+                    $recordModel->set('ownername', $ownername);
+                    // SalesPlatform.ru end
+
                     if(!Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $callerid)){
                         $name = $recordModel->get('customernumber').vtranslate('LBL_HIDDEN','PBXManager');
                         $recordModel->set('callername',$name);
@@ -79,6 +96,11 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
                         $recordModel->set('callername',$callerName);
                     }
                 }
+                //SalesPlatform.ru begin
+                  else {
+                  $recordModel->set('customer', null);    
+                }
+                //SalesPlatform.ru end
                 // End
                 $direction = $recordModel->get('direction');
                 if($direction == 'inbound'){
@@ -101,7 +123,8 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
             $user = Users_Record_Model::getCurrentUserModel();
             $moduleName = $request->get('modulename');
             $name = explode("@",$request->get('email'));
-            $element['lastname'] = $name[0];
+            $element['lastname'] = $request->get('lastname');
+            $element['firstname'] = $request->get('firstname');
             $element['email'] = $request->get('email');
             $element['phone'] = $request->get('number');
             $element['assigned_user_id'] = vtws_getWebserviceEntityId('Users', $user->id);
@@ -134,8 +157,14 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
         $id = vtws_getIdComponents($customer['id']);
         $sourceuuid = $request->get('callid');
         $module = $request->get('modulename');
-        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($sourceuuid);
-        $recordModel->updateCallDetails(array('customer'=>$id[1], 'customertype'=>$module));
+        //SalesPlatform.ru begin
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+        $user = array('id' => $currentUser->id);
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($sourceuuid, $user);
+        $recordModel->updateCallDetails(array('customer'=>$id[1], 'customertype'=>$module), $user);
+        //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($sourceuuid);
+        //$recordModel->updateCallDetails(array('customer'=>$id[1], 'customertype'=>$module));
+        //SalesPlatform.ru end
     }
     
     public function getCallStatus($request){

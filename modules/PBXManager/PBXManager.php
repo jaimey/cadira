@@ -48,6 +48,9 @@ class PBXManager extends CRMEntity {
         'User'     => 'user',
         'Recording' => 'recordingurl',
         'Start Time' => 'starttime',
+		//SalesPlatform.ru begin
+        'Incoming Line Name' => 'incominglinename',
+		//SalesPlatform.ru end
     );
     // Make the field link to detail view
     var $list_link_field = 'customernumber';
@@ -78,6 +81,18 @@ class PBXManager extends CRMEntity {
         $this->db = PearDatabase::getInstance();
         $this->column_fields = getColumnFields('PBXManager');
     }
+    //SalesPlatform.ru begin
+    function getListQuery($module, $where='') {
+        global $current_user;
+        $query = "SELECT vtiger_crmentity.*, vtiger_pbxmanager.*, vtiger_pbxmanagercf.* FROM vtiger_pbxmanager "
+                . "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_pbxmanager.pbxmanagerid "
+                . "INNER JOIN vtiger_pbxmanagercf ON vtiger_pbxmanagercf.pbxmanagerid=vtiger_pbxmanager.pbxmanagerid ";
+            $query .= getNonAdminAccessControlQuery($module, $current_user);
+            $query .= "WHERE vtiger_crmentity.deleted = 0 ". $where;
+            
+        return $query;
+    }
+    //SalesPlatform.ru end
     
      /**
      * Invoked when special actions are performed on the module.

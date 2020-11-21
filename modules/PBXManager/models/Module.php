@@ -95,7 +95,10 @@ class PBXManager_Module_Model extends Vtiger_Module_Model {
 	}
 
 	public function isWorkflowSupported() {
-		return false;
+                //SalesPlatform.ru start workflow for PBXManager
+                //return false;
+		return true;
+                //SalesPlatform.ru end
 	}
 
 	function isStarredEnabled(){

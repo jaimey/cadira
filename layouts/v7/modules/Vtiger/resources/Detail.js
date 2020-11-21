@@ -2764,6 +2764,14 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		});
 	},
 
+    //SalesPaltform.ru begin
+    registerAudioFieldClickEvent: function() {
+        var detailContentsHolder = this.getContentHolder();       		
+        detailContentsHolder.on('click', 'audio', function (e) {
+			e.stopPropagation();
+		});
+    },
+    //SalesPlatform.ru end
 
 	registerEvents : function() {
 		this._super();
@@ -2771,6 +2779,9 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		var detailContentsHolder = this.getContentHolder();
 		var self = this;
 		this.registerSendSmsSubmitEvent();
+        //SalesPlatform.ru begin
+        this.registerAudioFieldClickEvent();
+        //SalesPlatform.ru end        
 		detailContentsHolder.on('click','.viewThread', function(e){
 			var currentTarget = jQuery(e.currentTarget);
 			var currentTargetParent = currentTarget.parent();

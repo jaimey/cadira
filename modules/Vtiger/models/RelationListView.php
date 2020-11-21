@@ -373,6 +373,21 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 				}
 
 			}
+            
+            //SalesPlatform.ru begin
+            if ($relationModuleName == 'PBXManager') {
+                $recordingUrl = $row['recordingurl'];                               
+                if (!empty($recordingUrl) && $row['callstatus'] == 'completed') {
+                    $row['recordingurl'] = '<audio preload="metadata" src="index.php?module=PBXManager&action=ListenRecord&record='.$row['crmid'].'" controls>
+                        <a href="index.php?module=PBXManager&action=ListenRecord&record='.$row['crmid'].'" ><i class="icon-volume-up"></i></a>
+                    </audio>';
+                    $newRow['recordingurl'] = $row['recordingurl'];
+                } else {
+                    $newRow['recordingurl'] = '';
+                    $row['recordingurl'] = '';
+                }
+            }
+            //SalesPlatofrm.ru end
 
 			$record = Vtiger_Record_Model::getCleanInstance($relationModule->get('name'));
 			$record->setData($newRow)->setModuleFromInstance($relationModule)->setRawData($row);
