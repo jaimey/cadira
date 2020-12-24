@@ -174,6 +174,9 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View
 
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
 
+                $runtime_configs = Vtiger_Runtime_Configs::getInstance();
+                $password_regex = $runtime_configs->getValidationRegex('password_regex');
+                $viewer->assign('PWD_REGEX', $password_regex);
 		return parent::process($request);
 	}
 
