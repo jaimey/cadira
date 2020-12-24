@@ -40,7 +40,7 @@ class Users_Record_Model extends Vtiger_Record_Model
 	public function get($key)
 	{
 		if (property_exists($this, $key)) {
-			return $this->$key;
+			return $this->{$key};
 		}
 
 		return parent::get($key);
@@ -55,7 +55,7 @@ class Users_Record_Model extends Vtiger_Record_Model
 	public function set($key, $value)
 	{
 		if (property_exists($this, $key)) {
-			$this->$key = $value;
+			$this->{$key} = $value;
 		}
 		parent::set($key, $value);
 
@@ -265,7 +265,7 @@ class Users_Record_Model extends Vtiger_Record_Model
 		$objectProperties = get_object_vars($userObject);
 		$userModel = new self();
 		foreach ($objectProperties as $properName=>$propertyValue) {
-			$userModel->$properName = $propertyValue;
+			$userModel->{$properName} = $propertyValue;
 		}
 
 		return $userModel->setData($userObject->column_fields)->setModule('Users')->setEntity($userObject);
@@ -324,7 +324,7 @@ class Users_Record_Model extends Vtiger_Record_Model
 		if ($subordinateRoleUsers) {
 			foreach ($subordinateRoleUsers as $role=>$users) {
 				foreach ($users as $user) {
-					$subordinateUsers[$user] = $privilegesModel->get('first_name').' '.$privilegesModel->get('last_name');
+					$subordinateUsers[$user] = $privilegesModel->get('userlabel');
 				}
 			}
 		}
@@ -523,7 +523,7 @@ class Users_Record_Model extends Vtiger_Record_Model
 		$currentUserRoleModel = Settings_Roles_Record_Model::getInstanceById($this->getRole());
 		$childernRoles = $currentUserRoleModel->getAllChildren();
 		$users = $this->getAllUsersOnRoles($childernRoles);
-		$currentUserDetail = [$this->getId() => $this->get('first_name').' '.$this->get('last_name')];
+		$currentUserDetail = [$this->getId() => $this->get('userlabel')];
 
 		return $currentUserDetail + $users;
 	}
@@ -554,14 +554,12 @@ class Users_Record_Model extends Vtiger_Record_Model
 			for ($i = 0; $i < $noOfUsers; ++$i) {
 				$userIds[] = $db->query_result($result, $i, 'userid');
 			}
-			$query = 'SELECT id, first_name, last_name FROM vtiger_users WHERE status = ? AND id IN ('.generateQuestionMarks($userIds).')';
+			$query = 'SELECT id, userlabel FROM vtiger_users WHERE status = ? AND id IN ('.generateQuestionMarks($userIds).')';
 			$result = $db->pquery($query, ['ACTIVE', $userIds]);
 			$noOfUsers = $db->num_rows($result);
 			for ($j = 0; $j < $noOfUsers; ++$j) {
 				$userId = $db->query_result($result, $j, 'id');
-				$firstName = $db->query_result($result, $j, 'first_name');
-				$lastName = $db->query_result($result, $j, 'last_name');
-				$subUsers[$userId] = $firstName.' '.$lastName;
+				$subUsers[$userId] = $db->query_result($result, $j, 'userlabel');
 			}
 		}
 
@@ -908,7 +906,13 @@ break;
 	 */
 	public function getDisplayName()
 	{
-		return getFullNameFromArray($this->getModuleName(), $this->getData());
+		$userLabel = $this->get('userlabel');
+
+		if (! $userLabel) {
+			$userLabel = getFullNameFromArray($this->getModuleName(), $this->getData());
+		}
+
+		return $userLabel;
 	}
 
 	/**

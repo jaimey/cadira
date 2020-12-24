@@ -959,7 +959,7 @@ function getRoleUsers($roleId)
 	$num_rows = $adb->num_rows($result);
 	$roleRelatedUsers = [];
 	for ($i = 0; $i < $num_rows; $i++) {
-		$roleRelatedUsers[$adb->query_result($result, $i, 'userid')] = getFullNameFromQResult($result, $i, 'Users');
+		$roleRelatedUsers[$adb->query_result($result, $i, 'userid')] = $adb->query_result($result, $i, 'userlabel');
 	}
 	$log->debug('Exiting getRoleUsers method ...');
 
@@ -1164,13 +1164,13 @@ function getAllUserName()
 	global $log;
 	$log->debug('Entering getAllUserName() method ...');
 	global $adb;
-	$query = 'select * from vtiger_users where deleted=0';
+	$query = 'select id, userlabel from vtiger_users where deleted=0';
 	$result = $adb->pquery($query, []);
 	$num_rows = $adb->num_rows($result);
 	$user_details = [];
 	for ($i = 0;$i < $num_rows;$i++) {
 		$userid = $adb->query_result($result, $i, 'id');
-		$username = getFullNameFromQResult($result, $i, 'Users');
+		$username = $adb->query_result($result, $i, 'userlabel');
 		$user_details[$userid] = $username;
 	}
 	$log->debug('Exiting getAllUserName method ...');
