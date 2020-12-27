@@ -564,7 +564,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model
 		$_SESSION[$key] = $params;
 	}
 
-	public function deleteParamsSession($key, $params)
+	public static function deleteParamsSession($key, $params)
 	{
 		if (! is_array($params)) {
 			$params = [$params];

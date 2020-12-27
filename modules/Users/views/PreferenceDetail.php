@@ -114,22 +114,13 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View
 			$settingsModel = Settings_Vtiger_Module_Model::getInstance();
 			$menuModels = $settingsModel->getMenus();
 
-			if (! empty($selectedMenuId)) {
-				$selectedMenu = Settings_Vtiger_Menu_Model::getInstanceById($selectedMenuId);
-			} elseif (! empty($moduleName) && $moduleName != 'Vtiger') {
+			if (! empty($moduleName) && $moduleName != 'Vtiger') {
 				$fieldItem = Settings_Vtiger_Index_View::getSelectedFieldFromModule($menuModels, $moduleName);
-				if ($fieldItem) {
-					$selectedMenu = Settings_Vtiger_Menu_Model::getInstanceById($fieldItem->get('blockid'));
-					$fieldId = $fieldItem->get('fieldid');
-				} else {
+				if (! $fieldItem) {
 					reset($menuModels);
-					$firstKey = key($menuModels);
-					$selectedMenu = $menuModels[$firstKey];
 				}
 			} else {
 				reset($menuModels);
-				$firstKey = key($menuModels);
-				$selectedMenu = $menuModels[$firstKey];
 			}
 
 			$settingsMenItems = [];
@@ -174,9 +165,10 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View
 
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
 
-                $runtime_configs = Vtiger_Runtime_Configs::getInstance();
-                $password_regex = $runtime_configs->getValidationRegex('password_regex');
-                $viewer->assign('PWD_REGEX', $password_regex);
+		$runtime_configs = Vtiger_Runtime_Configs::getInstance();
+		$password_regex = $runtime_configs->getValidationRegex('password_regex');
+		$viewer->assign('PWD_REGEX', $password_regex);
+
 		return parent::process($request);
 	}
 
