@@ -25,7 +25,7 @@ class VTWorkflowManager
 	public function __construct($adb)
 	{
 		$this->adb = $adb;
-                $this->setMaxAllowedScheduledWorkflows();
+		$this->setMaxAllowedScheduledWorkflows();
 	}
 
 	public function save($workflow)
@@ -120,25 +120,27 @@ class VTWorkflowManager
 
 		return $adb->query_result($result, 0, 'count');
 	}
-        
-    /**
-    * Function to set max allowed scheduled workflow count as per global defaults
-    */
-	function setMaxAllowedScheduledWorkflows(){
-    	global $max_scheduled_workflows;
-        if(!empty($max_scheduled_workflows)){
-        	vglobal('max_scheduled_workflows', $max_scheduled_workflows);
-        }else{
-        	vglobal('max_scheduled_workflows', 10);
-        }
-    }
+
+	/**
+	 * Function to set max allowed scheduled workflow count as per global defaults
+	 */
+	public function setMaxAllowedScheduledWorkflows()
+	{
+		global $max_scheduled_workflows;
+		if (! empty($max_scheduled_workflows)) {
+			vglobal('max_scheduled_workflows', $max_scheduled_workflows);
+		} else {
+			vglobal('max_scheduled_workflows', 10);
+		}
+	}
 
 	/**
 	 * Function returns the maximum allowed scheduled workflows
 	 * @return int
 	 */
-	function getMaxAllowedScheduledWorkflows() {
-        return vglobal('max_scheduled_workflows');
+	public function getMaxAllowedScheduledWorkflows()
+	{
+		return vglobal('max_scheduled_workflows');
 	}
 
 	public function getWorkflowsForModule($moduleName)
@@ -161,34 +163,6 @@ class VTWorkflowManager
 
 			return $this->getWorkflowsForResult($result);
 		}
-	}
-
-	protected function getWorkflowsForResult($result){
-		$adb=$this->adb;
-
-		$it = new SqlResultIterator($adb, $result);
-		$workflows=array();
-		$i=0;
-		foreach($it as $row){
-			$workflow = $this->getWorkflowInstance($row->type);
-			$workflow->setup($row->data);
-
-			if(!is_a($workflow, 'Workflow')) continue;
-
-			$workflows[$i++]=$workflow;
-		}
-		return $workflows;
-	}
-
-	protected function getWorkflowInstance($type='basic') {
-		$configReader = new ConfigReader('modules/com_vtiger_workflow/config.inc', 'workflowConfig');
-		$workflowTypeConfig = $configReader->getConfig($type);
-		$workflowClassPath = $workflowTypeConfig['classpath'];
-		$workflowClass = $workflowTypeConfig['class'];
-
-		require_once $workflowClassPath;
-		$workflow = new $workflowClass();
-		return $workflow;
 	}
 
 	/**
