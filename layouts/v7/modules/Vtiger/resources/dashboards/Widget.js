@@ -518,12 +518,40 @@ Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
     },
 
 	loadChart : function() {
-		var chartData = this.generateData();
-        var chartOptions = {
-            renderer:'pie',
-            links: this.generateLinks()
-        };
-        this.getPlotContainer(false).vtchart(chartData,chartOptions);
+		var data = this.generateData();
+        
+		var jData = {
+			labels: ["Open"],
+			values: [data['chartData'][0][1]],
+			links: this.generateLinks(),
+			colors: "#1d74c2",
+		};
+
+		var container = this.getContainer();
+		var ctx = container.find('.widgetChartContainer');
+
+		var myChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: {
+			  labels: jData.labels,
+			  datasets: [{
+				data: jData.values,
+				backgroundColor: jData.colors,
+			  }]
+			},
+			options: {
+				segmentShowStroke : true,
+				segmentStrokeColor : "rgba(0,0,0,0)",
+				segmentStrokeWidth : 1,		
+				percentageInnerCutout : 50,
+				animationSteps : 30,
+				animationEasing : "none",
+				animateRotate : true,
+				animateScale : true,
+				responsive:true,
+				maintainAspectRatio: false,
+			}
+		  });		
 	}
 });
 
@@ -574,9 +602,14 @@ Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
 
 	loadChart : function() {
 		var data = this.generateChartData();
-        var chartOptions = {
-            renderer:'bar',
-            links: this.generateLinks()
+		
+		var jData = {
+			labels: data['labels'],
+			values: data['chartData'],
+			links: this.generateLinks(),
+			colors: palette("mpn65", data['chartData'].length).map(function(color) {
+				return "#" + color;
+			})
 		};
 
 		var container = this.getContainer();
@@ -585,38 +618,11 @@ Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
 		var myChart = new Chart(ctx, {
 			type: 'bar',
 			data: {
-			  labels: data['labels'],
+			  labels: jData.labels,
 			  datasets: [{
-				label: 'Chart',
-				data: data['chartData'],
-				backgroundColor: [
-				  'rgba(255, 99, 132, 0.2)',
-				  'rgba(54, 162, 235, 0.2)',
-				  'rgba(255, 206, 86, 0.2)',
-				  'rgba(75, 192, 192, 0.2)',
-				  'rgba(153, 102, 255, 0.2)',
-				  'rgba(255, 159, 64, 0.2)',
-				  'rgba(255, 99, 132, 0.2)',
-				  'rgba(54, 162, 235, 0.2)',
-				  'rgba(255, 206, 86, 0.2)',
-				  'rgba(75, 192, 192, 0.2)',
-				  'rgba(153, 102, 255, 0.2)',
-				  'rgba(255, 159, 64, 0.2)'
-				],
-				borderColor: [
-				  'rgba(255,99,132,1)',
-				  'rgba(54, 162, 235, 1)',
-				  'rgba(255, 206, 86, 1)',
-				  'rgba(75, 192, 192, 1)',
-				  'rgba(153, 102, 255, 1)',
-				  'rgba(255, 159, 64, 1)',
-				  'rgba(255,99,132,1)',
-				  'rgba(54, 162, 235, 1)',
-				  'rgba(255, 206, 86, 1)',
-				  'rgba(75, 192, 192, 1)',
-				  'rgba(153, 102, 255, 1)',
-				  'rgba(255, 159, 64, 1)'
-				],
+				label: 'Num.',
+				data: jData.values,
+				backgroundColor: jData.colors,
 				borderWidth: 1
 			  }]
 			},
