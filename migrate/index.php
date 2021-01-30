@@ -83,13 +83,12 @@ if (!$errorMessage) {
 	}
 }
 ?>
-<!doctype html>
+<!doctype>
 <html>
 	<head>
 		<title>Vtiger CRM Setup</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script type="text/javascript" src="resources/js/jquery-min.js"></script>
-                <script type="text/javascript" src="resources/js/jquery-migrate-1.4.1.js"></script>
 		<link href="resources/todc/css/bootstrap.min.css" rel="stylesheet">
 		<link href="resources/todc/css/todc-bootstrap.min.css" rel="stylesheet">
 		<link href="resources/css/mkCheckbox.css" rel="stylesheet">
