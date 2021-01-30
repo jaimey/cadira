@@ -44,7 +44,6 @@ class LoggerReflectionUtils {
 	 * @param object $obj The object to configure.
 	 * @param array $properties An array containing keys and values.
 	 * @param string $prefix Only keys having the specified prefix will be set.
-	 * @static
 	 */
 	 // TODO: check, if this is really useful
 	public static function setPropertiesByObject($obj, $properties, $prefix) {
@@ -128,7 +127,6 @@ class LoggerReflectionUtils {
 	 */
 	public static function createObject($class) {
 		if(!empty($class)) {
-			$class = basename($class);
 			return new $class();
 		}
 		return null;

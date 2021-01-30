@@ -53,44 +53,26 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
  *      Tue Sep  8 21:51:06 2009,120 [5485] FATAL root - Some more critical message!
  * </pre>
 
- * @version $Revision: 883108 $
+ * @version $Revision: 1213283 $
  * @package log4php
  * @subpackage appenders
  */
 class LoggerAppenderMail extends LoggerAppender {
 
 	/** @var string 'from' field */
-	private $from = null;
+	protected $from = null;
 
 	/** @var string 'subject' field */
-	private $subject = 'Log4php Report';
+	protected $subject = 'Log4php Report';
 	
 	/** @var string 'to' field */
-	private $to = null;
+	protected $to = null;
 
 	/** @var indiciates if this appender should run in dry mode */
-	private $dry = false;
+	protected $dry = false;
 
 	/** @var string used to create mail body */
-	private $body = '';
-	
-	/**
-	 * Constructor.
-	 *
-	 * @param string $name appender name
-	 */
-	public function __construct($name = '') {
-		parent::__construct($name);
-		$this->requiresLayout = true;
-	}
-
-	public function __destruct() {
-       $this->close();
-   	}
-
-	public function activateOptions() {
-		$this->closed = false;
-	}
+	protected $body = '';
 	
 	public function close() {
 		if($this->closed != true) {
@@ -113,19 +95,19 @@ class LoggerAppenderMail extends LoggerAppender {
 	}
 	
 	public function setSubject($subject) {
-		$this->subject = $subject;
+		$this->setString('subject', $subject);
 	}
 	
 	public function setTo($to) {
-		$this->to = $to;
+		$this->setString('to', $to);
 	}
 
 	public function setFrom($from) {
-		$this->from = $from;
-	}  
+		$this->setString('from', $from);
+	}
 
 	public function setDry($dry) {
-		$this->dry = $dry;
+		$this->setBoolean('dry', $dry);
 	}
 	
 	public function append(LoggerLoggingEvent $event) {

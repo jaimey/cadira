@@ -49,7 +49,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
  *      Tue Sep  8 21:51:04 2009,120 [5485] FATAL root - Some critical message!
  * </pre>
  *
- * @version $Revision: 883108 $
+ * @version $Revision: 1213283 $
  * @package log4php
  * @subpackage appenders
  */
@@ -58,27 +58,27 @@ class LoggerAppenderMailEvent extends LoggerAppender {
 	/**  'from' field (defaults to 'sendmail_from' from php.ini on win32).
 	 * @var string
 	 */
-	private $from = null;
+	protected $from;
 
 	/** Mailserver port (win32 only).
 	 * @var integer 
 	 */
-	private $port = 25;
+	protected $port = 25;
 
 	/** Mailserver hostname (win32 only).
 	 * @var string   
 	 */
-	private $smtpHost = null;
+	protected $smtpHost = null;
 
 	/**
 	 * @var string 'subject' field
 	 */
-	private $subject = '';
+	protected $subject = '';
 
 	/**
 	 * @var string 'to' field
 	 */
-	private $to = null;
+	protected $to = null;
 	
 	/**
 	 * @access private
@@ -86,21 +86,8 @@ class LoggerAppenderMailEvent extends LoggerAppender {
 	protected $requiresLayout = true;
 
 	/** @var indiciates if this appender should run in dry mode */
-	private $dry = false;
+	protected $dry = false;
 	
-	/**
-	 * Constructor.
-	 *
-	 * @param string $name appender name
-	 */
-	public function __construct($name = '') {
-		parent::__construct($name);
-	}
-
-	public function __destruct() {
-       $this->close();
-   	}
-   	
 	public function activateOptions() {
 	    if (empty($this->layout)) {
 	        throw new LoggerException("LoggerAppenderMailEvent requires layout!");
@@ -117,32 +104,28 @@ class LoggerAppenderMailEvent extends LoggerAppender {
         $this->closed = false;
 	}
 	
-	public function close() {
-		$this->closed = true;
-	}
-
 	public function setFrom($from) {
-		$this->from = $from;
+		$this->setString('from', $from);
 	}
 	
 	public function setPort($port) {
-		$this->port = (int)$port;
+		$this->setPositiveInteger('port', $port);
 	}
 	
 	public function setSmtpHost($smtpHost) {
-		$this->smtpHost = $smtpHost;
+		$this->setString('smtpHost', $smtpHost);
 	}
 	
 	public function setSubject($subject) {
-		$this->subject = $subject;
+		$this->setString('subject',  $subject);
 	}
 	
 	public function setTo($to) {
-		$this->to = $to;
+		$this->setString('to',  $to);
 	}
 
 	public function setDry($dry) {
-		$this->dry = $dry;
+		$this->setBoolean('dry', $dry);
 	}
 	
 	public function append(LoggerLoggingEvent $event) {

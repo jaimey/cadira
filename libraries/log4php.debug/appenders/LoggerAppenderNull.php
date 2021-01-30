@@ -34,25 +34,16 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
  * 
  * {@example ../../examples/resources/appender_null.properties 18}
  * 
- * @version $Revision: 883108 $
+ * @version $Revision: 1166182 $
  * @package log4php
  * @subpackage appenders
  */
 class LoggerAppenderNull extends LoggerAppender {
 
+	/** 
+	 * This appender does not require a layout. 
+	 */
 	protected $requiresLayout = false;
-	
-	public function __destruct() {
-       $this->close();
-   	}
-   	
-	public function activateOptions() {
-		$this->closed = false;
-	}
-	
-	public function close() {
-		$this->closed = true;
-	}
 	
 	/**
 	 * Do nothing. 

@@ -52,74 +52,60 @@ require_once(LOG4PHP_DIR . '/LoggerLoggingEvent.php');
  *    0    8318   INFO  root       Hello World!
  * </pre>
  * 
- * @version $Revision: 883108 $
+ * @version $Revision: 1213283 $
  * @package log4php
  * @subpackage layouts
  */
 class LoggerLayoutHtml extends LoggerLayout {
+	/**
+	 * The <b>LocationInfo</b> option takes a boolean value. By
+	 * default, it is set to false which means there will be no location
+	 * information output by this layout. If the the option is set to
+	 * true, then the file name and line number of the statement
+	 * at the origin of the log statement will be output.
+	 *
+	 * <p>If you are embedding this layout within a {@link LoggerAppenderMail}
+	 * or a {@link LoggerAppenderMailEvent} then make sure to set the
+	 * <b>LocationInfo</b> option of that appender as well.
+	 * @var boolean
+	 */
+	protected $locationInfo = false;
+	
+	/**
+	 * The <b>Title</b> option takes a String value. This option sets the
+	 * document title of the generated HTML document.
+	 * Defaults to 'Log4php Log Messages'.
+	 * @var string
+	 */
+	protected $title = "Log4php Log Messages";
+	
+	/**
+	 * The <b>LocationInfo</b> option takes a boolean value. By
+	 * default, it is set to false which means there will be no location
+	 * information output by this layout. If the the option is set to
+	 * true, then the file name and line number of the statement
+	 * at the origin of the log statement will be output.
+	 *
+	 * <p>If you are embedding this layout within a {@link LoggerAppenderMail}
+	 * or a {@link LoggerAppenderMailEvent} then make sure to set the
+	 * <b>LocationInfo</b> option of that appender as well.
+	 */
+	public function setLocationInfo($flag) {
+		$this->setBoolean('locationInfo', $flag);
+	}
 
-    /**
-     * The <b>LocationInfo</b> option takes a boolean value. By
-     * default, it is set to false which means there will be no location
-     * information output by this layout. If the the option is set to
-     * true, then the file name and line number of the statement
-     * at the origin of the log statement will be output.
-     *
-     * <p>If you are embedding this layout within a {@link LoggerAppenderMail}
-     * or a {@link LoggerAppenderMailEvent} then make sure to set the
-     * <b>LocationInfo</b> option of that appender as well.
-     * @var boolean
-     */
-    private $locationInfo = false;
-    
-    /**
-     * The <b>Title</b> option takes a String value. This option sets the
-     * document title of the generated HTML document.
-     * Defaults to 'Log4php Log Messages'.
-     * @var string
-     */
-    private $title = "Log4php Log Messages";
-    
-    /**
-     * Constructor
-     */
-    public function __construct() {
-    }
-    
-    /**
-     * The <b>LocationInfo</b> option takes a boolean value. By
-     * default, it is set to false which means there will be no location
-     * information output by this layout. If the the option is set to
-     * true, then the file name and line number of the statement
-     * at the origin of the log statement will be output.
-     *
-     * <p>If you are embedding this layout within a {@link LoggerAppenderMail}
-     * or a {@link LoggerAppenderMailEvent} then make sure to set the
-     * <b>LocationInfo</b> option of that appender as well.
-     */
-    public function setLocationInfo($flag) {
-        if (is_bool($flag)) {
-            $this->locationInfo = $flag;
-        } else {
-            $this->locationInfo = (bool)(strtolower($flag) == 'true');
-        }
-    }
-
-    /**
-     * Returns the current value of the <b>LocationInfo</b> option.
-     */
-    public function getLocationInfo() {
-        return $this->locationInfo;
-    }
-    
-    /**
-     * The <b>Title</b> option takes a String value. This option sets the
-     * document title of the generated HTML document.
-     * Defaults to 'Log4php Log Messages'.
-     */
-    public function setTitle($title) {
-        $this->title = $title;
-    }
+	/**
+	 * Returns the current value of the <b>LocationInfo</b> option.
+	 */
+	public function getLocationInfo() {
+		return $this->locationInfo;
+	}
+	
+	/**
+	 * The <b>Title</b> option takes a String value. This option sets the
+	 * document title of the generated HTML document.
+	 * Defaults to 'Log4php Log Messages'.
+	 */
 
     /**
      * @return string Returns the current value of the <b>Title</b> option.

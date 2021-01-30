@@ -44,7 +44,7 @@ require_once(LOG4PHP_DIR . '/appenders/LoggerAppenderFile.php');
  *
  * The above will create a file like: daily_20090908.log
  *
- * @version $Revision: 883108 $
+ * @version $Revision: 1213283 $
  * @package log4php
  * @subpackage appenders
  */
@@ -55,18 +55,14 @@ class LoggerAppenderDailyFile extends LoggerAppenderFile {
 	 * It follows the {@link PHP_MANUAL#date()} formatting rules and <b>should always be set before {@link $file} param</b>.
 	 * @var string
 	 */
-	public $datePattern = "Ymd";
+	protected $datePattern = "Ymd";
 	
-	public function __destruct() {
-       parent::__destruct();
-   	}
-   	
 	/**
-	* Sets date format for the file name.
-	* @param string $format a regular date() string format
-	*/
-	public function setDatePattern($format) {
-		$this->datePattern = $format;
+	 * Sets date format for the file name.
+	 * @param string $datePattern a regular date() string format
+	 */
+	public function setDatePattern($datePattern) {
+		$this->setString('datePattern', $datePattern);
 	}
 	
 	/**
@@ -76,23 +72,37 @@ class LoggerAppenderDailyFile extends LoggerAppenderFile {
 		return $this->datePattern;
 	}
 	
-	/**
-	* The File property takes a string value which should be the name of the file to append to.
-	* Sets and opens the file where the log output will go.
-	*
-	* @see LoggerAppenderFile::setFile()
-	*/
-	public function setFile() {
-		$numargs = func_num_args();
-		$args = func_get_args();
+	/** 
+	 * Similar to parent method, but but replaces "%s" in the file name with 
+	 * the current date in format specified by the 'datePattern' parameter.
+	 */ 
+	public function activateOptions() {
+		$fileName = $this->getFile();
+		$date = date($this->getDatePattern());
+		$fileName = sprintf($fileName, $date);
 		
-		if($numargs == 1 and is_string($args[0])) {
-			parent::setFile( sprintf((string)$args[0], date($this->getDatePattern())) );
-		} else if ($numargs == 2 and is_string($args[0]) and is_bool($args[1])) {
-			parent::setFile( sprintf((string)$args[0], date($this->getDatePattern())), $args[1] );
+		if(!is_file($fileName)) {
+			$dir = dirname($fileName);
+			if(!is_dir($dir)) {
+				mkdir($dir, 0777, true);
+			}
 		}
-	} 
-
+	
+		$this->fp = fopen($fileName, ($this->getAppend()? 'a':'w'));
+		if($this->fp) {
+			if(flock($this->fp, LOCK_EX)) {
+				if($this->getAppend()) {
+					fseek($this->fp, 0, SEEK_END);
+				}
+				fwrite($this->fp, $this->layout->getHeader());
+				flock($this->fp, LOCK_UN);
+				$this->closed = false;
+			} else {
+				// TODO: should we take some action in this case?
+				$this->closed = true;
+			}
+		} else {
+			$this->closed = true;
 }
 
 ?>

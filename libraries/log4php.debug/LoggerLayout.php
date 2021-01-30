@@ -26,11 +26,10 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__));
 /**
  * Extend this abstract class to create your own log layout format.
  *	
- * @version $Revision: 822415 $
+ * @version $Revision: 1213283 $
  * @package log4php
- * @abstract
  */
-abstract class LoggerLayout {
+abstract class LoggerLayout extends LoggerConfigurable {
 	/**
 	 * Activates options for this layout.
 	 * Override this method if you have options to be activated.
@@ -71,6 +70,11 @@ abstract class LoggerLayout {
 	 */
 	public function getHeader() {
 		return null;
+	}
+	
+	/** Triggers a warning for this layout with the given message. */
+	protected function warn($message) {
+		trigger_error("log4php: [" . get_class($this) . "]: $message", E_USER_WARNING);
 	}
 }
 ?>

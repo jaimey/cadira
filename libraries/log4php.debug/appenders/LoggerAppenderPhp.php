@@ -30,10 +30,11 @@ require_once(LOG4PHP_DIR . '/LoggerLevel.php');
  *
  * This appender has no configurable parameters.
  *
- * <p>Levels are mapped as follows:</p>
- * - <b>level &lt; WARN</b> mapped to E_USER_NOTICE
- * - <b>WARN &lt;= level &lt; ERROR</b> mapped to E_USER_WARNING
- * - <b>level &gt;= ERROR</b> mapped to E_USER_ERROR  
+ * Levels are mapped as follows:
+ * 
+ * - <b>level < WARN</b> mapped to E_USER_NOTICE
+ * - <b>WARN <= level < ERROR</b> mapped to E_USER_WARNING
+ * - <b>level >= ERROR</b> mapped to E_USER_ERROR  
  *
  * An example:
  * 
@@ -41,28 +42,11 @@ require_once(LOG4PHP_DIR . '/LoggerLevel.php');
  * 
  * {@example ../../examples/resources/appender_php.properties 18}
  *
- * @version $Revision: 883108 $
+ * @version $Revision: 1166182 $
  * @package log4php
  * @subpackage appenders
  */ 
 class LoggerAppenderPhp extends LoggerAppender {
-
-	public function __construct($name = '') {
-		parent::__construct($name);
-		$this->requiresLayout = true;
-	}
-	
-	public function __destruct() {
-       $this->close();
-   	}
-	
-	public function activateOptions() {
-		$this->closed = false;
-	}
-
-	public function close() {
-		$this->closed = true;
-	}
 
 	public function append(LoggerLoggingEvent $event) {
 		if($this->layout !== null) {

@@ -45,10 +45,9 @@ $GLOBALS['log4php.LoggerPatternConverter.spaces'] = array(
  * individual PatternConverters. Each of which is responsible for
  * converting a logging event in a converter specific manner.</p>
  * 
- * @version $Revision: 822445 $
+ * @version $Revision: 1166187 $
  * @package log4php
  * @subpackage helpers
- * @abstract
  * @since 0.3
  */
 class LoggerPatternConverter {

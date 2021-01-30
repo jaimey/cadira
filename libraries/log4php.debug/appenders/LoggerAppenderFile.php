@@ -43,7 +43,7 @@ require_once(LOG4PHP_DIR . '/helpers/LoggerOptionConverter.php');
  * 
  * {@example ../../examples/resources/appender_file.properties 18}
  * 
- * @version $Revision: 883108 $
+ * @version $Revision: 1213663 $
  * @package log4php
  * @subpackage appenders
  */
@@ -52,7 +52,8 @@ class LoggerAppenderFile extends LoggerAppender {
 	/**
 	 * @var boolean if {@link $file} exists, appends events.
 	 */
-	private $append = true;
+	protected $append = true;
+	
 	/**
 	 * @var string the file name used to append events
 	 */
@@ -62,18 +63,15 @@ class LoggerAppenderFile extends LoggerAppender {
 	 */
 	protected $fp = false;
 	
-	public function __construct($name = '') {
-		parent::__construct($name);
-		$this->requiresLayout = true;
-	}
-
-	public function __destruct() {
-       $this->close();
-   	}
-   	
 	public function activateOptions() {
 		$fileName = $this->getFile();
 
+		if (empty($fileName)) {
+			$this->warn("Required parameter 'fileName' not set. Closing appender.");
+			$this->closed = true;
+			return;
+		}
+		
 		if(!is_file($fileName)) {
 			$dir = dirname($fileName);
 			if(!is_dir($dir)) {
@@ -132,16 +130,8 @@ class LoggerAppenderFile extends LoggerAppender {
 	 * 
 	 * TODO: remove overloading. Use only file as alias to filename
 	 */
-	public function setFile() {
-		$numargs = func_num_args();
-		$args	 = func_get_args();
-
-		if($numargs == 1 and is_string($args[0])) {
-			$this->setFileName($args[0]);
-		} else if ($numargs >=2 and is_string($args[0]) and is_bool($args[1])) {
-			$this->setFile($args[0]);
-			$this->setAppend($args[1]);
-		}
+	public function setFile($file) {
+		$this->setString('file', $file);
 	}
 	
 	/**
@@ -158,8 +148,13 @@ class LoggerAppenderFile extends LoggerAppender {
 		return $this->append;
 	}
 
-	public function setAppend($flag) {
-		$this->append = LoggerOptionConverter::toBoolean($flag, true);		  
+	public function setAppend($append) {
+		$this->setBoolean('append', $append);
+	}
+
+	/**
+	 * Sets the file where the log output will go.
+	 * @param string $fileName
 	}
 
 	public function setFileName($fileName) {

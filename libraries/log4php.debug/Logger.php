@@ -38,10 +38,9 @@ spl_autoload_register(['Logger', 'autoload']);
  * 		<li>{@link fatal()}</li>
  * 	</ul>
  *
- * @category   log4php
  * @package    log4php
  * @license	   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
- * @version	   SVN: $Id: Logger.php 1137439 2011-06-19 21:13:04Z ihabunek $
+ * @version	   SVN: $Id: Logger.php 1213710 2011-12-13 14:30:50Z ihabunek $
  * @link	   http://logging.apache.org/log4php
  */
 class Logger
@@ -54,15 +53,16 @@ class Logger
 		'LoggerMDC'                       => '/LoggerMDC.php',
 		'LoggerNDC'                       => '/LoggerNDC.php',
 		'LoggerReflectionUtils'           => '/LoggerReflectionUtils.php',
+		'LoggerConfigurable'              => '/LoggerConfigurable.php',
 		'LoggerConfigurator'              => '/LoggerConfigurator.php',
-		'LoggerConfiguratorBasic'         => '/configurators/LoggerConfiguratorBasic.php',
-		'LoggerConfiguratorIni'           => '/configurators/LoggerConfiguratorIni.php',
-		'LoggerConfiguratorPhp'           => '/configurators/LoggerConfiguratorPhp.php',
-		'LoggerConfiguratorXml'           => '/configurators/LoggerConfiguratorXml.php',
+		'LoggerConfiguratorDefault'       => '/configurators/LoggerConfiguratorDefault.php',
+		'LoggerConfigurationAdapter'      => '/configurators/LoggerConfigurationAdapter.php',
+		'LoggerConfigurationAdapterINI'   => '/configurators/LoggerConfigurationAdapterINI.php',
+		'LoggerConfigurationAdapterXML'   => '/configurators/LoggerConfigurationAdapterXML.php',
+		'LoggerConfigurationAdapterPHP'   => '/configurators/LoggerConfigurationAdapterPHP.php',
 		'LoggerRoot'                      => '/LoggerRoot.php',
 		'LoggerAppender'                  => '/LoggerAppender.php',
 		'LoggerAppenderPool'              => '/LoggerAppenderPool.php',
-		'LoggerAppenderAdodb'             => '/appenders/LoggerAppenderAdodb.php',
 		'LoggerAppenderPDO'               => '/appenders/LoggerAppenderPDO.php',
 		'LoggerAppenderConsole'           => '/appenders/LoggerAppenderConsole.php',
 		'LoggerAppenderDailyFile'         => '/appenders/LoggerAppenderDailyFile.php',
@@ -96,11 +96,11 @@ class Logger
 		'LoggerClassNamePatternConverter' => '/helpers/LoggerClassNamePatternConverter.php',
 		'LoggerCategoryPatternConverter'  => '/helpers/LoggerCategoryPatternConverter.php',
 		'LoggerPatternParser'             => '/helpers/LoggerPatternParser.php',
-		'LoggerLayoutBson'                => '/layouts/LoggerLayoutBson.php',
 		'LoggerLayoutHtml'                => '/layouts/LoggerLayoutHtml.php',
 		'LoggerLayoutSimple'              => '/layouts/LoggerLayoutSimple.php',
 		'LoggerLayoutTTCC'                => '/layouts/LoggerLayoutTTCC.php',
 		'LoggerLayoutPattern'             => '/layouts/LoggerLayoutPattern.php',
+		'LoggerLayoutSerialized'          => '/layouts/LoggerLayoutSerialized.php',
 		'LoggerLayoutXml'                 => '/layouts/LoggerLayoutXml.php',
 		'LoggerRendererDefault'           => '/renderers/LoggerRendererDefault.php',
 		'LoggerRendererObject'            => '/renderers/LoggerRendererObject.php',
@@ -145,16 +145,10 @@ class Logger
 	private static $hierarchy;
 
 	/**
-	 * Name of the configurator class used to configure log4php.
-	 * Populated by {@link configure()} and used in {@link initialize()}.
+	 * Holds the configurator.
+	 * @var LoggerConfigurator
 	 */
-	private static $configurationClass = 'LoggerConfiguratorBasic';
-
-	/**
-	 * Path to the configuration file which may be used by the configurator.
-	 * Populated by {@link configure()} and used in {@link initialize()}.
-	 */
-	private static $configurationFile;
+	private static $configurator;
 
 	/** Inidicates if log4php has been initialized */
 	private static $initialized = false;
@@ -222,66 +216,72 @@ class Logger
 	 * Log a message object with the TRACE level.
 	 *
 	 * @param mixed $message message
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function trace($message, $caller = null)
+	public function trace($message, $throwable = null)
 	{
-		$this->log(LoggerLevel::getLevelTrace(), $message, $caller);
+		$this->log(LoggerLevel::getLevelTrace(), $message, $throwable);
 	}
 
 	/**
 	 * Log a message object with the DEBUG level.
 	 *
 	 * @param mixed $message message
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function debug($message, $caller = null)
+	public function debug($message, $throwable = null)
 	{
-		$this->log(LoggerLevel::getLevelDebug(), $message, $caller);
+		$this->log(LoggerLevel::getLevelDebug(), $message, $throwable);
 	}
 
 	/**
 	 * Log a message object with the INFO Level.
 	 *
 	 * @param mixed $message message
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function info($message, $caller = null)
+	public function info($message, $throwable = null)
 	{
-		$this->log(LoggerLevel::getLevelInfo(), $message, $caller);
+		$this->log(LoggerLevel::getLevelInfo(), $message, $throwable);
 	}
 
 	/**
 	 * Log a message with the WARN level.
 	 *
 	 * @param mixed $message message
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function warn($message, $caller = null)
+	public function warn($message, $throwable = null)
 	{
-		$this->log(LoggerLevel::getLevelWarn(), $message, $caller);
+		$this->log(LoggerLevel::getLevelWarn(), $message, $throwable);
 	}
 
 	/**
 	 * Log a message object with the ERROR level.
 	 *
 	 * @param mixed $message message
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function error($message, $caller = null)
+	public function error($message, $throwable = null)
 	{
-		$this->log(LoggerLevel::getLevelError(), $message, $caller);
+		$this->log(LoggerLevel::getLevelError(), $message, $throwable);
 	}
 
 	/**
 	 * Log a message object with the FATAL level.
 	 *
 	 * @param mixed $message message
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function fatal($message, $caller = null)
+	public function fatal($message, $throwable = null)
 	{
-		$this->log(LoggerLevel::getLevelFatal(), $message, $caller);
+		$this->log(LoggerLevel::getLevelFatal(), $message, $throwable);
 	}
 
 	/**
@@ -293,13 +293,14 @@ class Logger
 	 * wrappers.
 	 *
 	 * @param string $fqcn Fully qualified class name of the Logger
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 * @param LoggerLevel $level log level
 	 * @param mixed $message message to log
 	 */
-	public function forcedLog($fqcn, $caller, $level, $message)
+	public function forcedLog($fqcn, $throwable, LoggerLevel $level, $message)
 	{
-		$throwable = ($caller !== null && $caller instanceof Exception) ? $caller : null;
+		$throwable = ($throwable !== null && $throwable instanceof Exception) ? $throwable : null;
 
 		$this->callAppenders(new LoggerLoggingEvent($fqcn, $this, $level, $message, null, $throwable));
 	}
@@ -317,10 +318,9 @@ class Logger
 	 * Check whether this Logger is enabled for a given Level passed as parameter.
 	 *
 	 * @param LoggerLevel level
-	 * @param mixed $level
 	 * @return boolean
 	 */
-	public function isEnabledFor($level)
+	public function isEnabledFor(LoggerLevel $level)
 	{
 		return (bool)($level->isGreaterOrEqual($this->getEffectiveLevel()));
 	}
@@ -337,14 +337,15 @@ class Logger
 	/**
 	 * Log a message using the provided logging level.
 	 *
-	 * @param LoggerLevel $priority The logging level.
+	 * @param LoggerLevel $level The logging level.
 	 * @param mixed $message Message to log.
-	 * @param mixed $caller caller object or caller string id
+	 * @param Exception $throwable Optional throwable information to include
+	 *   in the logging event.
 	 */
-	public function log($priority, $message, $caller = null)
+	public function log(LoggerLevel $level, $message, $throwable = null)
 	{
-		if ($this->isEnabledFor($priority)) {
-			$this->forcedLog($this->fqcn, $caller, $priority, $message);
+		if ($this->isEnabledFor($level)) {
+			$this->forcedLog($this->fqcn, $throwable, $level, $message);
 		}
 	}
 
@@ -364,31 +365,30 @@ class Logger
 	// Factory methods
 
 	/**
-	 * Get a Logger by name (Delegate to {@link Logger})
+	 * Returns a Logger by name.
+	 *
+	 * If it does not exist, it will be created.
 	 *
 	 * @param string $name logger name
-	 * @param LoggerFactory $factory a {@link LoggerFactory} instance or null
 	 * @return Logger
-	 * @static
 	 */
 	public static function getLogger($name)
 	{
 		if (! self::isInitialized()) {
-			self::initialize();
+			self::configure();
 		}
 
 		return self::getHierarchy()->getLogger($name);
 	}
 
 	/**
-	 * Get the Root Logger (Delegate to {@link Logger})
+	 * Returns the Root Logger.
 	 * @return LoggerRoot
-	 * @static
 	 */
 	public static function getRootLogger()
 	{
 		if (! self::isInitialized()) {
-			self::initialize();
+			self::configure();
 		}
 
 		return self::getHierarchy()->getRootLogger();
@@ -412,10 +412,8 @@ class Logger
 	 */
 	public function removeAllAppenders()
 	{
-		$appenderNames = array_keys($this->appenders);
-		$enumAppenders = count($appenderNames);
-		for ($i = 0; $i < $enumAppenders; $i++) {
-			$this->removeAppender($appenderNames[$i]);
+		foreach ($this->appenders as $name => $appender) {
+			$this->removeAppender($name);
 		}
 	}
 
@@ -517,8 +515,6 @@ class Logger
 
 	/**
 	 * Clears all Logger definitions from the logger hierarchy.
-	 *
-	 * @static
 	 * @return boolean
 	 */
 	public static function clear()
@@ -528,26 +524,18 @@ class Logger
 
 	/**
 	 * Destroy configurations for logger definitions
-	 *
-	 * @static
-	 * @return boolean
 	 */
 	public static function resetConfiguration()
 	{
-		$result = self::getHierarchy()->resetConfiguration();
+		self::getHierarchy()->resetConfiguration();
+		self::getHierarchy()->clear(); // TODO: clear or not?
 		self::$initialized = false;
-		self::$configurationClass = 'LoggerConfiguratorBasic';
-		self::$configurationFile = null;
-
-		return $result;
 	}
 
 	/**
 	 * Safely close all appenders.
-	 *
 	 * @deprecated This is no longer necessary due the appenders shutdown via
 	 * destructors.
-	 * @static
 	 */
 	public static function shutdown()
 	{
@@ -558,7 +546,6 @@ class Logger
 	 * check if a given logger exists.
 	 *
 	 * @param string $name logger name
-	 * @static
 	 * @return boolean
 	 */
 	public static function exists($name)
@@ -568,8 +555,6 @@ class Logger
 
 	/**
 	 * Returns an array this whole Logger instances.
-	 *
-	 * @static
 	 * @see Logger
 	 * @return array
 	 */
@@ -608,77 +593,55 @@ class Logger
 	}
 
 	/**
-	 * Configures log4php by defining a configuration file and/or class.
+	 * Configures log4php.
 	 *
 	 * This method needs to be called before the first logging event has
-	 * occured. If this method is not called before then, the standard
-	 * configuration takes place (@see LoggerConfiguratorBasic).
+	 * occured. If this method is not called before then the default
+	 * configuration will be used.
 	 *
-	 * If only the configuration file is given, the configurator class will
-	 * be determined by the config file extension.
+	 * @param array|string $configuration Either a path to the configuration
+	 *   file, or a configuration array.
 	 *
-	 * If a custom configurator class is provided, the configuration file
-	 * should either be null or contain the path to file used by the custom
-	 * configurator. Make sure the configurator class is already loaded, or
-	 * that it can be included by PHP when necessary.
-	 *
-	 * @param string $configurationFile path to the configuration file
-	 * @param string $configurationClass name of the custom configurator class
+	 * @param mixed $configuratorClass A custom configurator class: either a
+	 * class name (string), or an object which implements LoggerConfigurator
+	 * interface. If left empty, the default configurator will be used.
 	 */
-	public static function configure($configurationFile = null, $configurationClass = null)
+	public static function configure($configuration = null, $configuratorClass = null)
 	{
-		if ($configurationClass === null && $configurationFile === null) {
-			self::$configurationClass = 'LoggerConfiguratorBasic';
-
-			return;
-		}
-
-		if ($configurationClass !== null) {
-			self::$configurationFile = $configurationFile;
-			self::$configurationClass = $configurationClass;
-
-			return;
-		}
-
-		if (strtolower(substr($configurationFile, -4)) == '.xml') {
-			self::$configurationFile = $configurationFile;
-			self::$configurationClass = 'LoggerConfiguratorXml';
-		} else {
-			self::$configurationFile = $configurationFile;
-			self::$configurationClass = 'LoggerConfiguratorIni';
-		}
-	}
-
-	/**
-	 * Returns the current {@link Logger::$configurationClass configurator class}.
-	 * @return string the configurator class name
-	 */
-	public static function getConfigurationClass()
-	{
-		return self::$configurationClass;
-	}
-
-	/**
-	 * Returns the current {@link Logger::$configurationFile configuration file}.
-	 * @return string the configuration file
-	 */
-	public static function getConfigurationFile()
-	{
-		return self::$configurationFile;
-	}
-
-	/**
-	 * Initializes the log4php framework using the provided {@link
-	 * Logger::$configurationClass configuration class}  and {@link
-	 * Logger::$configurationFile configuration file}.
-	 * @return boolean
-	 */
-	public static function initialize()
-	{
+		self::resetConfiguration();
+		$configurator = self::getConfigurator($configuratorClass);
+		$configurator->configure(self::getHierarchy(), $configuration);
 		self::$initialized = true;
-		$instance = LoggerReflectionUtils::createObject(self::$configurationClass);
+	}
 
-		return $instance->configure(self::getHierarchy(), self::$configurationFile);
+	/**
+	 * Creates a logger configurator instance based on the provided
+	 * configurator class. If no class is given, returns an instance of
+	 * the default configurator.
+	 *
+	 * @param string $configuratorClass The configurator class.
+	 */
+	private static function getConfigurator($configuratorClass = null)
+	{
+		if (empty($configuratorClass)) {
+			return new LoggerConfiguratorDefault();
+		}
+
+		if (! class_exists($configuratorClass)) {
+			$this->warn("Specified configurator class [${configuratorClass}] does not exist. Reverting to default configurator.");
+
+			return new LoggerConfiguratorDefault();
+		}
+
+		$configurator = new $configuratorClass();
+
+		if (! ($configurator instanceof LoggerConfigurator)) {
+			$this->warn("Specified configurator class [${configuratorClass}] does not implement the LoggerConfigurator interface. Reverting to default configurator.");
+
+			return new LoggerConfiguratorDefault();
+		}
+
+		return $configurator;
 	}
 
 	/**
