@@ -49,7 +49,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
  *      Tue Sep  8 21:51:04 2009,120 [5485] FATAL root - Some critical message!
  * </pre>
  *
- * @version $Revision: 1213283 $
+ * @version $Revision: 1237433 $
  * @package log4php
  * @subpackage appenders
  */
@@ -89,19 +89,20 @@ class LoggerAppenderMailEvent extends LoggerAppender {
 	protected $dry = false;
 	
 	public function activateOptions() {
-	    if (empty($this->layout)) {
-	        throw new LoggerException("LoggerAppenderMailEvent requires layout!");
-	    }
-	    if (empty($this->to)) {
-            throw new LoggerException("LoggerAppenderMailEvent was initialized with empty 'from' ($this->from) or 'to' ($this->to) Adress!");
-        }
-        
-        $sendmail_from = ini_get('sendmail_from');
-        if (empty($this->from) and empty($sendmail_from)) {
-            throw new LoggerException("LoggerAppenderMailEvent requires 'from' or on win32 at least the ini variable sendmail_from!");
-        }
-        
-        $this->closed = false;
+		if (empty($this->to)) {
+			$this->warn("Required parameter 'to' not set. Closing appender.");
+			$this->close = true;
+			return;
+		}
+		
+		$sendmail_from = ini_get('sendmail_from');
+		if (empty($this->from) and empty($sendmail_from)) {
+			$this->warn("Required parameter 'from' not set. Closing appender.");
+			$this->close = true;
+			return;
+		}
+		
+		$this->closed = false;
 	}
 	
 	public function setFrom($from) {
