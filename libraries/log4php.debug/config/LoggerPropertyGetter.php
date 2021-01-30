@@ -14,39 +14,24 @@
  * a copy of which has been included with this distribution in the LICENSE file.</p>
  * 
  * @package log4php
+ * @subpackage config
  */
 
 /**
- * @ignore
+ * @ignore 
  */
-if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__));
-
-require_once(LOG4PHP_DIR . '/spi/LoggerFactory.php');
-require_once(LOG4PHP_DIR . '/Logger.php');
+if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
 
 /**
- * Creates instances of {@link Logger} with a given name.
- *
  * @author VxR <vxr@vxr.it>
  * @version $Revision: 1.2 $
  * @package log4php
- * @since 0.5 
+ * @subpackage config
+ * @since 0.5
+ * @todo Ehm... try to guess...
  */
-class LoggerDefaultCategoryFactory extends LoggerFactory {
-    
-    function LoggerDefaultCategoryFactory()
-    {
-        return;
-    }    
-    
-    /**
-     * @param string $name
-     * @return Logger
-     */
-    function makeNewLoggerInstance($name)
-    {
-        return new Logger($name);
-    }
+class LoggerPropertyGetter {
+
 }
 
 ?>

@@ -65,18 +65,15 @@ class Vendors extends CRMEntity
 
 	/**	Constructor which will set the column_fields in this object
 	 */
-	public function __construct()
-	{
-		$this->log = Logger::getLogger('vendor');
-		$this->log->debug('Entering Vendors() method ...');
-		$this->db = PearDatabase::getInstance();
-		$this->column_fields = getColumnFields('Vendors');
-		$this->log->debug('Exiting Vendor method ...');
-	}
-
-	public function Vendors()
-	{
-		self::__construct();
+        function __construct() {
+            $this->log =Logger::getLogger('vendor');
+            $this->log->debug("Entering Vendors() method ...");
+            $this->db = PearDatabase::getInstance();
+            $this->column_fields = getColumnFields('Vendors');
+            $this->log->debug("Exiting Vendor method ...");
+        }
+	function Vendors() {
+            self::__construct();
 	}
 
 	public function save_module($module)
