@@ -145,33 +145,32 @@ class Contacts extends CRMEntity
 	public $default_sort_order = 'ASC';
 
 	// For Alphabetical search
-	var $def_basicsearch_col = 'lastname';
+	public $def_basicsearch_col = 'lastname';
 
-	var $related_module_table_index = array(
-		'Potentials' => array('table_name' => 'vtiger_potential', 'table_index' => 'potentialid', 'rel_index' => 'contact_id'),
-		'Quotes' => array('table_name' => 'vtiger_quotes', 'table_index' => 'quoteid', 'rel_index' => 'contactid'),
-		'SalesOrder' => array('table_name' => 'vtiger_salesorder', 'table_index' => 'salesorderid', 'rel_index' => 'contactid'),
-		'PurchaseOrder' => array('table_name' => 'vtiger_purchaseorder', 'table_index' => 'purchaseorderid', 'rel_index' => 'contactid'),
-		'Invoice' => array('table_name' => 'vtiger_invoice', 'table_index' => 'invoiceid', 'rel_index' => 'contactid'),
-		'HelpDesk' => array('table_name' => 'vtiger_troubletickets', 'table_index' => 'ticketid', 'rel_index' => 'contact_id'),
-		'Products' => array('table_name' => 'vtiger_seproductsrel', 'table_index' => 'productid', 'rel_index' => 'crmid'),
-		'Calendar' => array('table_name' => 'vtiger_cntactivityrel', 'table_index' => 'activityid', 'rel_index' => 'contactid'),
-		'Documents' => array('table_name' => 'vtiger_senotesrel', 'table_index' => 'notesid', 'rel_index' => 'crmid'),
-		'ServiceContracts' => array('table_name' => 'vtiger_servicecontracts', 'table_index' => 'servicecontractsid', 'rel_index' => 'sc_related_to'),
-		'Services' => array('table_name' => 'vtiger_crmentityrel', 'table_index' => 'crmid', 'rel_index' => 'crmid'),
-		'Campaigns' => array('table_name' => 'vtiger_campaigncontrel', 'table_index' => 'campaignid', 'rel_index' => 'contactid'),
-		'Assets' => array('table_name' => 'vtiger_assets', 'table_index' => 'assetsid', 'rel_index' => 'contact'),
-		'Project' => array('table_name' => 'vtiger_project', 'table_index' => 'projectid', 'rel_index' => 'linktoaccountscontacts'),
-		'Emails' => array('table_name' => 'vtiger_seactivityrel', 'table_index' => 'crmid', 'rel_index' => 'activityid'),
-        'Vendors' => array('table_name' => 'vtiger_vendorcontactrel', 'table_index' => 'vendorid', 'rel_index' => 'contactid'),
-	);
-        function __construct() {
-            $this->log = Logger::getLogger('contact');
-            $this->db = PearDatabase::getInstance();
-            $this->column_fields = getColumnFields('Contacts');
-        }       
-	function Contacts() {
-            self::__construct();
+	public $related_module_table_index = [
+		'Potentials'       => ['table_name' => 'vtiger_potential', 'table_index' => 'potentialid', 'rel_index' => 'contact_id'],
+		'Quotes'           => ['table_name' => 'vtiger_quotes', 'table_index' => 'quoteid', 'rel_index' => 'contactid'],
+		'SalesOrder'       => ['table_name' => 'vtiger_salesorder', 'table_index' => 'salesorderid', 'rel_index' => 'contactid'],
+		'PurchaseOrder'    => ['table_name' => 'vtiger_purchaseorder', 'table_index' => 'purchaseorderid', 'rel_index' => 'contactid'],
+		'Invoice'          => ['table_name' => 'vtiger_invoice', 'table_index' => 'invoiceid', 'rel_index' => 'contactid'],
+		'HelpDesk'         => ['table_name' => 'vtiger_troubletickets', 'table_index' => 'ticketid', 'rel_index' => 'contact_id'],
+		'Products'         => ['table_name' => 'vtiger_seproductsrel', 'table_index' => 'productid', 'rel_index' => 'crmid'],
+		'Calendar'         => ['table_name' => 'vtiger_cntactivityrel', 'table_index' => 'activityid', 'rel_index' => 'contactid'],
+		'Documents'        => ['table_name' => 'vtiger_senotesrel', 'table_index' => 'notesid', 'rel_index' => 'crmid'],
+		'ServiceContracts' => ['table_name' => 'vtiger_servicecontracts', 'table_index' => 'servicecontractsid', 'rel_index' => 'sc_related_to'],
+		'Services'         => ['table_name' => 'vtiger_crmentityrel', 'table_index' => 'crmid', 'rel_index' => 'crmid'],
+		'Campaigns'        => ['table_name' => 'vtiger_campaigncontrel', 'table_index' => 'campaignid', 'rel_index' => 'contactid'],
+		'Assets'           => ['table_name' => 'vtiger_assets', 'table_index' => 'assetsid', 'rel_index' => 'contact'],
+		'Project'          => ['table_name' => 'vtiger_project', 'table_index' => 'projectid', 'rel_index' => 'linktoaccountscontacts'],
+		'Emails'           => ['table_name' => 'vtiger_seactivityrel', 'table_index' => 'crmid', 'rel_index' => 'activityid'],
+		'Vendors'          => ['table_name' => 'vtiger_vendorcontactrel', 'table_index' => 'vendorid', 'rel_index' => 'contactid'],
+	];
+
+	public function Contacts()
+	{
+		$this->log = LoggerManager::getLogger('contact');
+		$this->db = PearDatabase::getInstance();
+		$this->column_fields = getColumnFields('Contacts');
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
