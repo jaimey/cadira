@@ -19,26 +19,24 @@
  */
 
 /**
+ * Returns the literal value passed in the constructor, without modifications.
+ *
  * @package log4php
- * @subpackage helpers
+ * @subpackage pattern
+ * @version $Revision: 1326626 $
+ * @since 2.3
  */
-class LoggerCategoryPatternConverter extends LoggerNamedPatternConverter {
+class LoggerPatternConverterLiteral extends LoggerPatternConverter
+{
+	private $literalValue;
 
-	/**
-	 * Constructor
-	 *
-	 * @param string $formattingInfo
-	 * @param integer $precision
-	 */
-	public function __construct($formattingInfo, $precision) {
-		parent::__construct($formattingInfo, $precision);
+	public function __construct($literalValue)
+	{
+		$this->literalValue = $literalValue;
 	}
 
-	/**
-	 * @param LoggerLoggingEvent $event
-	 * @return string
-	 */
-	public function getFullyQualifiedName($event) {
-		return $event->getLoggerName();
+	public function convert(LoggerLoggingEvent $event)
+	{
+		return $this->literalValue;
 	}
 }
