@@ -37,4 +37,9 @@ if(isset($PERFORMANCE_CONFIG) && isset($PERFORMANCE_CONFIG['LOG4PHP_DEBUG']) && 
         $config = new LoggerPropertyConfigurator();
         $config->configure('log4php.properties');
 }
+
+global $logbg;
+if (empty($logbg)) {
+        $logbg = Logger::getLogger('BACKGROUND');
+}
 // END
