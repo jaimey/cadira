@@ -14,29 +14,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * @package log4php
  */
-
-/**
- * @ignore 
- */
-if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
 
 /**
  * A NullAppender merely exists, it never outputs a message to any device.	
  *
  * This appender has no configurable parameters.
  * 
- * An example:
- * 
- * {@example ../../examples/php/appender_null.php 19}
- * 
- * {@example ../../examples/resources/appender_null.properties 18}
- * 
- * @version $Revision: 1166182 $
+ * @version $Revision: 1343601 $
  * @package log4php
  * @subpackage appenders
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link http://logging.apache.org/log4php/docs/appenders/null.html Appender documentation
  */
 class LoggerAppenderNull extends LoggerAppender {
 
@@ -53,5 +42,3 @@ class LoggerAppenderNull extends LoggerAppender {
 	public function append(LoggerLoggingEvent $event) {
 	}
 }
-
-?>

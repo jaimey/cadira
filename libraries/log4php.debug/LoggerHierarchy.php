@@ -19,19 +19,6 @@
  */
 
 /**
- * @ignore 
- */
-if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__)); 
-
-/**
- */
-//require_once(LOG4PHP_DIR . '/LoggerLog.php');
-require_once(LOG4PHP_DIR . '/LoggerLevel.php');
-require_once(LOG4PHP_DIR . '/LoggerRoot.php');
-require_once(LOG4PHP_DIR . '/renderers/LoggerRendererMap.php');
-//require_once(LOG4PHP_DIR . '/LoggerDefaultCategoryFactory.php');
-
-/**
  * This class is specialized in retrieving loggers by name and also maintaining 
  * the logger hierarchy. The logger hierarchy is dealing with the several Log-Levels
  * Logger can have. From log4j website:
@@ -57,7 +44,7 @@ require_once(LOG4PHP_DIR . '/renderers/LoggerRendererMap.php');
  * to the provision node. Other descendants of the same ancestor add
  * themselves to the previously created provision node.</p>
  *
- * @version $Revision: 1163124 $
+ * @version $Revision: 1394956 $
  * @package log4php
  */
 class LoggerHierarchy {
@@ -69,7 +56,7 @@ class LoggerHierarchy {
 	 * The root logger.
 	 * @var RootLogger 
 	 */
-	protected $root = null;
+	protected $root;
 	
 	/** 
 	 * The logger renderer map.
@@ -100,7 +87,7 @@ class LoggerHierarchy {
 	public function clear() {
 		$this->loggers = array();
 	}
-	  
+	
 	/**
 	 * Check if the named logger exists in the hierarchy.
 	 * @param string $name
@@ -170,9 +157,6 @@ class LoggerHierarchy {
 	 * @return LoggerRoot
 	 */ 
 	public function getRootLogger() {
-		if(!isset($this->root) or $this->root == null) {
-			$this->root = new LoggerRoot();
-		}
 		return $this->root;
 	}
 	 
@@ -220,7 +204,8 @@ class LoggerHierarchy {
 			$logger->removeAllAppenders();
 		}
 		
-		$this->rendererMap->clear();
+		$this->rendererMap->reset();
+		LoggerAppenderPool::clear();
 	}
 	
 	/**
@@ -246,7 +231,27 @@ class LoggerHierarchy {
 		$this->root->removeAllAppenders();
 		
 		foreach($this->loggers as $logger) {
+			$logger->removeAllAppenders();
+		}
+	}
+	
+	/**
+	 * Prints the current Logger hierarchy tree. Useful for debugging.
+	 */
+	public function printHierarchy() {
+		$this->printHierarchyInner($this->getRootLogger(), 0);
+	}
+	
+	private function printHierarchyInner(Logger $current, $level) {
+		for ($i = 0; $i < $level; $i++) {
+			echo ($i == $level - 1) ? "|--" : "|  ";
+		}
+		echo $current->getName() . "\n";
+		
+		foreach($this->loggers as $logger) {
+			if ($logger->getParent() == $current) {
+				$this->printHierarchyInner($logger, $level + 1);
+			}
 		}
 	}
 } 
-?>

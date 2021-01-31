@@ -19,19 +19,6 @@
  */
 
 /**
- * @ignore 
- */
-if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__)); 
- 
-/**
- */
-
-/**
- * This is the global repository of NDC stack
- */
-$GLOBALS['log4php.LoggerNDC.ht'] = array();
-
-/**
  * The NDC class implements <i>nested diagnostic contexts</i>.
  * 
  * NDC was defined by Neil Harrison in the article "Patterns for Logging
@@ -102,12 +89,15 @@ $GLOBALS['log4php.LoggerNDC.ht'] = array();
  * 2009-09-13 19:04:27 DEBUG root : back and waiting for new connections in src/examples/php/ndc.php at 29
  * </pre>
  *	
- * @version $Revision: 1166187 $
+ * @version $Revision: 1350602 $
  * @package log4php 
  * @since 0.3
  */
 class LoggerNDC {
-	const HT_SIZE = 7;
+	
+	/** This is the repository of NDC stack */
+	private static $stack = array();
+	
 	/**
 	 * Clear any nested diagnostic information if any. This method is
 	 * useful in cases where the same thread can be potentially used
@@ -117,7 +107,7 @@ class LoggerNDC {
 	 * method with a zero <var>maxDepth</var> argument.
 	 */
 	public static function clear() {
-		$GLOBALS['log4php.LoggerNDC.ht'] = array();
+		self::$stack = array();
 	}
 
 	/**
@@ -125,10 +115,7 @@ class LoggerNDC {
 	 * @return array
 	 */
 	public static function get() {
-		if(!array_key_exists('log4php.LoggerNDC.ht', $GLOBALS)) {
-			LoggerNDC::clear();
-		}
-		return $GLOBALS['log4php.LoggerNDC.ht'];
+		return implode(' ', self::$stack);
 	}
   
 	/**
@@ -138,7 +125,7 @@ class LoggerNDC {
 	 * @return integer
 	 */
 	public static function getDepth() {
-		return count($GLOBALS['log4php.LoggerNDC.ht']);	  
+		return count(self::$stack);
 	}
 
 	/**
@@ -151,8 +138,8 @@ class LoggerNDC {
 	 * @return string The innermost diagnostic context.
 	 */
 	public static function pop() {
-		if(count($GLOBALS['log4php.LoggerNDC.ht']) > 0) {
-			return array_pop($GLOBALS['log4php.LoggerNDC.ht']);
+		if(count(self::$stack) > 0) {
+			return array_pop(self::$stack);
 		} else {
 			return '';
 		}
@@ -166,14 +153,14 @@ class LoggerNDC {
 	 * context is available, then the empty string "" is returned.</p>
 	 * @return string The innermost diagnostic context.
 	 */
-	public static function peek(){
-		if(count($GLOBALS['log4php.LoggerNDC.ht']) > 0) {
-			return end($GLOBALS['log4php.LoggerNDC.ht']);
+	public static function peek() {
+		if(count(self::$stack) > 0) {
+			return end(self::$stack);
 		} else {
 			return '';
 		}
 	}
-  
+	
 	/**
 	 * Push new diagnostic context information for the current thread.
 	 *
@@ -183,7 +170,7 @@ class LoggerNDC {
 	 * @param string $message The new diagnostic context information.
 	 */
 	public static function push($message) {
-		array_push($GLOBALS['log4php.LoggerNDC.ht'], (string)$message);
+		array_push(self::$stack, (string)$message);
 	}
 
 	/**
@@ -209,12 +196,8 @@ class LoggerNDC {
 	 */
 	public static function setMaxDepth($maxDepth) {
 		$maxDepth = (int)$maxDepth;
-		if($maxDepth <= self::HT_SIZE) {
-			if(LoggerNDC::getDepth() > $maxDepth) {
-				$GLOBALS['log4php.LoggerNDC.ht'] = array_slice($GLOBALS['log4php.LoggerNDC.ht'], $maxDepth);
-			}
+		if(LoggerNDC::getDepth() > $maxDepth) {
+			self::$stack = array_slice(self::$stack, 0, $maxDepth);
 		}
 	}
-
 }
-?>

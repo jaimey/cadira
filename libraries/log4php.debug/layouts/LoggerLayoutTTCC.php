@@ -21,11 +21,11 @@
 /**
  * TTCC layout format consists of <b>t</b>ime, <b>t</b>hread, <b>c</b>ategory and nested
  * diagnostic <b>c</b>ontext information, hence the name.
- *
+ * 
  * <p>Each of the four fields can be individually enabled or
  * disabled. The time format depends on the <b>DateFormat</b> used.</p>
  *
- * <p>If no dateFormat is specified it defaults to '%c'.
+ * <p>If no dateFormat is specified it defaults to '%c'. 
  * See php {@link PHP_MANUAL#date} function for details.</p>
  *
  * Configurable parameters for this layout are:
@@ -36,26 +36,29 @@
  * - {@link $dateFormat} (string) set date format. See php {@link PHP_MANUAL#date} function for details.
  *
  * An example how to use this layout:
- *
+ * 
  * {@example ../../examples/php/layout_ttcc.php 19}<br>
- *
+ * 
  * {@example ../../examples/resources/layout_ttcc.properties 18}<br>
  *
  * The above would print:<br>
  * <samp>02:28 [13714] INFO root - Hello World!</samp>
  *
- * @version $Revision: 1213283 $
+ * @version $Revision: 1302503 $
  * @package log4php
  * @subpackage layouts
+ * 
+ * @deprecated LoggerLayout TTCC is deprecated and will be removed in a future release. Please use 
+ *   LoggerLayoutPattern instead. 
  */
-class LoggerLayoutTTCC extends LoggerLayout
-{
-	// Internal representation of options
-	protected $threadPrinting = true;
-	protected $categoryPrefixing = true;
-	protected $contextPrinting = true;
-	protected $microSecondsPrinting = true;
+class LoggerLayoutTTCC extends LoggerLayout {
 
+	// Internal representation of options
+	protected $threadPrinting    = true;
+	protected $categoryPrefixing = true;
+	protected $contextPrinting   = true;
+	protected $microSecondsPrinting = true;
+	
 	/**
 	 * @var string date format. See {@link PHP_MANUAL#strftime} for details
 	 */
@@ -65,51 +68,43 @@ class LoggerLayoutTTCC extends LoggerLayout
 	 * Constructor
 	 *
 	 * @param string date format
-	 * @param mixed $dateFormat
 	 * @see dateFormat
 	 */
-	public function __construct($dateFormat = '')
-	{
-		if (! empty($dateFormat)) {
+	public function __construct($dateFormat = '') {
+		$this->warn("LoggerLayout TTCC is deprecated and will be removed in a future release. Please use LoggerLayoutPattern instead.");
+		if (!empty($dateFormat)) {
 			$this->dateFormat = $dateFormat;
 		}
-
 		return;
 	}
 
 	/**
 	 * The <b>ThreadPrinting</b> option specifies whether the name of the
 	 * current thread is part of log output or not. This is true by default.
-	 * @param mixed $threadPrinting
 	 */
-	public function setThreadPrinting($threadPrinting)
-	{
+	public function setThreadPrinting($threadPrinting) {
 		$this->setBoolean('threadPrinting', $threadPrinting);
 	}
 
 	/**
 	 * @return boolean Returns value of the <b>ThreadPrinting</b> option.
 	 */
-	public function getThreadPrinting()
-	{
+	public function getThreadPrinting() {
 		return $this->threadPrinting;
 	}
 
 	/**
 	 * The <b>CategoryPrefixing</b> option specifies whether {@link Category}
 	 * name is part of log output or not. This is true by default.
-	 * @param mixed $categoryPrefixing
 	 */
-	public function setCategoryPrefixing($categoryPrefixing)
-	{
+	public function setCategoryPrefixing($categoryPrefixing) {
 		$this->setBoolean('categoryPrefixing', $categoryPrefixing);
 	}
 
 	/**
 	 * @return boolean Returns value of the <b>CategoryPrefixing</b> option.
 	 */
-	public function getCategoryPrefixing()
-	{
+	public function getCategoryPrefixing() {
 		return $this->categoryPrefixing;
 	}
 
@@ -117,50 +112,43 @@ class LoggerLayoutTTCC extends LoggerLayout
 	 * The <b>ContextPrinting</b> option specifies log output will include
 	 * the nested context information belonging to the current thread.
 	 * This is true by default.
-	 * @param mixed $contextPrinting
 	 */
-	public function setContextPrinting($contextPrinting)
-	{
+	public function setContextPrinting($contextPrinting) {
 		$this->setBoolean('contextPrinting', $contextPrinting);
 	}
 
 	/**
 	 * @return boolean Returns value of the <b>ContextPrinting</b> option.
 	 */
-	public function getContextPrinting()
-	{
+	public function getContextPrinting() {
 		return $this->contextPrinting;
 	}
-
+	
 	/**
 	 * The <b>MicroSecondsPrinting</b> option specifies if microseconds infos
 	 * should be printed at the end of timestamp.
 	 * This is true by default.
-	 * @param mixed $microSecondsPrinting
 	 */
-	public function setMicroSecondsPrinting($microSecondsPrinting)
-	{
+	public function setMicroSecondsPrinting($microSecondsPrinting) {
 		$this->setBoolean('microSecondsPrinting', $microSecondsPrinting);
 	}
 
 	/**
 	 * @return boolean Returns value of the <b>MicroSecondsPrinting</b> option.
 	 */
-	public function getMicroSecondsPrinting()
-	{
+	public function getMicroSecondsPrinting() {
 		return $this->microSecondsPrinting;
 	}
-
-	public function setDateFormat($dateFormat)
-	{
+	
+	
+	public function setDateFormat($dateFormat) {
 		$this->setString('dateFormat', $dateFormat);
 	}
-
+	
 	/**
 	 * @return string
 	 */
-	public function getDateFormat()
-	{
+	public function getDateFormat() {
 		return $this->dateFormat;
 	}
 
@@ -172,44 +160,42 @@ class LoggerLayoutTTCC extends LoggerLayout
 	 * @param LoggerLoggingEvent $event
 	 * @return string
 	 */
-	public function format(LoggerLoggingEvent $event)
-	{
+	public function format(LoggerLoggingEvent $event) {
 		$timeStamp = (float)$event->getTimeStamp();
 		$format = strftime($this->dateFormat, (int)$timeStamp);
-
+		
 		if ($this->microSecondsPrinting) {
 			$usecs = floor(($timeStamp - (int)$timeStamp) * 1000);
 			$format .= sprintf(',%03d', $usecs);
 		}
-
+			
 		$format .= ' ';
-
+		
 		if ($this->threadPrinting) {
 			$format .= '['.getmypid().'] ';
 		}
-
+		
 		$level = $event->getLevel();
 		$format .= $level.' ';
-
-		if ($this->categoryPrefixing) {
+		
+		if($this->categoryPrefixing) {
 			$format .= $event->getLoggerName().' ';
 		}
-
-		if ($this->contextPrinting) {
+	   
+		if($this->contextPrinting) {
 			$ndc = $event->getNDC();
-			if ($ndc != null) {
+			if($ndc != null) {
 				$format .= $ndc.' ';
 			}
 		}
-
+		
 		$format .= '- '.$event->getRenderedMessage();
 		$format .= PHP_EOL;
-
+		
 		return $format;
 	}
 
-	public function ignoresThrowable()
-	{
+	public function ignoresThrowable() {
 		return true;
 	}
 }

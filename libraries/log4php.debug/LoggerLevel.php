@@ -19,15 +19,6 @@
  */
 
 /**
- * @ignore 
- */
-if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__));
- 
-/**
- */
-//require_once(LOG4PHP_DIR . '/LoggerLog.php');
-
-/**
  * Defines the minimum set of levels recognized by the system, that is
  * <i>OFF</i>, <i>FATAL</i>, <i>ERROR</i>,
  * <i>WARN</i>, <i>INFO</i>, <i>DEBUG</i> and
@@ -36,7 +27,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__));
  * <p>The <i>LoggerLevel</i> class may be subclassed to define a larger
  * level set.</p>
  *
- * @version $Revision: 1230524 $
+ * @version $Revision: 1379729 $
  * @package log4php
  * @since 0.5
  */
@@ -48,6 +39,7 @@ class LoggerLevel {
 	const WARN = 30000;
 	const INFO = 20000;
 	const DEBUG = 10000;
+	const TRACE = 5000;
 	const ALL = -2147483647;
 
 	/** Integer level value. */
@@ -183,7 +175,7 @@ class LoggerLevel {
 	}
 	
 	/**
-	 * Return the syslog equivalent of this priority as an integer.
+	 * Return the syslog equivalent of this level as an integer.
 	 * @return integer
 	 */
 	public function getSyslogEquivalent() {
@@ -203,12 +195,19 @@ class LoggerLevel {
 	}
 
 	/**
-	 * Returns the string representation of this priority.
+	 * Returns the string representation of this level.
 	 * @return string
-	 * @final
 	 */
 	public function toString() {
 		return $this->levelStr;
+	}
+	
+	/**
+	 * Returns the string representation of this level.
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->toString();
 	}
 
 	/**
@@ -250,8 +249,8 @@ class LoggerLevel {
 				case 'ERROR': return self::getLevelError();
 				case 'FATAL': return self::getLevelFatal();
 				case 'OFF':	return self::getLevelOff();
+				default: return $defaultLevel;
 			}
 		}
 	}
 }
-?>
