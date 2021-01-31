@@ -14,9 +14,9 @@
  */
 
 // Adjust error_reporting favourable to deployment.
-//version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & E_ERROR) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & E_ERROR & ~E_STRICT); // PRODUCTION
-ini_set('display_errors', 'on');
-version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);   // DEBUGGING
+version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & E_ERROR) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & E_ERROR & ~E_STRICT); // PRODUCTION
+//ini_set('display_errors', 'on');
+//version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);   // DEBUGGING
 //ini_set('display_errors','on'); error_reporting(E_ALL); // STRICT DEVELOPMENT
 
 include 'vtigerversion.php';
@@ -46,8 +46,8 @@ db_name
 
 $dbconfig['db_server'] = 'localhost';
 $dbconfig['db_port'] = ':3306';
-$dbconfig['db_username'] = 'root';
-$dbconfig['db_password'] = 'superweb';
+$dbconfig['db_username'] = 'dogiusr';
+$dbconfig['db_password'] = 'DogiUser*598_';
 $dbconfig['db_name'] = 'dogicrm';
 $dbconfig['db_type'] = 'mysqli';
 $dbconfig['db_status'] = 'true';
