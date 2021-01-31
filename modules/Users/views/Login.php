@@ -6,34 +6,38 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ************************************************************************************/
+ */
 
 vimport('~~/vtlib/Vtiger/Net/Client.php');
-class Users_Login_View extends Vtiger_View_Controller {
-
-	function loginRequired() {
+class Users_Login_View extends Vtiger_View_Controller
+{
+	public function loginRequired()
+	{
 		return false;
 	}
-	
-	function checkPermission(Vtiger_Request $request) {
+
+	public function checkPermission(Vtiger_Request $request)
+	{
 		return true;
 	}
-	
-	function preProcess(Vtiger_Request $request, $display = true) {
+
+	public function preProcess(Vtiger_Request $request, $display = true)
+	{
 		$viewer = $this->getViewer($request);
 		$viewer->assign('PAGETITLE', $this->getPageTitle($request));
 		$viewer->assign('SCRIPTS', $this->getHeaderScripts($request));
 		$viewer->assign('STYLES', $this->getHeaderCss($request));
 		$viewer->assign('MODULE', $request->getModule());
 		$viewer->assign('VIEW', $request->get('view'));
-		$viewer->assign('LANGUAGE_STRINGS', array());
+		$viewer->assign('LANGUAGE_STRINGS', []);
 		if ($display) {
 			$this->preProcessDisplay($request);
 		}
 	}
 
-	function process (Vtiger_Request $request) {
-		$finalJsonData = array();
+	public function process(Vtiger_Request $request)
+	{
+		$finalJsonData = [];
 
 		$modelInstance = Settings_ExtensionStore_Extension_Model::getInstance();
 		$news = $modelInstance->getNews();
@@ -44,8 +48,8 @@ class Users_Login_View extends Vtiger_View_Controller {
 			foreach ($jsonData as $blockData) {
 				if ($blockData['type'] === 'feature') {
 					$blockData['heading'] = "What's new in Vtiger Cloud";
-				} else if ($blockData['type'] === 'news') {
-					$blockData['heading'] = "Latest News";
+				} elseif ($blockData['type'] === 'news') {
+					$blockData['heading'] = 'Latest News';
 					$blockData['image'] = '';
 				}
 
@@ -68,11 +72,17 @@ class Users_Login_View extends Vtiger_View_Controller {
 		$message = '';
 		if ($error) {
 			switch ($error) {
-				case 'login'		:	$message = 'Invalid credentials';						break;
-				case 'fpError'		:	$message = 'Invalid Username or Email address';			break;
-				case 'statusError'	:	$message = 'Outgoing mail server was not configured';	break;
+				case 'login':	$message = 'Invalid credentials';
+
+break;
+				case 'fpError':	$message = 'Invalid Username or Email address';
+
+break;
+				case 'statusError':	$message = 'Outgoing mail server was not configured';
+
+break;
 			}
-		} else if ($mailStatus) {
+		} elseif ($mailStatus) {
 			$message = 'Mail has been sent to your inbox, please check your e-mail';
 		}
 
@@ -82,27 +92,31 @@ class Users_Login_View extends Vtiger_View_Controller {
 		$viewer->view('Login.tpl', 'Users');
 	}
 
-	function postProcess(Vtiger_Request $request) {
+	public function postProcess(Vtiger_Request $request)
+	{
 		$moduleName = $request->getModule();
 		$viewer = $this->getViewer($request);
 		$viewer->view('Footer.tpl', $moduleName);
 	}
 
-	function getPageTitle(Vtiger_Request $request) {
+	public function getPageTitle(Vtiger_Request $request)
+	{
 		$companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
+
 		return $companyDetails->get('organizationname');
 	}
 
-	function getHeaderScripts(Vtiger_Request $request){
+	public function getHeaderScripts(Vtiger_Request $request)
+	{
 		$headerScriptInstances = parent::getHeaderScripts($request);
 
-		$jsFileNames = array(
-							'~libraries/jquery/boxslider/jquery.bxslider.min.js',
-							'modules.Vtiger.resources.List',
-							'modules.Vtiger.resources.Popup',
-							);
+		$jsFileNames = [
+			'~libraries/jquery/boxslider/jquery.bxslider.min.js',
+			'modules.Vtiger.resources.List',
+			'modules.Vtiger.resources.Popup',
+		];
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($jsScriptInstances,$headerScriptInstances);
-		return $headerScriptInstances;
+
+		return array_merge($jsScriptInstances, $headerScriptInstances);
 	}
 }
