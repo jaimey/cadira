@@ -117,7 +117,7 @@
                                     <tr class="searchRow listViewSearchContainer">
                                         <th class="inline-search-btn">
                                             <div class="table-actions">
-                                                <button class="btn btn-success btn-sm {if count($SEARCH_DETAILS) gt 0}hide{/if}" data-trigger="listSearch">
+                                                <button class="btn btn-success btn-lg {if count($SEARCH_DETAILS) gt 0}hide{/if}" data-trigger="listSearch">
                                                     <i class="fa fa-search"></i> &nbsp;
                                                     <span class="s2-btn-text">{vtranslate("LBL_SEARCH",$MODULE)}</span>
                                                 </button>

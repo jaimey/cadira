@@ -52,7 +52,7 @@
 							</tr>
 							<tr class="searchRow">
 								<th class="inline-search-btn">
-									<button class="btn btn-success btn-sm" data-trigger="relatedListSearch">{vtranslate("LBL_SEARCH",$MODULE)}</button>
+									<button class="btn btn-success btn-lg" data-trigger="relatedListSearch">{vtranslate("LBL_SEARCH",$MODULE)}</button>
 								</th>
 								{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
 									<th>
