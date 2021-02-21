@@ -144,8 +144,8 @@ body > .mCSB_inside > .mCSB_container {
     top: 0;
     left: 0;
     min-height: 100%;
-    background-color: #175388;
-    background: #175388;
+    background-color: #007bff;
+    background: #007bff;
   }
   .main-container .sidebar-essentials {
     display: inline-block;
@@ -181,8 +181,8 @@ body > .mCSB_inside > .mCSB_container {
   margin-left: 5px;
 }
 .vt-notification {
-  background-color: #175388;
-  border-color: #175388;
+  background-color: #007bff;
+  border-color: #007bff;
   padding: 10px 15px;
   font-size: 15px;
   position: fixed !important;
@@ -447,14 +447,14 @@ body > .mCSB_inside > .mCSB_container {
   background-color: #010101 !important;
 }
 .app-switcher-container .app-navigator {
-  background-color: #175388;
+  background-color: #007bff;
 }
 .app-switcher-container .app-navigator .app-icon {
   color: white;
   opacity: 0.8;
 }
 .global-nav .app-switcher-container .app-navigator:hover {
-  background: #1c64a2;
+  background: #007bff;
   opacity: 1;
 }
 .global-nav .app-switcher-container .app-navigator:hover .app-icon {
@@ -471,7 +471,7 @@ body > .mCSB_inside > .mCSB_container {
   font-size: 14px;
   vertical-align: middle;
 }
-.app-menu {
+.app-menu{
   width: 230px;
   height: 100%;
   padding-top: 0;
@@ -480,8 +480,7 @@ body > .mCSB_inside > .mCSB_container {
   position: fixed;
   border: 0;
   top: 0px !important;
-  box-shadow: 0px 5px 14px #555;
-  background: #175388;
+  background: #e8e8e8;
   z-index: 1102;
   display: none;
 }
@@ -500,7 +499,6 @@ body > .mCSB_inside > .mCSB_container {
 .menu-item {
   padding: 15px 5px;
   margin: 10px 0;
-  background: #ddd;
   cursor: pointer;
   display: block;
 }
@@ -529,16 +527,14 @@ body > .mCSB_inside > .mCSB_container {
 a.menu-item:hover {
   color: #000000;
 }
-.app-item {
+.app-item{
   font-size: 14px;
-  color: #fff;
+  color: #525252;
   cursor: pointer;
   display: block;
-  background-color: #175388;
   padding: 2.5% 2% !important;
   margin-left: 2px;
   opacity: 0.8;
-  text-shadow: 0 0 1px #000;
 }
 .app-item div {
   -webkit-transition: all 0.25s ease-in;
@@ -549,7 +545,7 @@ a.menu-item:hover {
 .active-app-item,
 .app-item:hover {
   opacity: 1;
-  background: #1c64a2;
+  background: #007bff;
   color: #f2f1f1;
 }
 .app-item-color-MARKETING {
@@ -590,7 +586,7 @@ a.menu-item:hover {
   height: 100vh;
   font-size: 1.2em;
   overflow-x: hidden;
-  background-color: #175388;
+  background-color: #007bff;
   box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -617,7 +613,7 @@ a.menu-item:hover {
 }
 .app-menu .app-modules-dropdown li:hover {
   opacity: 1;
-  background: #1c64a2;
+  background: #007bff;
   color: #f2f1f1;
 }
 .app-menu .app-modules-dropdown li:hover .module-icon {
@@ -712,7 +708,7 @@ a.menu-item:hover {
   -moz-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;
   transition: all 0.2s ease;
-  background: #175388;
+  background: #007bff;
   padding: 6px;
   border-radius: 20px;
   margin-top: -2px;
@@ -933,7 +929,7 @@ input[type="password"].inputElement {
   width: 100%;
   height: 100%;
   float: left;
-  background: #175388;
+  background: #eaeaea;
   position: absolute;
   z-index: 10;
   left: 0;
@@ -949,7 +945,7 @@ input[type="password"].inputElement {
   margin-bottom: 0;
 }
 .modules-menu ul li a {
-  color: #fff;
+  color: #555;
   padding: 10px 17px;
   display: block;
   z-index: 1;
@@ -990,14 +986,14 @@ input[type="password"].inputElement {
   white-space: nowrap;
 }
 .modules-menu ul li:hover {
-  background: #1c64a2;
+  background: #cecfd0;
   opacity: 1;
 }
 .modules-menu ul li:hover a {
   opacity: 1;
 }
 .modules-menu ul li.active {
-  background: #1c64a2;
+  background: #cecfd0;
 }
 .modules-menu ul li.active a {
   opacity: 1;
@@ -1164,7 +1160,7 @@ input[type="password"].inputElement {
 }
 .integrations-container > div:hover,
 .common-links-container > div:hover {
-  background: #175388;
+  background: #007bff;
 }
 .integrations-container > div a,
 .common-links-container > div a {
@@ -1302,7 +1298,7 @@ ul.unstyled {
   border-bottom: 1px solid #EF5E29;
 }
 .coloredBorderTop {
-  border-top: 1px solid #1c64a2;
+  border-top: 1px solid #007bff;
 }
 .redColor {
   color: red;
@@ -1353,10 +1349,8 @@ ul.unstyled {
   margin-right: 10px;
 }
 .btn {
-  border-radius: 0px;
   font-weight: 100;
   cursor: pointer;
-  border-width: thin;
 }
 .btn:hover {
   cursor: pointer;
@@ -1370,7 +1364,7 @@ ul.unstyled {
   margin: 4px 2px;
   border-radius: 2px;
   border: 1px solid #ddd;
-  color: #175388;
+  color: #007bff;
   background: #fff;
   border-width: thin;
 }
@@ -2378,7 +2372,7 @@ th {
   color: #3498DB;
 }
 .fieldLabel {
-  color: #175388;
+  color: #007bff;
   opacity: 0.8;
 }
 .fieldLabel label {
@@ -2798,7 +2792,7 @@ th {
   display: inline-block;
   width: 100%;
   float: left;
-  background: #175388;
+  background: #007bff;
   height: 100%;
 }
 .settings-flip {
@@ -3100,7 +3094,7 @@ th {
   width: 100px;
 }
 .updates_timeline #more_button .update_icon .moreRecentUpdates {
-  background: #175388;
+  background: #007bff;
   border-radius: 15%;
 }
 .updates_timeline .update_icon img {
@@ -3299,7 +3293,7 @@ th {
   color: #FFFFFF;
 }
 .settingsgroup div.panel-collapse {
-  background-color: #175388;
+  background-color: #007bff;
 }
 .settingsgroup-accordion {
   color: #FFFFFF;
@@ -3317,11 +3311,11 @@ th {
   text-transform: uppercase;
 }
 .settingsgroup {
-  background: #175388;
+  background: #007bff;
   height: 100%;
 }
 .settingsgroup .panel-group .panel {
-  background-color: #175388;
+  background-color: #007bff;
 }
 .userDefaultIcon {
   font-size: 30px;
@@ -5012,7 +5006,7 @@ hr {
   bottom: 0;
   background: #EFEFEF;
   /*width:100%;*/
-  border-left: 42px solid #175388;
+  border-left: 42px solid #007bff;
   height: 60px;
   left: 0;
   right: 0;
@@ -5029,7 +5023,7 @@ hr {
   z-index: 0;
 }
 .settingsPageDiv .modal-overlay-footer {
-  border-left: 230px solid #175388;
+  border-left: 230px solid #007bff;
 }
 .settingsOverlayContainer .modal-overlay-footer {
   margin: 0;
@@ -5800,7 +5794,7 @@ TN-34230 .row .nav > li > a:hover {
   margin: 20px 0px 20px 0px;
 }
 .highLightMail {
-  background-color: #175388;
+  background-color: #007bff;
 }
 .whiteFont {
   color: #FFFFFF;
@@ -6029,7 +6023,7 @@ div.tooltip-inner {
   font-size: 2em;
 }
 .menuEditorModuleItem {
-  background: #175388;
+  background: #007bff;
   border-bottom: 1px solid #DDDDDD;
   cursor: move;
 }
@@ -6402,7 +6396,7 @@ div.tooltip-inner {
   background-color: white;
 }
 .help_header {
-  background-color: #175388;
+  background-color: #007bff;
   cursor: move;
   box-shadow: 0 0px 5px 0 #ccc;
   padding: 5px 10px;
@@ -6419,7 +6413,7 @@ div.tooltip-inner {
   position: relative;
   top: 10px;
   border: 0px;
-  background-color: #175388;
+  background-color: #007bff;
 }
 .help_close_area {
   margin: 5px 15px;
@@ -7222,7 +7216,7 @@ input:focus:-ms-input-placeholder {
 }
 #OnBoardLayout #OnBoardPageContainer .step-tracker {
   padding: 1%;
-  background: #175388;
+  background: #007bff;
   min-height: 100px;
   width: 100%;
   z-index: 1;
@@ -7313,7 +7307,7 @@ input:focus:-ms-input-placeholder {
   padding: 1%;
 }
 #OnBoardLayout #OnBoardPageContainer .crmGoals .item:hover {
-  border-color: #175388;
+  border-color: #007bff;
 }
 #OnBoardLayout #OnBoardPageContainer .crmGoals .item:hover p {
   opacity: 1;
@@ -7349,7 +7343,7 @@ input:focus:-ms-input-placeholder {
   margin-top: 10px;
 }
 #OnBoardLayout #OnBoardPageContainer .PickRoles .item {
-  border: 1px solid #175388;
+  border: 1px solid #007bff;
   height: 100px;
   cursor: pointer;
   text-align: center;
@@ -7755,7 +7749,7 @@ body .fc {
   opacity: 1;
 }
 .actionImages {
-  color: #175388;
+  color: #007bff;
   font-size: 20px;
 }
 /*# sourceMappingURL=style.css.map */

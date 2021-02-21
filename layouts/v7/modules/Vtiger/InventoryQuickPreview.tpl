@@ -56,7 +56,7 @@
                             </div>
                             <div class="col-lg-2 btn-group pull-right">
                                 {if $DETAIL_ENABLED}
-                                    <button class="btn btn-success btn-sm" style ="margin-right:10px">{vtranslate('LBL_DETAILS',$MODULE)}</button>
+                                    <button class="btn btn-success btn-lg" style ="margin-right:10px">{vtranslate('LBL_DETAILS',$MODULE)}</button>
                                 {/if}
                                 {if $NAVIGATION}
                                     <button class="btn btn-default btn-sm" id="quickPreviewPreviousRecordButton" data-id = '{$PREVIOUS_RECORD_ID}' {if empty($PREVIOUS_RECORD_ID)} disabled="disabled"{else} onclick="return false"{/if} >
