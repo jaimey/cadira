@@ -181,10 +181,13 @@ body > .mCSB_inside > .mCSB_container {
   margin-left: 5px;
 }
 .vt-notification {
-  background-color: #007bff;
-  border-color: #007bff;
   padding: 10px 15px;
   font-size: 15px;
+  background: #eeeeee;
+  border-radius: 5px;
+  position: relative;
+  border: 2px solid #e0e0e0;
+  transition: all 5s ease-in-out;
   position: fixed !important;
 }
 .vt-notification .notificationHeader {
@@ -192,11 +195,11 @@ body > .mCSB_inside > .mCSB_container {
   padding-bottom: 8px;
 }
 .vt-notification .notificationHeader [data-notify="title"] {
-  color: #FFFFFF;
+  color: #333;
   margin-left: 8px;
 }
 .vt-notification .notificationHeader .close {
-  color: #c3c3c3;
+  color: #333;
 }
 .vt-notification .fa-exclamation-triangle {
   color: #FFC600;
@@ -208,7 +211,7 @@ body > .mCSB_inside > .mCSB_container {
   color: #4EBF4E;
 }
 .vt-notification [data-notify="message"] {
-  color: #eaeaea;
+  color: #333;
 }
 /**********************************/
 /******** Navigation styles *******/
@@ -480,7 +483,7 @@ body > .mCSB_inside > .mCSB_container {
   position: fixed;
   border: 0;
   top: 0px !important;
-  background: #e8e8e8;
+  background: #eeeeee;
   z-index: 1102;
   display: none;
 }
@@ -929,7 +932,7 @@ input[type="password"].inputElement {
   width: 100%;
   height: 100%;
   float: left;
-  background: #eaeaea;
+  background: #eeeeee;
   position: absolute;
   z-index: 10;
   left: 0;
@@ -2211,6 +2214,7 @@ th {
   margin-bottom: 10px;
   background: #FFFFFF;
   border-width: thin;
+  border-radius: 5px;
 }
 .summaryView .fieldLabel {
   padding-left: 0px;
@@ -6055,6 +6059,7 @@ div.tooltip-inner {
   padding-top: 25px;
   border: 1px solid #eee;
   border-width: thin;
+  border-radius: 5px;
 }
 .detailViewContainer .content-area,
 .editViewPageDiv .content-area,
@@ -7886,4 +7891,70 @@ div.flip {
   color: #007bff;
   font-size: 20px;
 }
-/*# sourceMappingURL=style.css.map */
+
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #eeeeee;
+  border-radius: 5px;
+  position: relative;
+  border: 2px solid #e0e0e0;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
