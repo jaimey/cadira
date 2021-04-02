@@ -6,32 +6,35 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *************************************************************************************/
+ */
 
-Class Inventory_Edit_View extends Vtiger_Edit_View {
-
-	public function process(Vtiger_Request $request) {
+class Inventory_Edit_View extends Vtiger_Edit_View
+{
+	public function process(Vtiger_Request $request)
+	{
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$record = $request->get('record');
 		$sourceRecord = $request->get('sourceRecord');
 		$sourceModule = $request->get('sourceModule');
-		if(empty($sourceRecord) && empty($sourceModule)) {
+
+		if (empty($sourceRecord) && empty($sourceModule)) {
 			$sourceRecord = $request->get('returnrecord');
 			$sourceModule = $request->get('returnmodule');
 		}
 
 		$viewer->assign('MODE', '');
 		$viewer->assign('IS_DUPLICATE', false);
+
 		if ($request->has('totalProductCount')) {
-			if($record) {
+			if ($record) {
 				$recordModel = Vtiger_Record_Model::getInstanceById($record);
 			} else {
 				$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
 			}
 			$relatedProducts = $recordModel->convertRequestToProducts($request);
 			$taxes = $relatedProducts[1]['final_details']['taxes'];
-		} else if(!empty($record)  && $request->get('isDuplicate') == true) {
+		} elseif (! empty($record) && $request->get('isDuplicate') == true) {
 			$recordModel = Inventory_Record_Model::getInstanceById($record, $moduleName);
 			$currencyInfo = $recordModel->getCurrencyInfo();
 			$taxes = $recordModel->getProductTaxes();
@@ -48,7 +51,7 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 				}
 			}
 			$viewer->assign('IS_DUPLICATE', true);
-		} elseif (!empty($record)) {
+		} elseif (! empty($record)) {
 			$recordModel = Inventory_Record_Model::getInstanceById($record, $moduleName);
 			$currencyInfo = $recordModel->getCurrencyInfo();
 			$taxes = $recordModel->getProductTaxes();
@@ -60,7 +63,7 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 				$referenceId = $request->get('salesorder_id');
 			} elseif ($request->get('invoice_id')) {
 				$referenceId = $request->get('invoice_id');
-			} else{
+			} else {
 				$referenceId = $request->get('quote_id');
 			}
 
@@ -91,35 +94,35 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 
 			//The creation of Inventory record from action and Related list of product/service detailview the product/service details will calculated by following code
 			if ($request->get('product_id') || $sourceModule === 'Products' || $request->get('productid')) {
-				if($sourceRecord) {
+				if ($sourceRecord) {
 					$productRecordModel = Products_Record_Model::getInstanceById($sourceRecord);
-				} else if($request->get('product_id')) {
+				} elseif ($request->get('product_id')) {
 					$productRecordModel = Products_Record_Model::getInstanceById($request->get('product_id'));
-				} else if($request->get('productid')) {
+				} elseif ($request->get('productid')) {
 					$productRecordModel = Products_Record_Model::getInstanceById($request->get('productid'));
 				}
 				$relatedProducts = $productRecordModel->getDetailsForInventoryModule($recordModel);
 			} elseif ($request->get('service_id') || $sourceModule === 'Services') {
-				if($sourceRecord) {
+				if ($sourceRecord) {
 					$serviceRecordModel = Services_Record_Model::getInstanceById($sourceRecord);
 				} else {
 					$serviceRecordModel = Services_Record_Model::getInstanceById($request->get('service_id'));
 				}
 				$relatedProducts = $serviceRecordModel->getDetailsForInventoryModule($recordModel);
-			} elseif ($sourceRecord && in_array($sourceModule, array('Accounts', 'Contacts', 'Potentials', 'Vendors', 'PurchaseOrder'))) {
+			} elseif ($sourceRecord && in_array($sourceModule, ['Accounts', 'Contacts', 'Potentials', 'Vendors', 'PurchaseOrder'])) {
 				$parentRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
 				$recordModel->setParentRecordData($parentRecordModel);
 				if ($sourceModule !== 'PurchaseOrder') {
 					$relatedProducts = $recordModel->getParentRecordRelatedLineItems($parentRecordModel);
 				}
-			} elseif ($sourceRecord && in_array($sourceModule, array('HelpDesk', 'Leads'))) {
+			} elseif ($sourceRecord && in_array($sourceModule, ['HelpDesk', 'Leads'])) {
 				$parentRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
 				$relatedProducts = $recordModel->getParentRecordRelatedLineItems($parentRecordModel);
 			}
 		}
 
 		$deductTaxes = $relatedProducts[1]['final_details']['deductTaxes'];
-		if (!$deductTaxes) {
+		if (! $deductTaxes) {
 			$deductTaxes = Inventory_TaxRecord_Model::getDeductTaxesList();
 		}
 
@@ -132,36 +135,36 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 		$inventoryRecordModel = Inventory_Record_Model::getCleanInstance($moduleName);
 		$termsAndConditions = $inventoryRecordModel->getInventoryTermsAndConditions();
 
-		foreach($requestFieldList as $fieldName=>$fieldValue) {
+		foreach ($requestFieldList as $fieldName=>$fieldValue) {
 			$fieldModel = $fieldList[$fieldName];
-			if($fieldModel->isEditable()) {
+			if ($fieldModel->isEditable()) {
 				$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 			}
 		}
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
 
-		$viewer->assign('VIEW_MODE', "fullForm");
+		$viewer->assign('VIEW_MODE', 'fullForm');
 
 		$isRelationOperation = $request->get('relationOperation');
 
 		//if it is relation edit
 		$viewer->assign('IS_RELATION_OPERATION', $isRelationOperation);
-		if($isRelationOperation) {
+		if ($isRelationOperation) {
 			$viewer->assign('SOURCE_MODULE', $sourceModule);
 			$viewer->assign('SOURCE_RECORD', $sourceRecord);
 		}
-		if(!empty($record)  && $request->get('isDuplicate') == true) {
-			$viewer->assign('IS_DUPLICATE',true);
+		if (! empty($record) && $request->get('isDuplicate') == true) {
+			$viewer->assign('IS_DUPLICATE', true);
 		} else {
-			$viewer->assign('IS_DUPLICATE',false);
+			$viewer->assign('IS_DUPLICATE', false);
 		}
 		$currencies = Inventory_Module_Model::getAllCurrencies();
 		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
 		$recordStructure = $recordStructureInstance->getStructure();
 
-		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Vtiger_Functions::jsonEncode($picklistDependencyDatasource));
-		$viewer->assign('RECORD',$recordModel);
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE', Vtiger_Functions::jsonEncode($picklistDependencyDatasource));
+		$viewer->assign('RECORD', $recordModel);
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructure);
 		$viewer->assign('MODULE', $moduleName);
@@ -207,40 +210,40 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 	 * @param Vtiger_Request $request
 	 * @return <Array> - List of Vtiger_JsScript_Model instances
 	 */
-	function getHeaderScripts(Vtiger_Request $request) {
+	public function getHeaderScripts(Vtiger_Request $request)
+	{
 		$headerScriptInstances = parent::getHeaderScripts($request);
 
 		$moduleName = $request->getModule();
 		$modulePopUpFile = 'modules.'.$moduleName.'.resources.Popup';
 		$moduleEditFile = 'modules.'.$moduleName.'.resources.Edit';
-		unset($headerScriptInstances[$modulePopUpFile]);
-		unset($headerScriptInstances[$moduleEditFile]);
+		unset($headerScriptInstances[$modulePopUpFile], $headerScriptInstances[$moduleEditFile]);
 
-		$jsFileNames = array(
-				'modules.Inventory.resources.Edit',
-				'modules.Inventory.resources.Popup',
-				'modules.PriceBooks.resources.Popup',
-		);
+		$jsFileNames = [
+			'modules.Inventory.resources.Edit',
+			'modules.Inventory.resources.Popup',
+			'modules.PriceBooks.resources.Popup',
+		];
 		$jsFileNames[] = $moduleEditFile;
 		$jsFileNames[] = $modulePopUpFile;
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
-		return $headerScriptInstances;
+
+		return array_merge($headerScriptInstances, $jsScriptInstances);
 	}
 
-	public function getOverlayHeaderScripts(Vtiger_Request $request) {
+	public function getOverlayHeaderScripts(Vtiger_Request $request)
+	{
 		$moduleName = $request->getModule();
 		$modulePopUpFile = 'modules.'.$moduleName.'.resources.Popup';
 		$moduleEditFile = 'modules.'.$moduleName.'.resources.Edit';
 
-		$jsFileNames = array(
+		$jsFileNames = [
 			'modules.Inventory.resources.Popup',
 			'modules.PriceBooks.resources.Popup',
-		);
+		];
 		$jsFileNames[] = $moduleEditFile;
 		$jsFileNames[] = $modulePopUpFile;
-		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		return $jsScriptInstances;
-	}
 
+		return $this->checkAndConvertJsScripts($jsFileNames);
+	}
 }
