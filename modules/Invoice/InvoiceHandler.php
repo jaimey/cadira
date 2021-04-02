@@ -11,49 +11,50 @@
 include_once 'include/Webservices/Revise.php';
 include_once 'include/Webservices/Retrieve.php';
 
-class InvoiceHandler extends VTEventHandler {
+class InvoiceHandler extends VTEventHandler
+{
+	public function handleEvent($eventName, $entityData)
+	{
+		$moduleName = $entityData->getModuleName();
 
-    function handleEvent($eventName, $entityData) {
+		// Validate the event target
+		if ($moduleName != 'Invoice') {
+			return;
+		}
 
-        $moduleName = $entityData->getModuleName();
+		//Get Current User Information
+		global $current_user, $currentModule;
 
-        // Validate the event target
-        if ($moduleName != 'Invoice') {
-            return;
-        }
+		/**
+		 * Adjust the balance amount against total & received amount
+		 * NOTE: beforesave the total amount will not be populated in event data.
+		 */
+		if ($eventName == 'vtiger.entity.aftersave') {
+			// Trigger from other module (due to indirect save) need to be ignored - to avoid inconsistency.
+			if ($currentModule != 'Invoice') {
+				return;
+			}
+			$entityDelta = new VTEntityDelta();
+			$oldCurrency = $entityDelta->getOldValue($entityData->getModuleName(), $entityData->getId(), 'currency_id');
+			$newCurrency = $entityDelta->getCurrentValue($entityData->getModuleName(), $entityData->getId(), 'currency_id');
+			$oldConversionRate = $entityDelta->getOldValue($entityData->getModuleName(), $entityData->getId(), 'conversion_rate');
 
-        //Get Current User Information
-        global $current_user, $currentModule;
+			$db = PearDatabase::getInstance();
 
-        /**
-         * Adjust the balance amount against total & received amount
-         * NOTE: beforesave the total amount will not be populated in event data.
-         */
-        if ($eventName == 'vtiger.entity.aftersave') {
-            // Trigger from other module (due to indirect save) need to be ignored - to avoid inconsistency.
-            if ($currentModule != 'Invoice')
-                return;
-            $entityDelta = new VTEntityDelta();
-            $oldCurrency = $entityDelta->getOldValue($entityData->getModuleName(), $entityData->getId(), 'currency_id');
-            $newCurrency = $entityDelta->getCurrentValue($entityData->getModuleName(), $entityData->getId(), 'currency_id');
-            $oldConversionRate = $entityDelta->getOldValue($entityData->getModuleName(), $entityData->getId(), 'conversion_rate');
-            $db = PearDatabase::getInstance();
-            $wsid = vtws_getWebserviceEntityId('Invoice', $entityData->getId());
-            $wsrecord = vtws_retrieve($wsid,$current_user);
-            if ($oldCurrency != $newCurrency && $oldCurrency != '') {
-              if($oldConversionRate != ''){ 
-                $wsrecord['received'] = floatval(($wsrecord['received']/$oldConversionRate) * $wsrecord['conversion_rate']);
-              }  
-            }
-            $wsrecord['balance'] = floatval($wsrecord['hdnGrandTotal'] - $wsrecord['received']);
-            if ($wsrecord['balance'] == 0) {
-                $wsrecord['invoicestatus'] = 'Paid';
-            }
-            $query = "UPDATE vtiger_invoice SET balance=?,received=? WHERE invoiceid=?";
-            $db->pquery($query, array($wsrecord['balance'], $wsrecord['received'], $entityData->getId()));
-        }
-    }
+			$wsid = vtws_getWebserviceEntityId('Invoice', $entityData->getId());
+			$wsrecord = vtws_retrieve($wsid, $current_user);
 
+			if ($oldCurrency != $newCurrency && $oldCurrency != '') {
+				if ($oldConversionRate != '') {
+					$wsrecord['received'] = floatval(($wsrecord['received'] / $oldConversionRate) * $wsrecord['conversion_rate']);
+				}
+			}
+			$wsrecord['balance'] = floatval($wsrecord['hdnGrandTotal'] - $wsrecord['received']);
+			if ($wsrecord['balance'] == 0) {
+				$wsrecord['invoicestatus'] = 'Paid';
+			}
+			$query = 'UPDATE vtiger_invoice SET balance=?,received=? WHERE invoiceid=?';
+			$db->pquery($query, [$wsrecord['balance'], $wsrecord['received'], $entityData->getId()]);
+		}
+	}
 }
-
-?>
