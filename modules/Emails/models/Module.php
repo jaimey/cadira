@@ -218,6 +218,7 @@ class Emails_Module_Model extends Vtiger_Module_Model
 		$moduleName = $this->get('name');
 		$focus = $recordModel->getEntity();
 		$fields = $focus->column_fields;
+
 		foreach ($fields as $fieldName => $fieldValue) {
 			$fieldValue = $recordModel->get($fieldName);
 			if (is_array($fieldValue)) {
@@ -227,6 +228,7 @@ class Emails_Module_Model extends Vtiger_Module_Model
 				$focus->column_fields[$fieldName] = $value;
 			}
 		}
+
 		$focus->mode = $recordModel->get('mode');
 		$focus->id = $recordModel->getId();
 		$focus->save($moduleName);

@@ -50,7 +50,6 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View
 
 		$moduleName = $request->getModule();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		$recordIds = $this->getRecordsListFromRequest($request);
 		$documentIds = $request->get('documentids');
 		$signature = $request->get('signature');
 		// This is either SENT or SAVED
@@ -153,7 +152,9 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View
 		$recordModel->set('documentids', $documentIds);
 		$recordModel->set('signature', $signature);
 
+		$parentIds = '';
 		$recordModel->set('toemailinfo', $toMailInfo);
+
 		foreach ($toMailInfo as $recordId=> $emailValueList) {
 			if ($recordModel->getEntityType($recordId) == 'Users') {
 				$parentIds .= $recordId.'@-1|';

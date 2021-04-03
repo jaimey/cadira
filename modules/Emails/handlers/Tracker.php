@@ -11,6 +11,7 @@
 include_once 'modules/Users/Users.php';
 require_once 'include/events/include.inc';
 vimport('includes.runtime.LanguageHandler');
+
 class Emails_Tracker_Handler
 {
 	public function process($data = [])
@@ -29,7 +30,7 @@ class Emails_Tracker_Handler
 	protected function clickHandler($data = [])
 	{
 		$redirectUrl = rawurldecode($data['redirectUrl']);
-		$redirectLinkName = rawurldecode($data['linkName']);
+
 		if ((strpos($_SERVER['HTTP_REFERER'], vglobal('site_URL')) !== false) || (empty($_SERVER['HTTP_REFERER']) && $_REQUEST['fromcrm'])) {
 			if (! empty($redirectUrl)) {
 				return Vtiger_Functions::redirectUrl($redirectUrl);
@@ -64,6 +65,7 @@ class Emails_Tracker_Handler
 	{
 		$recordId = $data['record'];
 		$parentId = $data['parentId'];
+
 		if ($recordId && $parentId) {
 			if ((strpos($_SERVER['HTTP_REFERER'], vglobal('site_URL')) !== false) || (empty($_SERVER['HTTP_REFERER']) && $_REQUEST['fromcrm'])) {
 				// If a email is opened from CRM then we no need to track but need to be redirected

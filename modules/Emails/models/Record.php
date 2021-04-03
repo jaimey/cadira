@@ -74,7 +74,7 @@ class Emails_Record_Model extends Vtiger_Record_Model
 		$allEligibleEmails = [];
 		$toEmailInfo = array_map('unserialize', array_unique(array_map('serialize', array_map('array_unique', $toEmailInfo))));
 		$toFieldData = array_diff(explode(',', $this->get('saved_toid')), $emailsInfo);
-		$toEmailsData = [];
+
 		$i = 1;
 		foreach ($toFieldData as $value) {
 			$toEmailInfo['to'.$i++] = [$value];
@@ -607,6 +607,7 @@ class Emails_Record_Model extends Vtiger_Record_Model
 		$db = PearDatabase::getInstance();
 		$moduleModel = $this->getModule();
 		$emailRelatedModules = $moduleModel->getEmailRelatedModules();
+
 		$relatedModule = '';
 		if (! empty($id)) {
 			$sql = 'SELECT setype FROM vtiger_crmentity WHERE crmid=?';
