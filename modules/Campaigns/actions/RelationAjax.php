@@ -97,8 +97,10 @@ class Campaigns_RelationAjax_Action extends Vtiger_RelationAjax_Action
 	 */
 	public function updateStatus(Vtiger_Request $request)
 	{
+		$moduleName = $request->getModule();
 		$relatedModuleName = $request->get('relatedModule');
 		$relatedRecordId = $request->get('relatedRecord');
+
 		$status = $request->get('status');
 		$response = new Vtiger_Response();
 
@@ -111,7 +113,7 @@ class Campaigns_RelationAjax_Action extends Vtiger_RelationAjax_Action
 
 			$response->setResult([true]);
 		} else {
-			$response->setError($code);
+			$response->setError('Campaigns_RelationAjax_Action::updateStatus', $moduleName);
 		}
 		$response->emit();
 	}

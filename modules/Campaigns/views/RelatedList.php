@@ -16,11 +16,13 @@ class Campaigns_RelatedList_View extends Vtiger_RelatedList_View
 		$relatedModuleName = $request->get('relatedModule');
 		$parentId = $request->get('record');
 		$label = $request->get('tab_label');
+
 		$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId, $moduleName);
 		$relationListView = Vtiger_RelationListView_Model::getInstance($parentRecordModel, $relatedModuleName, $label);
 		$relationModel = $relationListView->getRelationModel();
 
 		$viewer = $this->getViewer($request);
+
 		if (array_key_exists($relatedModuleName, $relationModel->getEmailEnabledModulesInfoForDetailView())) {
 			$viewer->assign('CUSTOM_VIEWS', CustomView_Record_Model::getAllByGroup($relatedModuleName, false));
 			$viewer->assign('STATUS_VALUES', $relationModel->getCampaignRelationStatusValues());

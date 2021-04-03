@@ -102,6 +102,7 @@ class Campaigns extends CRMEntity
 	public function get_accounts($id, $cur_tab_id, $rel_tab_id, $actions = false)
 	{
 		global $log, $singlepane_view,$currentModule;
+
 		$log->debug('Entering get_accounts('.$id.') method ...');
 		$this_module = $currentModule;
 
@@ -109,8 +110,9 @@ class Campaigns extends CRMEntity
 		require_once "modules/${related_module}/${related_module}.php";
 		$other = new $related_module();
 
-		$is_CampaignStatusAllowed = false;
 		global $current_user;
+		$is_CampaignStatusAllowed = false;
+
 		if (getFieldVisibilityPermission('Accounts', $current_user->id, 'campaignrelstatus') == '0') {
 			$other->list_fields['Status'] = ['vtiger_campaignrelstatus'=>'campaignrelstatus'];
 			$other->list_fields_name['Status'] = 'campaignrelstatus';
@@ -134,6 +136,7 @@ class Campaigns extends CRMEntity
 		// Send mail button for selected Accounts
 		$button .= "<input title='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' class='crmbutton small edit' value='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' type='button' name='button' onclick='rel_eMail(\"${this_module}\",this,\"${related_module}\")'>";
 		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+
 		// To get Accounts CustomView -START
 		require_once 'modules/CustomView/CustomView.php';
 		$ahtml = "<select id='".$related_module."_cv_list' class='small'><option value='None'>-- ".getTranslatedString('Select One').' --</option>';
@@ -585,7 +588,7 @@ class Campaigns extends CRMEntity
 		foreach ($related_list['entries'] as $key => &$entry) {
 			$popupitemshtml = '';
 			foreach ($this->campaignrelstatus as $campaingrelstatus) {
-				$camprelstatus = getTranslatedString($campaingrelstatus[campaignrelstatus], 'Campaigns');
+				$camprelstatus = getTranslatedString($campaingrelstatus['campaignrelstatus'], 'Campaigns');
 				$popupitemshtml .= "<a onmouseover=\"javascript: showBlock('campaignstatus_popup_${key}')\" href=\"javascript:updateCampaignRelationStatus('${related_module}', '".$this->id."', '${key}', '{$campaingrelstatus['campaignrelstatusid']}', '".addslashes($camprelstatus)."');\">${camprelstatus}</a><br />";
 			}
 			$popuphtml = '<div onmouseover="javascript:clearTimeout(statusPopupTimer);" onmouseout="javascript:closeStatusPopup(\'campaignstatus_popup_'.$key.'\');" style="margin-top: -14px; width: 200px;" id="campaignstatus_popup_'.$key.'" class="calAction"><div style="background-color: #FFFFFF; padding: 8px;">'.$popupitemshtml.'</div></div>';
