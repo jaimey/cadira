@@ -1491,15 +1491,15 @@ class Accounts extends CRMEntity
 	// Function to unlink the dependent records of the given record by id
 	public function unlinkDependencies($module, $id)
 	{
-		global $log;
-
 		//Deleting Account related Potentials.
 		$pot_q = 'SELECT vtiger_crmentity.crmid FROM vtiger_crmentity
 			INNER JOIN vtiger_potential ON vtiger_crmentity.crmid=vtiger_potential.potentialid
 			LEFT JOIN vtiger_account ON vtiger_account.accountid=vtiger_potential.related_to
 			WHERE vtiger_crmentity.deleted=0 AND vtiger_potential.related_to=?';
+
 		$pot_res = $this->db->pquery($pot_q, [$id]);
 		$pot_ids_list = [];
+
 		for ($k = 0;$k < $this->db->num_rows($pot_res);$k++) {
 			$pot_id = $this->db->query_result($pot_res, $k, 'crmid');
 			$pot_ids_list[] = $pot_id;
@@ -1507,7 +1507,7 @@ class Accounts extends CRMEntity
 			$this->db->pquery($sql, [$pot_id]);
 		}
 		//Backup deleted Account related Potentials.
-		$params = [$id, RB_RECORD_UPDATED, 'vtiger_crmentity', 'deleted', 'crmid', implode(',', $pot_ids_list)];
+		$params = [$id, 'RB_RECORD_UPDATED', 'vtiger_crmentity', 'deleted', 'crmid', implode(',', $pot_ids_list)];
 		$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
 
 		//Deleting Account related Quotes.
@@ -1515,8 +1515,10 @@ class Accounts extends CRMEntity
 			INNER JOIN vtiger_quotes ON vtiger_crmentity.crmid=vtiger_quotes.quoteid
 			INNER JOIN vtiger_account ON vtiger_account.accountid=vtiger_quotes.accountid
 			WHERE vtiger_crmentity.deleted=0 AND vtiger_quotes.accountid=?';
+
 		$quo_res = $this->db->pquery($quo_q, [$id]);
 		$quo_ids_list = [];
+
 		for ($k = 0;$k < $this->db->num_rows($quo_res);$k++) {
 			$quo_id = $this->db->query_result($quo_res, $k, 'crmid');
 			$quo_ids_list[] = $quo_id;
@@ -1524,20 +1526,22 @@ class Accounts extends CRMEntity
 			$this->db->pquery($sql, [$quo_id]);
 		}
 		//Backup deleted Account related Quotes.
-		$params = [$id, RB_RECORD_UPDATED, 'vtiger_crmentity', 'deleted', 'crmid', implode(',', $quo_ids_list)];
+		$params = [$id, 'RB_RECORD_UPDATED', 'vtiger_crmentity', 'deleted', 'crmid', implode(',', $quo_ids_list)];
 		$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
 
 		//Backup Contact-Account Relation
 		$con_q = 'SELECT contactid FROM vtiger_contactdetails WHERE accountid = ?';
 		$con_res = $this->db->pquery($con_q, [$id]);
+
 		if ($this->db->num_rows($con_res) > 0) {
 			$con_ids_list = [];
 			for ($k = 0;$k < $this->db->num_rows($con_res);$k++) {
 				$con_ids_list[] = $this->db->query_result($con_res, $k, 'contactid');
 			}
-			$params = [$id, RB_RECORD_UPDATED, 'vtiger_contactdetails', 'accountid', 'contactid', implode(',', $con_ids_list)];
+			$params = [$id, 'RB_RECORD_UPDATED', 'vtiger_contactdetails', 'accountid', 'contactid', implode(',', $con_ids_list)];
 			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
 		}
+
 		//Deleting Contact-Account Relation.
 		$con_q = 'UPDATE vtiger_contactdetails SET accountid = 0 WHERE accountid = ?';
 		$this->db->pquery($con_q, [$id]);
@@ -1545,14 +1549,16 @@ class Accounts extends CRMEntity
 		//Backup Trouble Tickets-Account Relation
 		$tkt_q = 'SELECT ticketid FROM vtiger_troubletickets WHERE parent_id = ?';
 		$tkt_res = $this->db->pquery($tkt_q, [$id]);
+
 		if ($this->db->num_rows($tkt_res) > 0) {
 			$tkt_ids_list = [];
 			for ($k = 0;$k < $this->db->num_rows($tkt_res);$k++) {
 				$tkt_ids_list[] = $this->db->query_result($tkt_res, $k, 'ticketid');
 			}
-			$params = [$id, RB_RECORD_UPDATED, 'vtiger_troubletickets', 'parent_id', 'ticketid', implode(',', $tkt_ids_list)];
+			$params = [$id, 'RB_RECORD_UPDATED', 'vtiger_troubletickets', 'parent_id', 'ticketid', implode(',', $tkt_ids_list)];
 			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
 		}
+
 		//Deleting Trouble Tickets-Account Relation.
 		$tt_q = 'UPDATE vtiger_troubletickets SET parent_id = 0 WHERE parent_id = ?';
 		$this->db->pquery($tt_q, [$id]);
@@ -1563,7 +1569,6 @@ class Accounts extends CRMEntity
 	// Function to unlink an entity with given Id from another entity
 	public function unlinkRelationship($id, $return_module, $return_id)
 	{
-		global $log;
 		if (empty($return_module) || empty($return_id)) {
 			return;
 		}
@@ -1612,18 +1617,18 @@ class Accounts extends CRMEntity
 		$list_buttons = [];
 
 		if (isPermitted('Accounts', 'Delete', '') == 'yes') {
-			$list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
+			$list_buttons['del'] = $app_strings['LBL_MASS_DELETE'];
 		}
 		if (isPermitted('Accounts', 'EditView', '') == 'yes') {
-			$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
-			$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+			$list_buttons['mass_edit'] = $app_strings['LBL_MASS_EDIT'];
+			$list_buttons['c_owner'] = $app_strings['LBL_CHANGE_OWNER'];
 		}
 		if (isPermitted('Emails', 'EditView', '') == 'yes') {
-			$list_buttons['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+			$list_buttons['s_mail'] = $app_strings['LBL_SEND_MAIL_BUTTON'];
 		}
 		// mailer export
 		if (isPermitted('Accounts', 'Export', '') == 'yes') {
-			$list_buttons['mailer_exp'] = $mod_strings[LBL_MAILER_EXPORT];
+			$list_buttons['mailer_exp'] = $mod_strings['LBL_MAILER_EXPORT'];
 		}
 		// end of mailer export
 		return $list_buttons;
@@ -1632,7 +1637,7 @@ class Accounts extends CRMEntity
 	// Function to get attachments in the related list of accounts module
 	public function get_attachments($id, $cur_tab_id, $rel_tab_id, $actions = false)
 	{
-		global $currentModule, $app_strings, $singlepane_view;
+		global $currentModule, $singlepane_view;
 		$this_module = $currentModule;
 		$parenttab = getParentTab();
 
@@ -1710,9 +1715,7 @@ class Accounts extends CRMEntity
 	 */
 	public function get_merged_list($id, $cur_tab_id, $rel_tab_id, $actions = false)
 	{
-		global $currentModule, $app_strings, $singlepane_view, $current_user;
-
-		$parenttab = getParentTab();
+		global $currentModule, $singlepane_view, $current_user;
 
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
 		$other = CRMEntity::getInstance($related_module);
@@ -1762,6 +1765,7 @@ class Accounts extends CRMEntity
 			$contactTableName = null;
 			$otherModuleModel = Vtiger_Module_Model::getInstance($related_module);
 			$referenceFields = $otherModuleModel->getFieldsByType('reference');
+
 			foreach ($referenceFields as $referenceFieldName => $fieldModel) {
 				$referenceList = $fieldModel->getReferenceList();
 				foreach ($referenceList as $referencedModule) {
@@ -1825,7 +1829,7 @@ class Accounts extends CRMEntity
 	 */
 	public function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions = false)
 	{
-		global $currentModule, $app_strings, $singlepane_view;
+		global $currentModule, $singlepane_view;
 
 		$parenttab = getParentTab();
 
@@ -1864,7 +1868,9 @@ class Accounts extends CRMEntity
 			$returnset = "&return_module=${currentModule}&return_action=CallRelatedList&return_id=${id}";
 		}
 
+		$query = '';
 		$more_relation = '';
+
 		if (! empty($other->related_tables)) {
 			foreach ($other->related_tables as $tname => $relmap) {
 				$query .= ", ${tname}.*";
@@ -1913,11 +1919,14 @@ class Accounts extends CRMEntity
 			$id = $this->id;
 		}
 		$entityIds = [];
+
 		$query = 'SELECT contactid FROM vtiger_contactdetails
 				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 				WHERE vtiger_contactdetails.accountid = ? AND vtiger_crmentity.deleted = 0';
+
 		$accountContacts = $adb->pquery($query, [$id]);
 		$numOfContacts = $adb->num_rows($accountContacts);
+
 		if ($accountContacts && $numOfContacts > 0) {
 			for ($i = 0; $i < $numOfContacts; ++$i) {
 				array_push($entityIds, $adb->query_result($accountContacts, $i, 'contactid'));
@@ -1931,10 +1940,13 @@ class Accounts extends CRMEntity
 	{
 		$relatedIds = [];
 		$db = PearDatabase::getInstance();
+
 		$query = 'SELECT DISTINCT vtiger_crmentity.crmid FROM vtiger_potential INNER JOIN vtiger_crmentity ON 
 					vtiger_crmentity.crmid = vtiger_potential.potentialid LEFT JOIN vtiger_account ON vtiger_account.accountid = 
 					vtiger_potential.related_to WHERE vtiger_crmentity.deleted = 0 AND vtiger_potential.related_to = ?';
+
 		$result = $db->pquery($query, [$id]);
+
 		for ($i = 0; $i < $db->num_rows($result); $i++) {
 			$relatedIds[] = $db->query_result($result, $i, 'crmid');
 		}
@@ -1946,10 +1958,13 @@ class Accounts extends CRMEntity
 	{
 		$relatedIds = [];
 		$db = PearDatabase::getInstance();
+
 		$query = 'SELECT DISTINCT vtiger_crmentity.crmid FROM vtiger_troubletickets INNER JOIN vtiger_crmentity ON 
 					vtiger_crmentity.crmid = vtiger_troubletickets.ticketid WHERE vtiger_crmentity.deleted = 0 AND 
 					vtiger_troubletickets.parent_id = ?';
+
 		$result = $db->pquery($query, [$id]);
+
 		for ($i = 0; $i < $db->num_rows($result); $i++) {
 			$relatedIds[] = $db->query_result($result, $i, 'crmid');
 		}
