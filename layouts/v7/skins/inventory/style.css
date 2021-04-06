@@ -612,15 +612,14 @@ a.menu-item:hover {
 }
 .app-menu .app-modules-dropdown li:hover {
   opacity: 1;
-  background: #007bff;
-  color: #f2f1f1;
+  background: #d2d2d2;
+  color: #525252;
 }
 .app-menu .app-modules-dropdown li:hover .module-icon {
   opacity: 1;
 }
 .app-menu .app-modules-dropdown .module-icon {
   font-size: 1.2em;
-  opacity: 0.2;
 }
 .app-menu .app-list {
   margin-top: -10px;
@@ -2371,8 +2370,7 @@ th {
   color: #3498DB;
 }
 .fieldLabel {
-  color: #007bff;
-  opacity: 0.8;
+  color: #525252;
 }
 .fieldLabel label {
   font-weight: 100;
@@ -3292,7 +3290,7 @@ th {
   color: #FFFFFF;
 }
 .settingsgroup div.panel-collapse {
-  background-color: #007bff;
+  background-color: #525252;
 }
 .settingsgroup-accordion {
   color: #FFFFFF;
@@ -3310,7 +3308,7 @@ th {
   text-transform: uppercase;
 }
 .settingsgroup {
-  background: #007bff;
+  background: #e8e8e8;
   height: 100%;
 }
 .settingsgroup .panel-group .panel {
