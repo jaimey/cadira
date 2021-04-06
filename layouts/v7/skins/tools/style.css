@@ -549,8 +549,8 @@ a.menu-item:hover {
 .active-app-item,
 .app-item:hover {
   opacity: 1;
-  background: #596875;
-  color: #f2f1f1;
+  background: #d2d2d2;
+  color: #000000;
 }
 .app-item-color-MARKETING {
   border-left: 4px solid #EF5E29;
@@ -603,8 +603,7 @@ a.menu-item:hover {
 .app-menu .app-modules-dropdown li a {
   background: transparent;
   padding-left: 20px;
-  color: #fff;
-  text-shadow: 0 0 1px #000;
+  color: #525252;
   display: block;
 }
 .app-menu .app-modules-dropdown li a .module-name {
