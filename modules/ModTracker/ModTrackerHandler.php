@@ -14,11 +14,12 @@ class ModTrackerHandler extends VTEventHandler
 {
 	public function handleEvent($eventName, $data)
 	{
-		global $adb, $current_user;
+		global $adb;
 		$current_user_id = $_SESSION['authenticated_user_id'];
 		$current_user = Users_Record_Model::getInstanceById($current_user_id, 'Users');
 		$curid = $current_user->get('id');
 
+		global $current_user;
 		$moduleName = $data->getModuleName();
 		$isTrackingEnabled = ModTracker::isTrackingEnabledForModule($moduleName);
 		if (! $isTrackingEnabled) {
