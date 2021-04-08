@@ -1,22 +1,25 @@
 <?php
-/*************************************************************************************
+/*
  * The contents of this file are subject to the vtiger CRM Public License Version 1.1
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is: vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *************************************************************************************/
+ */
 
-class Reports_ChartDetail_View extends Vtiger_Index_View {
-
-	public function requiresPermission(\Vtiger_Request $request) {
+class Reports_ChartDetail_View extends Vtiger_Index_View
+{
+	public function requiresPermission(\Vtiger_Request $request)
+	{
 		$permissions = parent::requiresPermission($request);
-		$permissions[] = array('module_parameter' => 'module', 'action' => 'DetailView', 'record_parameter' => 'record');
+		$permissions[] = ['module_parameter' => 'module', 'action' => 'DetailView', 'record_parameter' => 'record'];
+
 		return $permissions;
 	}
-	
-	public function checkPermission(Vtiger_Request $request) {
+
+	public function checkPermission(Vtiger_Request $request)
+	{
 		parent::checkPermission($request);
 		$record = $request->get('record');
 		$reportModel = Reports_Record_Model::getCleanInstance($record);
@@ -26,16 +29,18 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		$sharingType = $reportModel->get('sharingtype');
 
 		$isRecordShared = true;
-		if(($currentUserPriviligesModel->id != $owner) && $sharingType == "Private"){
+		if (($currentUserPriviligesModel->id != $owner) && $sharingType == 'Private') {
 			$isRecordShared = $reportModel->isRecordHasViewAccess($sharingType);
 		}
-		if(!$isRecordShared) {
+		if (! $isRecordShared) {
 			throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
 		}
+
 		return true;
 	}
 
-	function preProcess(Vtiger_Request $request) {
+	public function preProcess(Vtiger_Request $request)
+	{
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
@@ -56,7 +61,7 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		$userPrivilegesModel = Users_Privileges_Model::getInstanceById($currentUser->getId());
 		$permission = $userPrivilegesModel->hasModulePermission($primaryModuleModel->getId());
 
-		if(!$permission) {
+		if (! $permission) {
 			$viewer->assign('MODULE', $primaryModule);
 			$viewer->assign('MESSAGE', vtranslate('LBL_PERMISSION_DENIED'));
 			$viewer->view('OperationNotPermitted.tpl', $primaryModule);
@@ -76,18 +81,18 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
 
 		$secondaryModuleIsCalendar = strpos($secondaryModules, 'Calendar');
-		if(($primaryModule == 'Calendar') || ($secondaryModuleIsCalendar !== FALSE)){
+		if (($primaryModule == 'Calendar') || ($secondaryModuleIsCalendar !== false)) {
 			$advanceFilterOpsByFieldType = Calendar_Field_Model::getAdvancedFilterOpsByFieldType();
-		} else{
+		} else {
 			$advanceFilterOpsByFieldType = Vtiger_Field_Model::getAdvancedFilterOpsByFieldType();
 		}
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $advanceFilterOpsByFieldType);
 		$dateFilters = Vtiger_Field_Model::getDateFilterTypes();
-		foreach($dateFilters as $comparatorKey => $comparatorInfo) {
+		foreach ($dateFilters as $comparatorKey => $comparatorInfo) {
 			$comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
 			$comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
-			$comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$moduleName);
+			$comparatorInfo['label'] = vtranslate($comparatorInfo['label'], $moduleName);
 			$dateFilters[$comparatorKey] = $comparatorInfo;
 		}
 
@@ -106,8 +111,8 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 
 		$dashBoardModel = new Vtiger_DashBoard_Model();
 		$activeTabs = $dashBoardModel->getActiveTabs();
-		foreach($activeTabs as $index => $tabInfo) {
-			if(!empty($tabInfo['appname'])) {
+		foreach ($activeTabs as $index => $tabInfo) {
+			if (! empty($tabInfo['appname'])) {
 				unset($activeTabs[$index]);
 			}
 		}
@@ -116,16 +121,19 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		$viewer->view('ChartReportHeader.tpl', $moduleName);
 	}
 
-	function process(Vtiger_Request $request) {
+	public function process(Vtiger_Request $request)
+	{
 		$mode = $request->getMode();
-		if(!empty($mode)) {
+		if (! empty($mode)) {
 			$this->invokeExposedMethod($mode, $request);
+
 			return;
 		}
 		echo $this->getReport($request);
 	}
 
-	function getReport(Vtiger_Request $request) {
+	public function getReport(Vtiger_Request $request)
+	{
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 
@@ -134,7 +142,7 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		$reportModel = Reports_Record_Model::getInstanceById($record);
 		$reportChartModel = Reports_Chart_Model::getInstanceById($reportModel);
 		$secondaryModules = $reportModel->getSecondaryModules();
-		if(empty($secondaryModules)) {
+		if (empty($secondaryModules)) {
 			$viewer->assign('CLICK_THROUGH', true);
 		}
 
@@ -147,12 +155,13 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 			$fieldModel = Vtiger_Field_Model::getInstance($fieldName, $relModuleModel);
 			if ($fieldModel && $fieldModel->getFieldDataType() != 'currency') {
 				$isPercentExist = true;
+
 				break;
-			} else if (!$fieldModel) {
+			} elseif (! $fieldModel) {
 				$isPercentExist = true;
 			}
 		}
-		$yAxisFieldDataType = (!$isPercentExist) ? 'currency' : '';
+		$yAxisFieldDataType = (! $isPercentExist) ? 'currency' : '';
 		$viewer->assign('YAXIS_FIELD_TYPE', $yAxisFieldDataType);
 
 		$viewer->assign('ADVANCED_FILTERS', $request->get('advanced_filter'));
@@ -167,7 +176,7 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('REPORT_MODEL', $reportModel);
-		$viewer->assign('SECONDARY_MODULES',$secondaryModules);
+		$viewer->assign('SECONDARY_MODULES', $secondaryModules);
 		$viewer->assign('MODULE', $moduleName);
 
 		$viewer->view('ChartReportContents.tpl', $moduleName);
@@ -178,20 +187,21 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 	 * @param Vtiger_Request $request
 	 * @return <Array> - List of Vtiger_JsScript_Model instances
 	 */
-	function getHeaderScripts(Vtiger_Request $request) {
+	public function getHeaderScripts(Vtiger_Request $request)
+	{
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$moduleName = $request->getModule();
 
-		$jsFileNames = array(
+		$jsFileNames = [
 			'modules.Vtiger.resources.Detail',
-			"modules.Vtiger.resources.dashboards.Widget",
-			"modules.$moduleName.resources.Detail",
-			"modules.$moduleName.resources.Edit",
-			"modules.$moduleName.resources.Edit3",
-			"modules.$moduleName.resources.ChartEdit",
-			"modules.$moduleName.resources.ChartEdit2",
-			"modules.$moduleName.resources.ChartEdit3",
-			"modules.$moduleName.resources.ChartDetail",
+			'modules.Vtiger.resources.dashboards.Widget',
+			"modules.${moduleName}.resources.Detail",
+			"modules.${moduleName}.resources.Edit",
+			"modules.${moduleName}.resources.Edit3",
+			"modules.${moduleName}.resources.ChartEdit",
+			"modules.${moduleName}.resources.ChartEdit2",
+			"modules.${moduleName}.resources.ChartEdit3",
+			"modules.${moduleName}.resources.ChartDetail",
 			'~/libraries/jquery/gridster/jquery.gridster.min.js',
 			'~/libraries/jquery/jqplot/jquery.jqplot.min.js',
 			'~/libraries/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
@@ -206,11 +216,11 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 			'~/libraries/jquery/jqplot/plugins/jqplot.logAxisRenderer.min.js',
 			'~/libraries/jquery/VtJqplotInterface.js',
 			'~/libraries/jquery/vtchart.js',
-		);
+		];
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
-		return $headerScriptInstances;
+
+		return array_merge($headerScriptInstances, $jsScriptInstances);
 	}
 
 	/**
@@ -218,15 +228,15 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 	 * @param Vtiger_Request $request
 	 * @return <Array> - List of Vtiger_CssScript_Model instances
 	 */
-	public function getHeaderCss(Vtiger_Request $request) {
+	public function getHeaderCss(Vtiger_Request $request)
+	{
 		$parentHeaderCssScriptInstances = parent::getHeaderCss($request);
 
-		$headerCss = array(
+		$headerCss = [
 			'~libraries/jquery/jqplot/jquery.jqplot.min.css'
-		);
+		];
 		$cssScripts = $this->checkAndConvertCssStyles($headerCss);
-		$headerCssScriptInstances = array_merge($parentHeaderCssScriptInstances , $cssScripts);
-		return $headerCssScriptInstances;
-	}
 
+		return array_merge($parentHeaderCssScriptInstances, $cssScripts);
+	}
 }

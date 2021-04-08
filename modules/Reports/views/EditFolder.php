@@ -6,18 +6,20 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ************************************************************************************/
+ */
 
-class Reports_EditFolder_View extends Vtiger_IndexAjax_View {
-
-	public function requiresPermission(\Vtiger_Request $request) {
+class Reports_EditFolder_View extends Vtiger_IndexAjax_View
+{
+	public function requiresPermission(\Vtiger_Request $request)
+	{
 		$permissions = parent::requiresPermission($request);
-		$permissions[] = array('module_parameter' => 'module', 'action' => 'DetailView');
+		$permissions[] = ['module_parameter' => 'module', 'action' => 'DetailView'];
+
 		return $permissions;
 	}
-	
-	public function process (Vtiger_Request $request) {
-		
+
+	public function process(Vtiger_Request $request)
+	{
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$folderId = $request->get('folderid');
@@ -27,9 +29,9 @@ class Reports_EditFolder_View extends Vtiger_IndexAjax_View {
 		} else {
 			$folderModel = Reports_Folder_Model::getInstance();
 		}
-		
+
 		$viewer->assign('FOLDER_MODEL', $folderModel);
-		$viewer->assign('MODULE',$moduleName);
+		$viewer->assign('MODULE', $moduleName);
 		$viewer->view('EditFolder.tpl', $moduleName);
 	}
 }
