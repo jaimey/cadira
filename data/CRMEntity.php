@@ -301,9 +301,7 @@ class CRMEntity
 	 */
 	public function insertIntoCrmEntity($module, $fileid = '')
 	{
-		global $adb;
-		global $current_user;
-		global $log;
+		global $adb, $current_user;
 
 		if ($fileid != '') {
 			$this->id = $fileid;
@@ -3177,6 +3175,7 @@ class CRMEntity
 		}
 
 		$i = 1;
+		$duplicateCheckClause = '';
 		foreach ($tableColumns as $tableColumn) {
 			$tableInfo = explode('.', $tableColumn);
 			$duplicateCheckClause .= " ifnull(${tableColumn},'null') = ifnull(temp.{$tableInfo[1]},'null')";
