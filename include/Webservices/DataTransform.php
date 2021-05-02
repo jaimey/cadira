@@ -41,7 +41,7 @@
 			return $newRow;
 		}
 
-		public function filterAndSanitize($row, $meta)
+		public static function filterAndSanitize($row, $meta)
 		{
 			$recordLabel = $row['label'];
 			$row = DataTransform::filterAllColumns($row, $meta);
@@ -62,7 +62,7 @@
 			return DataTransform::sanitizeFields($newRow, $meta);
 		}
 
-		public function sanitizeForInsert($row, $meta)
+		public static function sanitizeForInsert($row, $meta)
 		{
 			global $adb;
 			$associatedToUser = false;
