@@ -185,6 +185,14 @@ function __vt_get_date($arr)
 			return date('H:i:s');
 
 			break;
+		case 'last_month':
+			return date('m', strtotime('-1 day'));
+
+			break;
+		case 'last_quarter':
+			return 'Q'.ceil(date('m', strtotime('-1 day')) / 3);
+
+			break;
 		default:
 			return date('Y-m-d');
 
