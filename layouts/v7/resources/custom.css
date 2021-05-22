@@ -36,6 +36,7 @@ body{
     margin-bottom: 0;
 }
 .global-nav{
+    background-color: #3978fe;
     position: relative;
 }
 .app-nav{
@@ -63,7 +64,7 @@ body{
     }
     .app-nav .module-action-bar .module-action-content{
         border-bottom: 1px solid #ddd;
-        background: #fbfbfb;
+        background: #eaeaea;
     }
     .app-nav .module-action-bar .module-action-content .navbar-right{
         margin-right: 10px;
@@ -131,6 +132,7 @@ body{
     text-decoration: none;
     vertical-align: top;
     border-bottom: 1px solid #ddd;
+    background-color: white;
 }
 .search-link:hover, 
 .search-link:active, 

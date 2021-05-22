@@ -81,6 +81,7 @@ body > .mCSB_inside > .mCSB_container {
   border-top: 0;
 }
 .global-nav {
+  background-color: #3978fe;
   position: relative;
 }
 .global-nav .global-actions {
@@ -128,7 +129,7 @@ body > .mCSB_inside > .mCSB_container {
     height: 43px;
   }
   .app-nav .module-action-bar .module-action-content {
-    background: #FBFBFB;
+    background: #eaeaea;
     height: 41px;
     /*        border-bottom: 1px solid #eee;*/
   }
@@ -270,6 +271,7 @@ body > .mCSB_inside > .mCSB_container {
   vertical-align: top;
   border: 1px solid #DDDDDD;
   border-width: thin;
+  background-color: white;
 }
 .search-link .adv-search {
   margin-top: 9px;
