@@ -6,25 +6,29 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ************************************************************************************/
+ */
 
-class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
-
+class Inventory_TaxRegion_Model extends Vtiger_Base_Model
+{
 	const REGIONS_TABLE_NAME = 'vtiger_taxregions';
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->get('regionid');
 	}
 
-	public function getName() {
+	public function getName()
+	{
 		return $this->get('name');
 	}
 
-	public function getEditRegionUrl() {
+	public function getEditRegionUrl()
+	{
 		return '?module=Vtiger&parent=Settings&view=TaxAjax&mode=editTaxRegion&taxRegionId='.$this->getId();
 	}
 
-	public function getDeleteRegionUrl() {
+	public function getDeleteRegionUrl()
+	{
 		return '?module=Vtiger&parent=Settings&action=TaxAjax&mode=deleteTaxRegion&taxRegionId='.$this->getId();
 	}
 
@@ -32,19 +36,22 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 	 * Function to save the region info
 	 * @return <type>
 	 */
-	public function save() {
+	public function save()
+	{
 		$db = PearDatabase::getInstance();
 
 		$taxRegionId = $this->getId();
 		$taxRagionName = $this->getName();
-		if(!empty($taxRegionId)) {
-			$db->pquery('UPDATE '.self::REGIONS_TABLE_NAME.' SET name=? WHERE regionid=?', array($taxRagionName, $taxRegionId));
+
+		if (! empty($taxRegionId)) {
+			$db->pquery('UPDATE '.self::REGIONS_TABLE_NAME.' SET name=? WHERE regionid=?', [$taxRagionName, $taxRegionId]);
 		} else {
-			$db->pquery('INSERT INTO '.self::REGIONS_TABLE_NAME.'(name) VALUES(?)', array($taxRagionName));
-			$result = $db->pquery('SELECT regionid FROM '.self::REGIONS_TABLE_NAME.' WHERE name=?', array($taxRagionName));
+			$db->pquery('INSERT INTO '.self::REGIONS_TABLE_NAME.'(name) VALUES(?)', [$taxRagionName]);
+			$result = $db->pquery('SELECT regionid FROM '.self::REGIONS_TABLE_NAME.' WHERE name=?', [$taxRagionName]);
 			$this->set('regionid', $db->query_result($result, 0, 'regionid'));
 		}
 		Vtiger_Cache::flushPicklistCache('regionid');
+
 		return $this->getId();
 	}
 
@@ -52,14 +59,16 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 	 * Function to get all tax regions
 	 * @return <Array> list of Inventory_TaxRegion_Model
 	 */
-	public static function getAllTaxRegions() {
+	public static function getAllTaxRegions()
+	{
 		$db = PearDatabase::getInstance();
-		$taxRegions = array();
+		$taxRegions = [];
 
-		$result = $db->pquery('SELECT * FROM '.self::REGIONS_TABLE_NAME, array());
-		while($rowData = $db->fetch_array($result)) {
+		$result = $db->pquery('SELECT * FROM '.self::REGIONS_TABLE_NAME, []);
+		while ($rowData = $db->fetch_array($result)) {
 			$taxRegions[$rowData['regionid']] = new self($rowData);
 		}
+
 		return $taxRegions;
 	}
 
@@ -69,11 +78,12 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 	 * @param <Number> $taxRegionId
 	 * @return <Boolean> true/false
 	 */
-	public static function checkDuplicateTaxRegion($taxRegionName, $taxRegionId = false) {
+	public static function checkDuplicateTaxRegion($taxRegionName, $taxRegionId = false)
+	{
 		$db = PearDatabase::getInstance();
 
 		$query = 'SELECT 1 FROM '.self::REGIONS_TABLE_NAME.' WHERE name=?';
-		$params = array($taxRegionName);
+		$params = [$taxRegionName];
 
 		if ($taxRegionId) {
 			$query .= ' AND regionid != ?';
@@ -81,6 +91,7 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 		}
 
 		$result = $db->pquery($query, $params);
+
 		return ($db->num_rows($result) > 0) ? true : false;
 	}
 
@@ -89,16 +100,18 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 	 * @param <Number> $taxRegionId
 	 * @return <Inventory_TaxRegion_Model>
 	 */
-	public static function getRegionModel($taxRegionId = false) {
+	public static function getRegionModel($taxRegionId = false)
+	{
 		if ($taxRegionId) {
 			$db = PearDatabase::getInstance();
-			$result = $db->pquery('SELECT * FROM '.self::REGIONS_TABLE_NAME.' WHERE regionid=?', array($taxRegionId));
-			while($rowData = $db->fetch_array($result)) {
+			$result = $db->pquery('SELECT * FROM '.self::REGIONS_TABLE_NAME.' WHERE regionid=?', [$taxRegionId]);
+			while ($rowData = $db->fetch_array($result)) {
 				$regionModel = new self($rowData);
 			}
 		} else {
 			$regionModel = new self();
 		}
+
 		return $regionModel;
 	}
 
@@ -107,15 +120,16 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 	 * @param <Array> $taxRegionIdsList
 	 * @return <Boolean> True/False
 	 */
-	public static function deleteRegions($taxRegionIdsList = array()) {
+	public static function deleteRegions($taxRegionIdsList = [])
+	{
 		if ($taxRegionIdsList) {
-			if (!is_array($taxRegionIdsList)) {
-				$taxRegionIdsList = array($taxRegionIdsList);
+			if (! is_array($taxRegionIdsList)) {
+				$taxRegionIdsList = [$taxRegionIdsList];
 			}
 			$db = PearDatabase::getInstance();
 			$db->pquery('DELETE FROM '.self::REGIONS_TABLE_NAME.' WHERE regionid IN ('.generateQuestionMarks($taxRegionIdsList).')', $taxRegionIdsList);
 
-			$taxRecordModelsList = array();
+			$taxRecordModelsList = [];
 			foreach ($taxRegionIdsList as $regionId) {
 				$taxRecordModelsList = array_merge($taxRecordModelsList, Inventory_TaxRecord_Model::getInstancesByRegionId($regionId));
 			}
@@ -128,7 +142,7 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 				$taxRecordModel->set('compoundon', $taxRecordModel->getTaxesOnCompound());
 			}
 
-			$chargeModelsList = array();
+			$chargeModelsList = [];
 			foreach ($taxRegionIdsList as $regionId) {
 				$chargeModelsList = array_merge($chargeModelsList, Inventory_Charges_Model::getInstancesByRegionId($regionId));
 			}
@@ -147,7 +161,7 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 					$recordRegions = $recordModel->getRegionTaxes();
 				}
 
-				for ($i=0; $i<count($recordRegions); $i++) {
+				for ($i = 0; $i < count($recordRegions); $i++) {
 					$regionsList = $recordRegions[$i]['list'];
 					if (count($regionsList) === 1) {
 						if (in_array($regionId, $regionsList)) {
@@ -166,11 +180,12 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 						}
 					}
 				}
-				if (!$recordRegions) {
-					$recordRegions = array();
+				if (! $recordRegions) {
+					$recordRegions = [];
 				}
 
 				$recordModel->set('regions', array_values($recordRegions));
+
 				try {
 					$recordModel->save();
 				} catch (Exception $e) {
@@ -178,7 +193,7 @@ class Inventory_TaxRegion_Model extends Vtiger_Base_Model {
 				}
 			}
 		}
+
 		return true;
 	}
-
 }

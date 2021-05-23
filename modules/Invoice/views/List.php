@@ -6,8 +6,7 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *************************************************************************************/
-class Invoice_List_View extends Inventory_List_View {
-	
+ */
+class Invoice_List_View extends Inventory_List_View
+{
 }
-?>

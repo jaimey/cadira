@@ -6,32 +6,37 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ************************************************************************************/
+ */
 
-class Inventory_ServicesPopupAjax_View extends Inventory_ServicesPopup_View {
-
-	function __construct() {
+class Inventory_ServicesPopupAjax_View extends Inventory_ServicesPopup_View
+{
+	public function __construct()
+	{
 		parent::__construct();
 		$this->exposeMethod('getListViewCount');
 		$this->exposeMethod('getRecordsCount');
 		$this->exposeMethod('getPageCount');
 	}
 
-	function preProcess(Vtiger_Request $request) {
+	public function preProcess(Vtiger_Request $request)
+	{
 		return true;
 	}
 
-	function postProcess(Vtiger_Request $request) {
+	public function postProcess(Vtiger_Request $request)
+	{
 		return true;
 	}
 
-	function process (Vtiger_Request $request) {
+	public function process(Vtiger_Request $request)
+	{
 		$mode = $request->get('mode');
-		if(!empty($mode)) {
+		if (! empty($mode)) {
 			$this->invokeExposedMethod($mode, $request);
+
 			return;
 		}
-		$viewer = $this->getViewer ($request);
+		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 
 		$this->initializeListViewContents($request, $viewer);

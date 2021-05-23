@@ -6,10 +6,11 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *************************************************************************************/
-class Invoice_Save_Action extends Inventory_Save_Action {
-
-	public function saveRecord($request) {
+ */
+class Invoice_Save_Action extends Inventory_Save_Action
+{
+	public function saveRecord($request)
+	{
 		$recordId = $request->get('record');
 
 		if ($recordId && $_REQUEST['action'] == 'SaveAjax') {
@@ -22,6 +23,7 @@ class Invoice_Save_Action extends Inventory_Save_Action {
 
 		//Reverting the action value to $_REQUEST
 		$_REQUEST['action'] = $request->get('action');
+
 		return $recordModel;
 	}
 }

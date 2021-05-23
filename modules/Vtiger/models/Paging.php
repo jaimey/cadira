@@ -6,13 +6,13 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *************************************************************************************/
+ */
 
 /**
  * Vtiger Paging Model Class
  */
-class Vtiger_Paging_Model extends Vtiger_Base_Model {
-
+class Vtiger_Paging_Model extends Vtiger_Base_Model
+{
 	const DEFAULT_PAGE = 1;
 	const PAGE_LIMIT = 20;
 
@@ -20,11 +20,13 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 * Function to get the current page number
 	 * @return <Number>
 	 */
-	function getCurrentPage() {
+	public function getCurrentPage()
+	{
 		$currentPage = $this->get('page');
-		if(empty($currentPage)) {
+		if (empty($currentPage)) {
 			$currentPage = self::DEFAULT_PAGE;
 		}
+
 		return $currentPage;
 	}
 
@@ -32,41 +34,49 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 * Function to get the Next page number
 	 * @return <Number>
 	 */
-	function getNextPage() {
+	public function getNextPage()
+	{
 		$currentPage = $this->get('page');
-		if(empty($currentPage)) {
+		if (empty($currentPage)) {
 			$currentPage = self::DEFAULT_PAGE;
 		}
-		return $currentPage+1;
+
+		return $currentPage + 1;
 	}
 
 	/**
 	 * Function to get the limit on the number of records per page
 	 * @return <Number>
 	 */
-	function getPageLimit() {
+	public function getPageLimit()
+	{
 		$pageLimit = $this->get('limit');
-		if(empty($pageLimit)) {
+		if (empty($pageLimit)) {
 			$pageLimit = vglobal('list_max_entries_per_page');
-			if(empty($pageLimit)) {
+			if (empty($pageLimit)) {
 				$pageLimit = self::PAGE_LIMIT;
 			}
 		}
+
 		return $pageLimit;
 	}
 
-	function getStartIndex() {
+	public function getStartIndex()
+	{
 		$currentPage = $this->getCurrentPage();
 		$pageLimit = $this->getPageLimit();
-		return ($currentPage-1)*$pageLimit;
+
+		return ($currentPage - 1) * $pageLimit;
 	}
 
 	/**
 	 * Retrieves start sequence number of records in the page
 	 * @return <Integer>
 	 */
-	function getRecordStartRange() {
+	public function getRecordStartRange()
+	{
 		$rangeInfo = $this->getRecordRange();
+
 		return $rangeInfo['start'];
 	}
 
@@ -74,8 +84,10 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 * Retrieves end sequence number of records in the page
 	 * @return <Integer>
 	 */
-	function getRecordEndRange() {
+	public function getRecordEndRange()
+	{
 		$rangeInfo = $this->getRecordRange();
+
 		return $rangeInfo['end'];
 	}
 
@@ -85,7 +97,8 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 *						- start key which gives start sequence number
 	 *						- end key which gives end sequence number
 	 */
-	function getRecordRange() {
+	public function getRecordRange()
+	{
 		return $this->get('range');
 	}
 
@@ -93,11 +106,13 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 * Function to specify if previous page exists
 	 * @return <Boolean> - true/false
 	 */
-	public function isPrevPageExists() {
+	public function isPrevPageExists()
+	{
 		$prevPageExists = $this->get('prevPageExists');
-		if(isset($prevPageExists)) {
+		if (isset($prevPageExists)) {
 			return $prevPageExists;
 		}
+
 		return true;
 	}
 
@@ -105,11 +120,13 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 * Function to specify if next page exists
 	 * @return <Boolean> - true/false
 	 */
-	public function isNextPageExists() {
+	public function isNextPageExists()
+	{
 		$nextPageExists = $this->get('nextPageExists');
-		if(isset($nextPageExists)) {
+		if (isset($nextPageExists)) {
 			return $nextPageExists;
 		}
+
 		return true;
 	}
 
@@ -118,17 +135,18 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 	 * @param <type> $recordList - list of records which is show in current page
 	 * @return Vtiger_Paging_Model  -
 	 */
-	function calculatePageRange($recordList) {
-		$rangeInfo = array();
+	public function calculatePageRange($recordList)
+	{
+		$rangeInfo = [];
 		$recordCount = count($recordList);
 		$pageLimit = $this->getPageLimit();
 		$prevPageExists = $nextPageExists = false;
 
 		if ($recordCount > 0) {
 			//specifies what sequencce number of last record in prev page
-			$prevPageLastRecordSequence = (($this->getCurrentPage()-1)*$pageLimit);
+			$prevPageLastRecordSequence = (($this->getCurrentPage() - 1) * $pageLimit);
 
-			$rangeInfo['start'] = $prevPageLastRecordSequence+1;
+			$rangeInfo['start'] = $prevPageLastRecordSequence + 1;
 			if ($rangeInfo['start'] != 1) {
 				$prevPageExists = true;
 			}
@@ -149,7 +167,7 @@ class Vtiger_Paging_Model extends Vtiger_Base_Model {
 
 		$this->set('prevPageExists', $prevPageExists);
 		$this->set('nextPageExists', $nextPageExists);
+
 		return $this;
 	}
-
 }

@@ -94,6 +94,7 @@ class CustomView_Record_Model extends Vtiger_Base_Model
 		$userPrivilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$userId = $userPrivilegeModel->getId();
 		$moduleId = $this->getModule()->getId();
+
 		$cvId = Vtiger_Cache::get('UserDefaultCustomView', $userId.'-'.$moduleId);
 		if (! $cvId && ! is_null($cvId)) {
 			$cvId = null;

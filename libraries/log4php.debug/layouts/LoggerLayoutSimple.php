@@ -47,19 +47,22 @@ require_once(LOG4PHP_DIR . '/LoggerLayout.php');
  * @package log4php
  * @subpackage layouts
  */  
-class LoggerLayoutSimple extends LoggerLayout {
+class LoggerLayoutSimple extends LoggerLayout
+{
 	/**
 	 * Returns the log statement in a format consisting of the
 	 * <b>level</b>, followed by " - " and then the
-	 * <b>message</b>. For example, 
+	 * <b>message</b>. For example,
 	 * <samp> INFO - "A message" </samp>
 	 *
 	 * @param LoggerLoggingEvent $event
 	 * @return string
 	 */
-	public function format(LoggerLoggingEvent $event) {
+	public function format(LoggerLoggingEvent $event)
+	{
 		$level = $event->getLevel();
 		$message = $event->getRenderedMessage();
-		return "$level - $message" . PHP_EOL;
+
+		return "${level} - ${message}".PHP_EOL;
+	}
 }
-?>

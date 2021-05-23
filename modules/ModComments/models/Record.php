@@ -70,6 +70,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 		$this->set('id', $recordId);
 		$fileDetails = $this->getFileDetails($attachmentId);
 		$attachmentDetails = [];
+
 		if (! empty($fileDetails)) {
 			if (is_array($fileDetails[0])) {
 				foreach ($fileDetails as $index => $fileDetail) {
@@ -102,6 +103,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 			$val = str_replace(".${fileExtension}", '', $fileName);
 			$field_val = $val;
 			$listview_max_textlength = 50;
+
 			global $default_charset;
 			$temp_val = preg_replace('/(<\\/?)(\\w+)([^>]*>)/i', '', $field_val);
 			if (function_exists('mb_strlen')) {
@@ -258,8 +260,13 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 
 		$listView = Vtiger_ListView_Model::getInstance('ModComments');
 		$queryGenerator = $listView->get('query_generator');
-		$queryGenerator->setFields(['parent_comments', 'createdtime', 'modifiedtime', 'related_to', 'assigned_user_id',
-			'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid', 'from_mailconverter', 'from_mailroom', 'is_private', 'customer_email', 'related_email_id', 'filename']);
+		$queryGenerator->setFields(
+			[
+				'parent_comments', 'createdtime', 'modifiedtime', 'related_to', 'assigned_user_id',
+				'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid', 'from_mailconverter',
+				'from_mailroom', 'is_private', 'customer_email', 'related_email_id', 'filename'
+			]
+		);
 
 		$query = $queryGenerator->getQuery();
 		$query = $query.' AND related_to = ? ORDER BY vtiger_crmentity.createdtime DESC';
@@ -294,6 +301,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 		$db = PearDatabase::getInstance();
 		$focus = CRMEntity::getInstance('ModComments');
 		$query = $focus->get_comments();
+
 		if ($query) {
 			$query .= ' AND related_to = ? AND parent_comments = ? ORDER BY vtiger_crmentity.createdtime DESC';
 			$result = $db->pquery($query, [$parentId, '']);
@@ -346,8 +354,11 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 
 		$listView = Vtiger_ListView_Model::getInstance('ModComments');
 		$queryGenerator = $listView->get('query_generator');
-		$queryGenerator->setFields(['parent_comments', 'createdtime', 'modifiedtime', 'related_to', 'id', 'assigned_user_id',
-			'commentcontent', 'creator', 'reasontoedit', 'userid', 'from_mailconverter', 'from_mailroom', 'is_private', 'customer_email']);
+		$queryGenerator->setFields([
+			'parent_comments', 'createdtime', 'modifiedtime', 'related_to', 'id', 'assigned_user_id',
+			'commentcontent', 'creator', 'reasontoedit', 'userid', 'from_mailconverter', 'from_mailroom',
+			'is_private', 'customer_email'
+		]);
 		$query = $queryGenerator->getQuery();
 
 		//Condition are directly added as query_generator transforms the
@@ -417,6 +428,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model
 		$db = PearDatabase::getInstance();
 		$focus = CRMEntity::getInstance('ModComments');
 		$query = $focus->get_comments();
+
 		if ($query) {
 			$query .= ' AND related_to = ? ORDER BY vtiger_crmentity.createdtime DESC';
 			$result = $db->pquery($query, [$parentId]);

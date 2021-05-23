@@ -734,6 +734,7 @@ class QueryGenerator
 		} elseif (empty($deletedQuery)) {
 			$sql .= ' WHERE ';
 		}
+
 		$baseModule = $this->getModule();
 		$moduleFieldList = $this->getModuleFields();
 		$baseTable = $this->meta->getEntityBaseTable();
@@ -741,6 +742,7 @@ class QueryGenerator
 		$baseTableIndex = $moduleTableIndexList[$baseTable];
 		$groupSql = $this->groupInfo;
 		$fieldSqlList = [];
+
 		foreach ($this->conditionals as $index=>$conditionInfo) {
 			$fieldName = $conditionInfo['name'];
 			$field = $moduleFieldList[$fieldName];
@@ -971,6 +973,16 @@ class QueryGenerator
 				$fieldObject = $fields[$fieldName];
 				$columnName = $fieldObject->getColumnName();
 				$tableName = $fieldObject->getTableName();
+
+				if ($fieldObject->getUIType() == 56) {
+					if ($conditionInfo['value'] == 'true:boolean') {
+						$conditionInfo['value'] = '1';
+					}
+					if ($conditionInfo['value'] == 'false:boolean') {
+						$conditionInfo['value'] = '0';
+					}
+				}
+
 				$valueSQL = $this->getConditionValue($conditionInfo['value'], $conditionInfo['SQLOperator'], $fieldObject);
 				$fieldSql = '('.$tableName.$conditionInfo['referenceField'].'.'.$columnName.' '.$valueSQL[0].')';
 				$fieldSqlList[$index] = $fieldSql;

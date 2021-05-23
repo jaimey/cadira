@@ -81,6 +81,7 @@ body > .mCSB_inside > .mCSB_container {
   border-top: 0;
 }
 .global-nav {
+  background-color: #3978fe;
   position: relative;
 }
 .global-nav .global-actions {
@@ -128,8 +129,8 @@ body > .mCSB_inside > .mCSB_container {
     height: 43px;
   }
   .app-nav .module-action-bar .module-action-content {
-    background: #FBFBFB;
-    height: 41px;
+    background: #eaeaea;
+    height: 45px;
     /*        border-bottom: 1px solid #eee;*/
   }
   .app-nav .module-action-bar .module-action-content .navbar-right {
@@ -270,6 +271,7 @@ body > .mCSB_inside > .mCSB_container {
   vertical-align: top;
   border: 1px solid #DDDDDD;
   border-width: thin;
+  background-color: white;
 }
 .search-link .adv-search {
   margin-top: 9px;
@@ -394,8 +396,8 @@ body > .mCSB_inside > .mCSB_container {
   height: 50px;
 }
 .app-nav .app-indicator-icon-container {
-  top: 0px;
-  height: 42px;
+  top: 1px;
+  height: 45px;
   text-align: center;
   line-height: 42px;
   color: #ffffff;
@@ -545,8 +547,8 @@ a.menu-item:hover {
 .active-app-item,
 .app-item:hover {
   opacity: 1;
-  background: #007bff;
-  color: #f2f1f1;
+  background: #d2d2d2;
+  color: #000000;
 }
 .app-item-color-MARKETING {
   border-left: 4px solid #EF5E29;
@@ -586,7 +588,7 @@ a.menu-item:hover {
   height: 100vh;
   font-size: 1.2em;
   overflow-x: hidden;
-  background-color: #007bff;
+  background-color: #e8e8e8;
   box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -594,13 +596,11 @@ a.menu-item:hover {
 }
 .app-menu .app-modules-dropdown li {
   padding: 3%;
-  opacity: 0.7;
 }
 .app-menu .app-modules-dropdown li a {
   background: transparent;
   padding-left: 20px;
-  color: #fff;
-  text-shadow: 0 0 1px #000;
+  color: #525252;
   display: block;
 }
 .app-menu .app-modules-dropdown li a .module-name {
@@ -613,15 +613,14 @@ a.menu-item:hover {
 }
 .app-menu .app-modules-dropdown li:hover {
   opacity: 1;
-  background: #007bff;
-  color: #f2f1f1;
+  background: #d2d2d2;
+  color: #525252;
 }
 .app-menu .app-modules-dropdown li:hover .module-icon {
   opacity: 1;
 }
 .app-menu .app-modules-dropdown .module-icon {
   font-size: 1.2em;
-  opacity: 0.2;
 }
 .app-menu .app-list {
   margin-top: -10px;
@@ -2372,8 +2371,7 @@ th {
   color: #3498DB;
 }
 .fieldLabel {
-  color: #007bff;
-  opacity: 0.8;
+  color: #525252;
 }
 .fieldLabel label {
   font-weight: 100;
@@ -3305,7 +3303,7 @@ th {
   text-transform: uppercase;
 }
 .settingsgroup {
-  background: #007bff;
+  background: #e8e8e8;
   height: 100%;
 }
 .settingsgroup .panel-group .panel {
@@ -6992,6 +6990,7 @@ a.btnReport:hover {
 .MultiFile-wrap {
   display: inline-block;
   margin-right: 3px;
+  margin-top: 5px;
 }
 .commentContainer .detailViewSaveComment {
   width: 102px;

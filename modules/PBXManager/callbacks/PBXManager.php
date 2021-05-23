@@ -6,33 +6,35 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *************************************************************************************/
-chdir(dirname(__FILE__) . '/../../../');
+ */
+chdir(dirname(__FILE__).'/../../../');
 include_once 'include/Webservices/Relation.php';
 include_once 'vtlib/Vtiger/Module.php';
 include_once 'includes/main/WebUI.php';
 vimport('includes.http.Request');
 
-class PBXManager_PBXManager_Callbacks {
-    
-    function validateRequest($vtigersecretkey,$request) {
-        if($vtigersecretkey == $request->get('vtigersignature')){
-            return true;
-        }
-        return false;
-    }
+class PBXManager_PBXManager_Callbacks
+{
+	public function validateRequest($vtigersecretkey, $request)
+	{
+		if ($vtigersecretkey == $request->get('vtigersignature')) {
+			return true;
+		}
 
-    function process($request){
-	$pbxmanagerController = new PBXManager_PBXManager_Controller();
-        $connector = $pbxmanagerController->getConnector();
-        if($this->validateRequest($connector->getVtigerSecretKey(),$request)) {
-            $pbxmanagerController->process($request);
-        }else {
-            $response = $connector->getXmlResponse();
-            echo $response;
-        }
-    }
+		return false;
+	}
+
+	public function process($request)
+	{
+		$pbxmanagerController = new PBXManager_PBXManager_Controller();
+		$connector = $pbxmanagerController->getConnector();
+		if ($this->validateRequest($connector->getVtigerSecretKey(), $request)) {
+			$pbxmanagerController->process($request);
+		} else {
+			$response = $connector->getXmlResponse();
+			echo $response;
+		}
+	}
 }
 $pbxmanager = new PBXManager_PBXManager_Callbacks();
 $pbxmanager->process(new Vtiger_Request($_REQUEST));
-?>
