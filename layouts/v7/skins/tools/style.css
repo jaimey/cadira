@@ -81,7 +81,7 @@ body > .mCSB_inside > .mCSB_container {
   border-top: 0;
 }
 .global-nav {
-  background-color: #3978fe;
+  background-color: #292961;
   position: relative;
 }
 .global-nav .global-actions {
@@ -7751,7 +7751,7 @@ body .fc {
   }
 }
 .actionImages {
-  color: #007bff;
+  color: #292961;
   font-size: 20px;
 }
 /*# sourceMappingURL=style.css.map */
