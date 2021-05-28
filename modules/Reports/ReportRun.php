@@ -716,7 +716,6 @@ class ReportRun extends CRMEntity
 	 */
 	public function getaccesfield($module)
 	{
-		global $current_user;
 		global $adb;
 		$access_fields = [];
 
@@ -771,12 +770,16 @@ class ReportRun extends CRMEntity
 		$columnName = $selectedfields[1];
 		$moduleFieldLabel = $selectedfields[2];
 		$fieldName = $selectedfields[3];
+
 		list($moduleName, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
 		$fieldInfo = getFieldByReportLabel($moduleName, $fieldLabel);
 
 		if ($moduleName == 'ModComments' && $fieldName == 'creator') {
-			$concatSql = getSqlForNameInDisplayFormat(['first_name' => 'vtiger_usersModComments.first_name',
-				'last_name'                                            => 'vtiger_usersModComments.last_name'], 'Users');
+			$params = [
+				'first_name' => 'vtiger_usersModComments.first_name',
+				'last_name'  => 'vtiger_usersModComments.last_name'
+			];
+			$concatSql = getSqlForNameInDisplayFormat($params, 'Users');
 			$queryColumn = "trim(case when (vtiger_usersModComments.user_name not like '' and vtiger_crmentity.crmid!='') then ${concatSql} end) AS ModComments_Creator";
 			$this->queryPlanner->addTable('vtiger_usersModComments');
 			$this->queryPlanner->addTable('vtiger_usersModComments');
@@ -803,7 +806,6 @@ class ReportRun extends CRMEntity
 	public function getSelectedColumnsList($reportid)
 	{
 		global $adb;
-		global $modules;
 		global $log;
 
 		$ssql = 'select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid';
@@ -858,10 +860,12 @@ class ReportRun extends CRMEntity
 	 */
 	public function getAdvComparator($comparator, $value, $datatype = '', $columnName = '')
 	{
-		global $log, $adb, $default_charset, $ogReport;
+		global $log, $adb, $default_charset;
+
 		$value = html_entity_decode(trim($value), ENT_QUOTES, $default_charset);
 		$value_len = strlen($value);
 		$is_field = false;
+
 		if ($value_len > 1 && $value[0] == '$' && $value[$value_len - 1] == '$') {
 			$temp = str_replace('$', '', $value);
 			$is_field = true;
@@ -954,7 +958,7 @@ class ReportRun extends CRMEntity
 				$this->queryPlanner->addTable($secondary->table_name);
 			}
 		}
-		
+
 		$field = split('#', $field);
 		$module = $field[0];
 		$fieldname = trim($field[1]);
@@ -963,7 +967,7 @@ class ReportRun extends CRMEntity
 		$field_query = $adb->pquery('SELECT tablename,columnname,typeofdata,fieldname,uitype FROM vtiger_field WHERE tabid = ? AND fieldname= ?', [$tabid, $fieldname]);
 		$fieldtablename = $adb->query_result($field_query, 0, 'tablename');
 		$fieldcolname = $adb->query_result($field_query, 0, 'columnname');
-	
+
 		if ($fieldtablename == 'vtiger_crmentity' && $module != $this->primarymodule) {
 			$fieldtablename = $fieldtablename.$module;
 		}
@@ -1056,8 +1060,6 @@ class ReportRun extends CRMEntity
 
 	public function generateAdvFilterSql($advfilterlist)
 	{
-		global $adb;
-
 		$advfiltersql = '';
 		$customView = new CustomView();
 		$dateSpecificConditions = $customView->getStdFilterConditions();
@@ -2133,6 +2135,7 @@ class ReportRun extends CRMEntity
 		$result = $adb->pquery($sreportsortsql, [$reportid]);
 		$noofrows = $adb->num_rows($result);
 
+		$n = 0;
 		for ($i = 0; $i < $noofrows; $i++) {
 			$fieldcolname = $adb->query_result($result, $i, 'columnname');
 			$sortorder = $adb->query_result($result, $i, 'sortorder');
@@ -2269,7 +2272,8 @@ class ReportRun extends CRMEntity
 	 */
 	public function getReportsQuery($module, $type = '')
 	{
-		global $log, $current_user, $adb;
+		global $log, $current_user;
+
 		$secondary_module = "'";
 		$secondary_module .= str_replace(':', "','", $this->secondarymodule);
 		$secondary_module .= "'";
@@ -2530,6 +2534,7 @@ class ReportRun extends CRMEntity
 			$query .= ' '.$this->getRelatedModulesQuery($module, $this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule, $current_user).
 					' where vtiger_crmentity.deleted=0 ';
+
 		} elseif ($module == 'Calendar') {
 			$referenceModuleList = Vtiger_Util_Helper::getCalendarReferenceModulesList();
 			$referenceTablesList = [];
@@ -2926,6 +2931,7 @@ class ReportRun extends CRMEntity
 			$query .= ' '.$this->getRelatedModulesQuery($module, $this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule, $current_user).
 					' where vtiger_crmentity.deleted=0';
+					
 		} elseif ($module == 'Emails') {
 			$query = "from vtiger_activity
 			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_activity.activityid AND vtiger_activity.activitytype = 'Emails'";
@@ -4167,7 +4173,7 @@ class ReportRun extends CRMEntity
 			$field = $field_tablename.'tmp'.$inventoryModuleName.'.'.$field_columnname;
 			$itemTableName = 'vtiger_inventoryproductreltmp'.$inventoryModuleName;
 			$this->queryPlanner->addTable($itemTableName);
-			
+
 			if ($field_columnname == 'listprice') {
 				$field = $field.'/'.$inventoryModuleInstance->table_name.'.conversion_rate';
 			} elseif ($field_columnname == 'discount_amount') {
@@ -4229,12 +4235,12 @@ class ReportRun extends CRMEntity
 	public function getLstringforReportHeaders($fldname)
 	{
 		global $current_user, $app_strings;
-		
+
 		$rep_header = ltrim($fldname);
 		$rep_header = decode_html($rep_header);
 		$labelInfo = explode('_', $rep_header);
 		$rep_module = $labelInfo[0];
-		
+
 		if (is_array($this->labelMapping) && ! empty($this->labelMapping[$rep_header])) {
 			$rep_header = $this->labelMapping[$rep_header];
 		} else {
