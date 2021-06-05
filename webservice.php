@@ -9,6 +9,7 @@
  */
 
 require_once 'config.php';
+
 	/**
 	 * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode.
 	 */
@@ -34,8 +35,8 @@ require_once 'config.php';
 	$API_VERSION = '0.22';
 
 	global $seclog,$log;
-	$seclog = &LoggerManager::getLogger('SECURITY');
-	$log = &LoggerManager::getLogger('webservice');
+	$seclog = Logger::getLogger('SECURITY');
+	$log = Logger::getLogger('WEBSERVICE');
 
 	function getRequestParamsArrayForOperation($operation)
 	{
