@@ -87,6 +87,10 @@ class Documents extends CRMEntity
 
 	public function save_module($module)
 	{
+		if (isset($_REQUEST['operation'], $_REQUEST['elementType'])) {
+			$this->checkWebServiceAttachment();
+		}
+
 		global $adb,$upload_badext;
 
 		if (isset($this->parentid) && $this->parentid != '') {
@@ -150,7 +154,7 @@ class Documents extends CRMEntity
 		}
 
 		$query = 'UPDATE vtiger_notes SET filename = ? ,filesize = ?, filetype = ? , filelocationtype = ? , filedownloadcount = ? WHERE notesid = ?';
-		$re = $adb->pquery($query, [decode_html($filename), $filesize, $filetype, $filelocationtype, $filedownloadcount, $this->id]);
+		$adb->pquery($query, [decode_html($filename), $filesize, $filetype, $filelocationtype, $filedownloadcount, $this->id]);
 
 		//Inserting into attachments table
 		if ($filelocationtype == 'I') {
@@ -168,6 +172,52 @@ class Documents extends CRMEntity
 	}
 
 	/**
+	 * checkWebServiceAttachment()
+	 * @param mixed $id
+	 * @param mixed $module
+	 */
+	public function checkWebServiceAttachment()
+	{
+		if (! isset($_FILES['filename'])) {
+			if (isset($_REQUEST['operation'], $_REQUEST['elementType'])) {
+				if ($_REQUEST['operation'] == 'create' && $_REQUEST['elementType'] == 'Documents') {
+					global $root_directory;
+					$documentData = @json_decode($_REQUEST['element']);
+
+					if ($documentData != null) {
+						if ($documentData->attachment->filename != '') {
+							$filePath = $root_directory.'cache/'.$documentData->attachment->filename;
+							file_put_contents($filePath, base64_decode($documentData->attachment->content));
+
+							$_FILES['filename'] = [
+								'name'     => $documentData->attachment->filename,
+								'type'     => $documentData->filelocationtype,
+								'tmp_name' => $filePath,
+								'error'    => 0,
+								'size'     => filesize($filePath)
+							];
+
+							if ($documentData->relations != '') {
+								if (is_array($documentData->relations)) {
+									foreach ($documentData->relations as $relation) {
+										list($withModuleId, $elementId) = vtws_getIdComponents($relation);
+										$moduleName = Vtiger_Util_Helper::detectModulenameFromRecordId($withModuleId);
+										$this->save_related_module($moduleName, $elementId, 'Documents', $_REQUEST['currentid']);
+									}
+								} else {
+									list($withModuleId, $elementId) = vtws_getIdComponents($documentData->relations);
+									$moduleName = Vtiger_Util_Helper::detectModulenameFromRecordId($withModuleId);
+									$this->save_related_module($moduleName, $elementId, 'Documents', $_REQUEST['currentid']);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
 	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
 	 *      @param string $module  - the current module name
@@ -177,21 +227,42 @@ class Documents extends CRMEntity
 		global $log;
 		$log->debug("Entering into insertIntoAttachment(${id},${module}) method.");
 
-		$file_saved = false;
+		$isFileSaved = false;
 
 		foreach ($_FILES as $fileindex => $files) {
 			if ($files['name'] != '' && $files['size'] > 0) {
 				$files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
-				$file_saved = $this->uploadAndSaveFile($id, $module, $files);
-				if (! $file_saved) {
-					$log->debug('file upload failed');
+				$isFileSaved = $this->uploadAndSaveFile($id, $module, $files);
+				if (! $isFileSaved) {
+					throw new WebServiceException(
+						WebServiceErrorCode::$VALIDATION_FAILED,
+						vtranslate('LBL_IMAGESECURITY_ERROR', 'Webservices')
+					);
 
 					return false;
 				}
 			}
 		}
 
+		//Clear temp file
+		if (isset($_FILES['filename']['tmp_name']) && $isFileSaved) {
+			@unlink($_FILES['filename']['tmp_name']);
+		}
 		$log->debug("Exiting from insertIntoAttachment(${id},${module}) method.");
+
+		return true;
+	}
+
+	/**
+	 * save_related_module()
+	 * @param String $module
+	 * @param String $crmid
+	 * @param String $with_module
+	 * @param String $with_crmid
+	 */
+	public function save_related_module($module, $crmid, $with_module, $with_crmid)
+	{
+		parent::save_related_module($module, $crmid, $with_module, $with_crmid);
 	}
 
 	/**    Function used to get the sort order for Documents listview
@@ -338,9 +409,6 @@ class Documents extends CRMEntity
 		$adb->pquery($dbQuery, [$relid, $id]);
 	}
 
-	/*function save_related_module($module, $crmid, $with_module, $with_crmid){
-	}*/
-
 	/*
 	 * Function to get the primary query part of a report
 	 * @param - $module Primary module name
@@ -434,21 +502,6 @@ class Documents extends CRMEntity
 	// Function to unlink all the dependent entities of the given Entity by Id
 	public function unlinkDependencies($module, $id)
 	{
-		global $log;
-		/*//Backup Documents Related Records
-		$se_q = 'SELECT crmid FROM vtiger_senotesrel WHERE notesid = ?';
-		$se_res = $this->db->pquery($se_q, array($id));
-		if ($this->db->num_rows($se_res) > 0) {
-			for($k=0;$k < $this->db->num_rows($se_res);$k++)
-			{
-				$se_id = $this->db->query_result($se_res,$k,"crmid");
-				$params = array($id, RB_RECORD_DELETED, 'vtiger_senotesrel', 'notesid', 'crmid', $se_id);
-				$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
-			}
-		}
-		$sql = 'DELETE FROM vtiger_senotesrel WHERE notesid = ?';
-		$this->db->pquery($sql, array($id));*/
-
 		parent::unlinkDependencies($module, $id);
 	}
 
