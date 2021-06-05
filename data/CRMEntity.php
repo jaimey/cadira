@@ -136,11 +136,9 @@ class CRMEntity
 
 	public function saveentity($module, $fileid = '')
 	{
-		global $current_user, $adb; //$adb added by raju for mass mailing
-		$insertion_mode = $this->mode;
-
 		$columnFields = $this->column_fields;
 		$anyValue = false;
+
 		foreach ($columnFields as $value) {
 			if (! empty($value)) {
 				$anyValue = true;
@@ -198,11 +196,8 @@ class CRMEntity
 	 */
 	public function uploadAndSaveFile($id, $module, $file_details, $attachmentType = 'Attachment')
 	{
-		global $log;
+		global $adb, $current_user, $upload_badext, $log;
 		$log->debug("Entering into uploadAndSaveFile(${id},${module},${file_details}) method.");
-
-		global $adb, $current_user;
-		global $upload_badext;
 
 		$date_var = date('Y-m-d H:i:s');
 
@@ -220,13 +215,16 @@ class CRMEntity
 
 		// Check 1
 		$save_file = 'true';
+
 		//only images are allowed for Image Attachmenttype
 		$mimeType = vtlib_mime_content_type($file_details['tmp_name']);
 		$mimeTypeContents = explode('/', $mimeType);
+
 		// For contacts and products we are sending attachmentType as value
 		if ($attachmentType == 'Image' || ($file_details['size'] && $mimeTypeContents[0] == 'image')) {
 			$save_file = validateImageFile($file_details);
 		}
+
 		$log->debug("File Validation status in Check1 save_file => ${save_file}");
 		if ($save_file == 'false') {
 			return false;
@@ -253,6 +251,7 @@ class CRMEntity
 		// upload the file in server
 		$encryptFileName = Vtiger_Util_Helper::getEncryptedFileName($binFile);
 		$upload_status = copy($filetmp_name, $upload_file_path.$current_id.'_'.$encryptFileName);
+
 		// temporary file will be deleted at the end of request
 		$log->debug("Upload status of file => ${upload_status}");
 		if ($save_file == 'true' && $upload_status == 'true') {
@@ -262,24 +261,25 @@ class CRMEntity
 									INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_seattachmentsrel.attachmentsid AND vtiger_crmentity.setype = ? 
 									WHERE vtiger_seattachmentsrel.crmid = ?', [$module.' Attachment', $id]);
 				$oldAttachmentIds = [];
+				
 				for ($attachItr = 0;$attachItr < $adb->num_rows($res);$attachItr++) {
 					$oldAttachmentIds[] = $adb->query_result($res, $attachItr, 'attachmentsid');
 				}
+
 				if (count($oldAttachmentIds)) {
 					$adb->pquery('DELETE FROM vtiger_seattachmentsrel WHERE attachmentsid IN ('.generateQuestionMarks($oldAttachmentIds).')', $oldAttachmentIds);
-					//TODO : revisit to delete actual file and attachment entry,as we need to see the deleted file in the history when its changed
-					//$adb->pquery('DELETE FROM vtiger_attachments WHERE attachmentsid IN ('.generateQuestionMarks($oldAttachmentIds).')',$oldAttachmentIds);
-					//$adb->pquery('DELETE FROM vtiger_crmentity WHERE crmid IN ('.generateQuestionMarks($oldAttachmentIds).')',$oldAttachmentIds);
 				}
 			}
 			//Add entry to crmentity
 			$sql1 = 'INSERT INTO vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?)';
 			$params1 = [$current_id, $current_user->id, $ownerid, $module.' '.$attachmentType, $this->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true)];
 			$adb->pquery($sql1, $params1);
+
 			//Add entry to attachments
 			$sql2 = 'INSERT INTO vtiger_attachments(attachmentsid, name, description, type, path, storedname) values(?, ?, ?, ?, ?, ?)';
 			$params2 = [$current_id, $filename, $this->column_fields['description'], $filetype, $upload_file_path, $encryptFileName];
 			$adb->pquery($sql2, $params2);
+			
 			//Add relation
 			$sql3 = 'INSERT INTO vtiger_seattachmentsrel VALUES(?,?)';
 			$params3 = [$id, $current_id];
