@@ -1328,8 +1328,8 @@ class Contacts extends CRMEntity
 			if ($old_attachmentid != '') {
 				$setype = $adb->query_result($adb->pquery('select setype from vtiger_crmentity where crmid=?', [$old_attachmentid]), 0, 'setype');
 				if ($setype == 'Contacts Image') {
-					$del_res1 = $adb->pquery('delete from vtiger_attachments where attachmentsid=?', [$old_attachmentid]);
-					$del_res2 = $adb->pquery('delete from vtiger_seattachmentsrel where attachmentsid=?', [$old_attachmentid]);
+					$adb->pquery('delete from vtiger_attachments where attachmentsid=?', [$old_attachmentid]);
+					$adb->pquery('delete from vtiger_seattachmentsrel where attachmentsid=?', [$old_attachmentid]);
 				}
 			}
 		}
