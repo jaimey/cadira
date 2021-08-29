@@ -234,7 +234,7 @@
 								{assign var=SINGLE_MODULE value="SINGLE_$MODULE"}
 								{vtranslate('LBL_NO')} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND')}.
 								{if $IS_CREATE_PERMITTED}
-									<a style="color:blue" href="{$MODULE_MODEL->getCreateRecordUrl()}"> {vtranslate('LBL_CREATE')}</a>
+									<a style="color:blue" href="{$MODULE_MODEL->getCreateRecordUrl()}{$searchparams}"> {vtranslate('LBL_CREATE')}</a>
 									{if Users_Privileges_Model::isPermitted($MODULE, 'Import') && $LIST_VIEW_MODEL->isImportEnabled()}
 										{vtranslate('LBL_OR', $MODULE)}
 										<a style="color:blue" href="#" onclick="return Vtiger_Import_Js.triggerImportAction()">{vtranslate('LBL_IMPORT', $MODULE)}</a>
