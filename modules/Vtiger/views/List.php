@@ -105,6 +105,12 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		if(!empty($viewName)) {
 			$this->viewName = $viewName;
 		}
+		$params = $request->get('search_params');
+		$searchparams="";
+		foreach ($params[0] as $key => $val) {
+		   $searchparams .= "&" . $val[0] . "=" . ucfirst($val[2]);		   	 
+		}
+		$viewer->assign('searchparams', $searchparams);
 
 		$this->initializeListViewContents($request, $viewer);
 		$this->assignCustomViews($request,$viewer);
