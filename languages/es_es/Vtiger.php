@@ -694,7 +694,10 @@ $languageStrings = array(
     'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Algún campo obligatorio está vacío',
 
     'LBL_ORIGIN' => 'Origen',
-    'SENT' => 'CRM',
+    'SENT' => 'Enviado',
+    'RECEIVED' => 'Recibido',
+    'QUEUED'=> 'En cola',
+    'FAILED'=> 'Falló',
     'SAVED' => 'Borrador',
     'MailManager' => 'Admin Correo',
     'MAILSCANNER' => 'Convertidor de correo',
