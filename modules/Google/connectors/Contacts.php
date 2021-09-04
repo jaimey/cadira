@@ -642,6 +642,9 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
 		}
 
 		$payLoad = html_entity_decode($atom->asXML(), ENT_QUOTES, $default_charset);
+        $main1 = new SimpleXMLElement($payLoad);
+        $main1->entry->addAttribute('gd:etag', '*');
+        $payLoad = $main1->asXML();
 		$response = $this->sendBatchRequest($payLoad);
 		if($response) {
 			$responseXml = simplexml_load_string($response);
@@ -711,6 +714,9 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
 			}
 		}
 		$payLoad = html_entity_decode($atom->asXML(), ENT_QUOTES, $default_charset);
+       	$main1 = new SimpleXMLElement($payLoad);
+        $main1->entry->addAttribute('gd:etag', '*');
+        $payLoad = $main1->asXML();
 		$response = $this->sendBatchRequest($payLoad);
 		$responseXml = simplexml_load_string($response);
 		if($responseXml) {
